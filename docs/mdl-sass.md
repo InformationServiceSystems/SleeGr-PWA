@@ -33,7 +33,7 @@ The `src` directory above contains MDL's Sass files and the JavaScript sources f
 └── src
 ```
 
-Next we have some changes to make to Web Starter Kit's `app/index.html`. By default it includes the CDN-hosted production builds of Material Design Lite (e.g `https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css`) We will need to swap these out for references to our local files instead. 
+Next we have some changes to make to Web Starter Kit's `app/example.html`. By default it includes the CDN-hosted production builds of Material Design Lite (e.g `https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css`) We will need to swap these out for references to our local files instead. 
 
 5. First, we'll switch the CDN-hosted stylesheets to our local version.
 
@@ -51,7 +51,7 @@ with:
 
 If you navigate to "app/styles/main.css" in your Text Editor (e.g Sublime Text), you will notice that it already contains some styles. These are for the default template that ships with Web Starter Kit. 
 
-We're going to rename our `app/styles/main.css` file to `app/styles/main.scss` so that Web Starter Kit treats it as a Sass file. No further changes are required to our `app/index.html`.
+We're going to rename our `app/styles/main.css` file to `app/styles/main.scss` so that Web Starter Kit treats it as a Sass file. No further changes are required to our `app/example.html`.
 
 One final change for getting Sass working is adding the following line to the very top of `app/styles/main.scss`:
 
@@ -61,7 +61,7 @@ One final change for getting Sass working is adding the following line to the ve
 
 This imports in all of MDL's component styles. If you later decide to only use a smallet set of components, just edit `src/material-design-lite.scss`, commenting out what you don't want.
 
-6. Next, we'll localise our JavaScript files for MDL. Once again, we'll edit `app/index.html`:
+6. Next, we'll localise our JavaScript files for MDL. Once again, we'll edit `app/example.html`:
 
 Remove:
 
@@ -69,7 +69,7 @@ Remove:
 <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
 ```
 
-and find the following block in `app/index.html`:
+and find the following block in `app/example.html`:
 
 ```html
     <!-- build:js(app/) ../../scripts/main.min.js -->
