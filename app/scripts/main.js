@@ -73,43 +73,50 @@
   }
 
   // Your custom JavaScript goes here
+
   var AUTH0_CLIENT_ID='kMlSIl3Itqt6mQetzGXES6biAVFei6k8';
   var AUTH0_DOMAIN='app-iss.eu.auth0.com';
-  var AUTH0_CALLBACK_URL=null;
-  var lock = new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
-    auth: {
-      params: { scope: 'openid email' } //Details: https://auth0.com/docs/scopes
-    },
-    closable: false
-  });
+  var app = {
+    isLoading: true,
+    spinner: document.querySelector('.loader'),
+    cardTemplate: document.querySelector('.cardTemplate'),
+    container: document.querySelector('.main'),
+    lock: new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+      auth: {
+        params: {scope: 'openid email'}
+      },
+      closable: false
+    })
 
-  $('.btn-login').click(function(e) {
-    e.preventDefault();
-    lock.show();
-  });
+  };
 
-  $('.btn-logout').click(function(e) {
+
+  $('#btn-logout').click(function(e) {
     e.preventDefault();
     logout();
   })
 
-  lock.on("authenticated", function(authResult) {
-    lock.getProfile(authResult.idToken, function(error, profile) {
+  app.lock.on("authenticated", function(authResult) {
+    app.lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
         // Handle error
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
       // Display user information
-      show_profile_info(profile);
+      app.lock.hide();
+      document.getElementById('add').setAttribute('style', 'display: block');
+      app.retrieve_profile();
     });
   });
 
+
+
   //retrieve the profile:
-  var retrieve_profile = function() {
+  app.retrieve_profile = function() {
     var id_token = localStorage.getItem('id_token');
     if (id_token) {
-      lock.getProfile(id_token, function (err, profile) {
+      app.lock.getProfile(id_token, function (err, profile) {
         if (err) {
           return alert('There was an error getting the profile: ' + err.message);
         }
@@ -120,17 +127,24 @@
     }
   };
 
-  var show_profile_info = function(profile) {
-    $('.nickname').text(profile.nickname);
-    $('.btn-login').hide();
+  function show_profile_info(profile){
+    document.getElementById('username').innerHTML = profile.email;
     $('.avatar').attr('src', profile.picture).show();
-    $('.btn-logout').show();
-  };
 
+  }
+
+  if(!localStorage.getItem('id_token')){
+    document.getElementById('add').setAttribute('style', 'display: none');
+    app.lock.show();
+  }
+  else{
+    document.getElementById('add').setAttribute('style', 'display: block');
+    app.retrieve_profile();
+  }
   var logout = function() {
     localStorage.removeItem('id_token');
+    document.getElementById('add').setAttribute('style', 'display: none');
     window.location.href = "/";
   };
 
-  retrieve_profile();
 })();
