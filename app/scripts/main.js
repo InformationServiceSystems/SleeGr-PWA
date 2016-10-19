@@ -73,54 +73,78 @@
   }
 
   // Your custom JavaScript goes here
-
   var AUTH0_CLIENT_ID='kMlSIl3Itqt6mQetzGXES6biAVFei6k8';
   var AUTH0_DOMAIN='app-iss.eu.auth0.com';
   var app = {
     isLoading: true,
     spinner: document.querySelector('.loader'),
     cardTemplate: document.querySelector('.cardTemplate'),
-    container: document.querySelector('.main'),
-    lock: new Auth0Lock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
-      auth: {
-        params: {scope: 'openid email'}
-      },
-      closable: false
-    })
-
+    container: document.querySelector('#corellContainer'),
+    utils: getUtils()
   };
 
+  var lock = app.utils.initLock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+    auth: {
+      params: {scope: 'openid email'}
+    },
+    closable: false
+  });
+
+  lock.on("authenticated", function(authResult) {
+    lock.getProfile(authResult.idToken, function(error, profile) {
+      if (error) {
+        // Handle error
+        return;
+      }
+      localStorage.setItem('id_token', authResult.idToken);
+      localStorage.setItem('profile', JSON.stringify(profile));
+      // Display user information
+      lock.hide();
+      document.getElementById('add').setAttribute('style', 'display: block');
+      readCorrelations();
+      retrieve_profile();
+    });
+  });
+  var setup = getSetup();
+  var updater = getChartUpdater();
+
+  var start = moment().subtract(29, 'days');
+  var end = moment();
+
+  function cb(start, end) {
+    $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+  }
+
+  $('#reportrange').daterangepicker({
+    startDate: start,
+    endDate: end,
+    ranges: {
+      'Today': [moment(), moment()],
+      'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+      'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+      'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+      'This Month': [moment().startOf('month'), moment().endOf('month')],
+      'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+    }
+  }, cb);
+
+  cb(start, end);
 
   $('#btn-logout').click(function(e) {
     e.preventDefault();
     logout();
   })
 
-  app.lock.on("authenticated", function(authResult) {
-    app.lock.getProfile(authResult.idToken, function(error, profile) {
-      if (error) {
-        // Handle error
-        return;
-      }
-      localStorage.setItem('id_token', authResult.idToken);
-      // Display user information
-      app.lock.hide();
-      document.getElementById('add').setAttribute('style', 'display: block');
-      app.retrieve_profile();
-    });
-  });
-
 
 
   //retrieve the profile:
-  app.retrieve_profile = function() {
+  var retrieve_profile = function() {
     var id_token = localStorage.getItem('id_token');
     if (id_token) {
-      app.lock.getProfile(id_token, function (err, profile) {
+      lock.getProfile(id_token, function (err, profile) {
         if (err) {
           return alert('There was an error getting the profile: ' + err.message);
         }
-        console.log(profile);
         // Display user information
         show_profile_info(profile);
       });
@@ -133,18 +157,62 @@
 
   }
 
+  var logout = function() {
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('profile');
+    document.getElementById('add').setAttribute('style', 'display: none');
+    if (!app.isLoading) {
+      app.spinner.setAttribute('hidden', false);
+      app.container.setAttribute('hidden', true);
+      app.isLoading = true;
+    }
+    window.location.href = "/";
+  };
+
+  var readCorrelations = function () {
+    var url = 'http://localhost:5000';
+    var correlations_id = '#correlationsdiv';
+    var x_label_id = '#xLabel';
+    var y_label_id = '#yLabel';
+    var picker_id = '#reportrange';
+    var correlationList;
+    var time = new Object();
+    var user_id	= JSON.parse(localStorage.getItem('profile')).email;
+    var auth_token = localStorage.getItem('id_token');
+    $.ajaxSetup({
+      'beforeSend': function(xhr) {
+        if (localStorage.getItem('id_token')) {
+          xhr.setRequestHeader('Authorization',
+            'Bearer ' + localStorage.getItem('id_token'));
+        }
+      }
+    });
+    correlationList = setup.get_correlationsList(url);
+    setup.fillInXlabels(correlationList, x_label_id);
+    setup.fillInYlabels(url, user_id, correlationList, correlations_id, x_label_id, y_label_id);
+
+    $('body').on('change', x_label_id, function() {
+      setup.fillInYlabels(url, user_id, correlationList, correlations_id, x_label_id, y_label_id);
+    });
+    $('body').on('change', y_label_id, function() {
+      updater.update_correlations(url, user_id, correlationList, correlations_id)
+    });
+    if (app.isLoading) {
+      app.spinner.setAttribute('hidden', true);
+      app.container.removeAttribute('hidden');
+      app.isLoading = false;
+    }
+  }
+
   if(!localStorage.getItem('id_token')){
     document.getElementById('add').setAttribute('style', 'display: none');
-    app.lock.show();
+    lock.show();
   }
   else{
     document.getElementById('add').setAttribute('style', 'display: block');
-    app.retrieve_profile();
+    readCorrelations();
+    retrieve_profile();
+
   }
-  var logout = function() {
-    localStorage.removeItem('id_token');
-    document.getElementById('add').setAttribute('style', 'display: none');
-    window.location.href = "/";
-  };
 
 })();

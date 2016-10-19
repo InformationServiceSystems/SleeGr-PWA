@@ -52,14 +52,14 @@
     <!-- Your styles -->
     <link rel="stylesheet" href="styles/main.css">
 
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
     <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
     <!--
     <link rel="canonical" href="http://www.example.com/">
     -->
-    <script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
-
-    <!-- Auth0 lock script -->
-    <script src="//cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
@@ -79,7 +79,6 @@
         <a href="#features" class="mdl-layout__tab">Heartrate</a>
         <a href="#sleepdata" class="mdl-layout__tab">Sleep</a>
 
-
         <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
           <img alt="avatar" class="avatar" style="display:none; height: 100%; width: 100%">
         </button>
@@ -89,11 +88,30 @@
         </ul>
       </div>
     </header>
-    <main class="mdl-layout__content" hidden>
+    <main class="mdl-layout__content">
       <div class="mdl-layout__tab-panel is-active" id="overview">
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div id="chartdiv" class="card cardTemplate">
+          <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+            <span></span> <b class="caret"></b>
+          </div>
+        </section>
+        <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" hidden>
+          <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+            <div class="btn-group">
+              <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <label for="xLabel">Choose x-Label</label>
+                  <select class="form-control" id="xLabel"></select>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                  <label for="yLabel">Choose y-Label</label>
+                  <select class="form-control" id="yLabel"></select>
+                </div>
 
+              </div>
+            </div>
+            <div id="correlationsdiv" class="card cardTemplate" style="width: 100%;"></div>
           </div>
         </section>
       </div>
@@ -109,7 +127,29 @@
 
   <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
   <!-- build:js scripts/main.min.js -->
+  <script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+
+  <!-- Auth0 lock script -->
+  <script src="//cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
+
+  <script src="scripts/js/utils/common_functions.js" type="text/javascript"></script>
+
+  <script src="https://code.highcharts.com/highcharts.js" type="text/javascript"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js" type="text/javascript"></script>
+  <script src="scripts/js/amcharts/amcharts.js" type="text/javascript"></script>
+  <script src="scripts/js/amcharts/serial.js" type="text/javascript"></script>
+  <script src="http://www.amcharts.com/lib/3/themes/light.js" type="text/javascript"></script>
+  <script src="scripts/js/isscharts/functions/highcharts_functions.js" type="text/javascript"></script>
+  <script src="scripts/js/isscharts/functions/amCharts_functions.js" type="text/javascript"></script>
+  <script src="scripts/js/isscharts/charts.js" type="text/javascript"></script>
+  <script src="scripts/js/chart_updater.js" type="text/javascript"></script>
+  <script src="scripts/js/setup.js"></script>
+  <!-- Include Date Range Picker -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
   <script src="scripts/main.js"></script>
+
   <!-- endbuild -->
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
