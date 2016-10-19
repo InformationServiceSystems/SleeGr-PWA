@@ -100,9 +100,9 @@
       localStorage.setItem('profile', JSON.stringify(profile));
       // Display user information
       lock.hide();
-      document.getElementById('add').setAttribute('style', 'display: block');
-      readCorrelations();
+      document.getElementById('profile-button').setAttribute('style', 'display: block');
       retrieve_profile();
+      readCorrelations();
     });
   });
   var setup = getSetup();
@@ -160,7 +160,7 @@
   var logout = function() {
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
-    document.getElementById('add').setAttribute('style', 'display: none');
+    document.getElementById('profile-button').setAttribute('style', 'display: none');
     if (!app.isLoading) {
       app.spinner.setAttribute('hidden', false);
       app.container.setAttribute('hidden', true);
@@ -205,14 +205,13 @@
   }
 
   if(!localStorage.getItem('id_token')){
-    document.getElementById('add').setAttribute('style', 'display: none');
+    document.getElementById('profile-button').setAttribute('style', 'display: none');
     lock.show();
   }
   else{
-    document.getElementById('add').setAttribute('style', 'display: block');
-    readCorrelations();
+    document.getElementById('profile-button').setAttribute('style', 'display: block');
     retrieve_profile();
-
+    readCorrelations();
   }
 
 })();

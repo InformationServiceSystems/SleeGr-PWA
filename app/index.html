@@ -44,7 +44,7 @@
     material.blue-orange.min.css
     material.purple-indigo.min.css
     -->
-    <link rel="stylesheet" href="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_purple-red.min.css" />
 
     <!-- Material Design icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -52,7 +52,9 @@
     <!-- Your styles -->
     <link rel="stylesheet" href="styles/main.css">
 
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" />
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
 
@@ -62,30 +64,33 @@
     -->
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+      #profile-button {
+        position: fixed;
+        display: block;
+        right: 0;
+        top: 0;
+        margin-right: 40px;
+        margin-top: 20px;
+        z-index: 900;
+      }
+    </style>
+
   </head>
 
   <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
       <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-      </div>
-      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        <h3>SleeGr</h3>
-      </div>
-      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
+        <h2>SleeGr</h2>
       </div>
       <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-        <a href="#overview" class="mdl-layout__tab is-active">Dashboard</a>
-        <a href="#features" class="mdl-layout__tab">Heartrate</a>
-        <a href="#sleepdata" class="mdl-layout__tab">Sleep</a>
+        <a href="#overview" class="mdl-layout__tab"><img src="images/icons/dashboard-icon-3e0e4acd7a9b788ff73d3c144017a6eb.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
+        <a href="#feature" class="mdl-layout__tab"><img src="images/icons/pulse-512.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
+        <a href="#sleepdata" class="mdl-layout__tab"><img src="images/icons/sleep-icon-2.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
+        <a href="#sleepdata" class="mdl-layout__tab"><img src="images/icons/profile-icon.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
 
-        <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-shadow--4dp mdl-color--accent" id="add">
-          <img alt="avatar" class="avatar" style="display:none; height: 100%; width: 100%">
-        </button>
-        <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="add">
-          <li id="username" class="mdl-menu__item"></li>
-          <li id="btn-logout" class="mdl-menu__item">Log Out</li>
-        </ul>
       </div>
     </header>
     <main class="mdl-layout__content">
@@ -123,7 +128,13 @@
     </div>
   </div>
 
-
+  <button id="profile-button" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-color--accent mdl-color-text--accent-contrast">
+    <img alt="avatar" class="avatar" style="display:none; height: 100%; width: 100%">
+  </button>
+  <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="profile-button">
+    <li id="username" class="mdl-menu__item"></li>
+    <li id="btn-logout" class="mdl-menu__item">Log Out</li>
+  </ul>
 
   <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
   <!-- build:js scripts/main.min.js -->
