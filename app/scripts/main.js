@@ -82,29 +82,6 @@
     container: document.querySelector('#corellContainer'),
     utils: getUtils()
   };
-
-  var lock = app.utils.initLock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
-    auth: {
-      params: {scope: 'openid email'}
-    },
-    closable: false
-  });
-
-  lock.on("authenticated", function(authResult) {
-    lock.getProfile(authResult.idToken, function(error, profile) {
-      if (error) {
-        // Handle error
-        return;
-      }
-      localStorage.setItem('id_token', authResult.idToken);
-      localStorage.setItem('profile', JSON.stringify(profile));
-      // Display user information
-      lock.hide();
-      document.getElementById('profile-button').setAttribute('style', 'display: block');
-      retrieve_profile();
-      readCorrelations();
-    });
-  });
   var setup = getSetup();
   var updater = getChartUpdater();
 
@@ -133,9 +110,7 @@
   $('#btn-logout').click(function(e) {
     e.preventDefault();
     logout();
-  })
-
-
+  });
 
   //retrieve the profile:
   var retrieve_profile = function() {
@@ -169,8 +144,10 @@
     window.location.href = "/";
   };
 
+
+
   var readCorrelations = function () {
-    var url = 'http://localhost:5000';
+    var url = 'http://192.168.0.247:5000';
     var correlations_id = '#correlationsdiv';
     var x_label_id = '#xLabel';
     var y_label_id = '#yLabel';
@@ -203,6 +180,12 @@
       app.isLoading = false;
     }
   }
+  var lock = app.utils.initLock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
+    auth: {
+      params: {scope: 'openid email'}
+    },
+    closable: false
+  });
 
   if(!localStorage.getItem('id_token')){
     document.getElementById('profile-button').setAttribute('style', 'display: none');
@@ -213,5 +196,20 @@
     retrieve_profile();
     readCorrelations();
   }
+  lock.on("authenticated", function(authResult) {
+    lock.getProfile(authResult.idToken, function(error, profile) {
+      if (error) {
+        // Handle error
+        return;
+      }
+      localStorage.setItem('id_token', authResult.idToken);
+      localStorage.setItem('profile', JSON.stringify(profile));
+      // Display user information
+      lock.hide();
+      document.getElementById('profile-button').setAttribute('style', 'display: block');
+      retrieve_profile();
+      readCorrelations();
+    });
+  });
 
 })();

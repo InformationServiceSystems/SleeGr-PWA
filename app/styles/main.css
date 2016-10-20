@@ -24,9 +24,7 @@ html, body {
   margin: 0;
   padding: 0;
 }
-.mdl-demo .mdl-layout__header-row {
-  padding-left: 40px;
-}
+
 .mdl-demo .mdl-layout.is-small-screen .mdl-layout__header-row h3 {
   font-size: inherit;
 }
@@ -45,7 +43,7 @@ html, body {
 }
 .mdl-demo .mdl-layout__tab-bar {
   padding: 0;
-  padding-left: 16px;
+  padding-left: 0px;
   box-sizing: border-box;
   height: 100%;
   width: 100%;
@@ -110,7 +108,7 @@ html, body {
   margin-bottom: 48px;
 }
 .mdl-demo section.section--center {
-  max-width: 860px;
+  max-width: 1300px;
 }
 .mdl-demo #features section.section--center {
   max-width: 620px;
@@ -180,9 +178,7 @@ html, body {
 .mdl-demo .mdl-card .mdl-card__supporting-text > h3:first-child {
   margin-bottom: 24px;
 }
-.mdl-demo .mdl-layout__tab-panel:not(#overview) {
-  background-color: white;
-}
+
 .mdl-demo #features section {
   margin-bottom: 72px;
 }

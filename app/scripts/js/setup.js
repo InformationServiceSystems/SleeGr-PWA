@@ -92,7 +92,7 @@ function getSetup(){
   setup.get_correlationsList = function(url){
       var correlationsUrl = utils.format_url(url, 'get_correlations_list');
       var list;
-      $.ajax({type : 'GET', url: correlationsUrl, success: function (data) {
+      $.ajax({type : 'GET', crossDomain:true, url: correlationsUrl, success: function (data) {
               list=JSON.parse(data);
           },
           async: false

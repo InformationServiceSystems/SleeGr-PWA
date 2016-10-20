@@ -37,7 +37,7 @@ function getChartUpdater() {
 					nextDay: nextDay
 					};
 
-		$.ajax({type: "POST", url: rooturl, data: data, success: function(result){
+		$.ajax({type: "POST", crossDomain: true,url: rooturl, data: data, success: function(result){
 			var data_points = JSON.parse(result);
 			if (data_points!=null){
 				console.log('data from  %s', rooturl);

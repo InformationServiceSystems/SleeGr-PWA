@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Starter Kit</title>
+    <title>SleeGr - Version 1.0</title>
     <link rel="stylesheet" type="text/css" href="styles/inline.css">
 
     <!-- Disable tap highlight on IE -->
@@ -80,27 +80,25 @@
   </head>
 
   <body class="mdl-demo mdl-color--grey-100 mdl-color-text--grey-700 mdl-base">
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-    <header class="mdl-layout__header mdl-layout__header--scroll mdl-color--primary">
-      <div class="mdl-layout--large-screen-only mdl-layout__header-row">
-        <h2>SleeGr</h2>
+  <!-- Simple header with fixed tabs. -->
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header mdl-layout--fixed-tabs">
+    <header class="mdl-layout__header mdl-color--primary">
+      <div class="mdl-layout__header-row">
+        <!-- Title -->
+        <span class="mdl-layout-title">SleeGr</span>
       </div>
       <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-        <a href="#overview" class="mdl-layout__tab"><img src="images/icons/dashboard-icon-3e0e4acd7a9b788ff73d3c144017a6eb.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
-        <a href="#feature" class="mdl-layout__tab"><img src="images/icons/pulse-512.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
-        <a href="#sleepdata" class="mdl-layout__tab"><img src="images/icons/sleep-icon-2.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
-        <a href="#sleepdata" class="mdl-layout__tab"><img src="images/icons/profile-icon.png" style="width: auto; height: 60%; filter: brightness(0) invert(1);"></a>
-
+        <a href="#dashboard" class="mdl-layout__tab is-active"><img alt="Dashboard" src="images/icons/dashboard-icon-3e0e4acd7a9b788ff73d3c144017a6eb.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a href="#heartrate" class="mdl-layout__tab"><img alt="Heartrate" src="images/icons/pulse-512.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a href="#sleepdata" class="mdl-layout__tab"><img alt="Sleep" src="images/icons/sleep-icon-2.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a href="#profile" class="mdl-layout__tab"><img alt="Profile" src="images/icons/profile-icon.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
       </div>
     </header>
+    <div class="mdl-layout__drawer">
+      <span class="mdl-layout-title">Title</span>
+    </div>
     <main class="mdl-layout__content">
-      <div class="mdl-layout__tab-panel is-active" id="overview">
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-            <span></span> <b class="caret"></b>
-          </div>
-        </section>
+      <div class="mdl-layout__tab-panel is-active" id="dashboard">
         <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" hidden>
           <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
             <div class="btn-group">
@@ -119,6 +117,21 @@
             <div id="correlationsdiv" class="card cardTemplate" style="width: 100%;"></div>
           </div>
         </section>
+      </div>
+      <div class="mdl-layout__tab-panel" id="heartrate">
+
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+            <span></span> <b class="caret"></b>
+          </div>
+        </section>
+      </div>
+      <div class="mdl-layout__tab-panel" id="sleepdata">
+
+      </div>
+      <div class="mdl-layout__tab-panel" id="profile">
+
       </div>
     </main>
     <div class="loader">
