@@ -827,7 +827,7 @@ ChartUpdater.prototype = {
   update_correlations: function (url, user_id, linearData, correlations_id, app){
     if (!app.isLoading) {
       app.spinner.setAttribute('hidden', false);
-      app.container.setAttribute('hidden', true);
+      app.corellationsContainer.setAttribute('hidden', true);
       app.isLoading = true;
     }
     var nextDay;
@@ -862,7 +862,7 @@ ChartUpdater.prototype = {
       }
       if (app.isLoading) {
         app.spinner.setAttribute('hidden', true);
-        app.container.removeAttribute('hidden');
+        app.corellationsContainer.removeAttribute('hidden');
         app.isLoading = false;
       }
       return;
@@ -1128,7 +1128,8 @@ Setup.prototype = {
     isLoading: true,
     spinner: document.querySelector('.loader'),
     cardTemplate: document.querySelector('.cardTemplate'),
-    container: document.querySelector('#corellContainer'),
+    corellationsContainer: document.querySelector('#corellContainer'),
+    sleepContainer: document.querySelector('#sleepContainer'),
     utils: new Util(),
     setup: new Setup(),
     updater: new ChartUpdater(),
@@ -1187,7 +1188,13 @@ Setup.prototype = {
     $('body').on('change', y_label_id, function() {
       app.updater.update_correlations(app.url, user_id, app.correlations_list, correlations_id, app)
     });
-  }
+  };
+
+  app.readSleepData = function() {
+    var sleepDataId = 'sleepchart';
+    var userId = JSON.parse(localStorage.getItem('profile')).email;
+    app.updater.update_heatmap(app.url, userId, '01.01.2016', '01.06.2016', sleepDataId);
+  };
 
   //retrieve the profile:
   var retrieve_profile = function() {
@@ -1223,7 +1230,7 @@ Setup.prototype = {
     document.getElementById('profile-button').setAttribute('style', 'display: none');
     if (!app.isLoading) {
       app.spinner.setAttribute('hidden', false);
-      app.container.setAttribute('hidden', true);
+      app.corellationsContainer.setAttribute('hidden', true);
       app.isLoading = true;
     }
     window.location.href = "/";
@@ -1243,6 +1250,7 @@ Setup.prototype = {
     retrieve_profile();
     lock.hide();
     app.readCorrelations();
+    app.readSleepData();
   };
 
   lock.on("authenticated", function(authResult) {
@@ -1263,6 +1271,7 @@ Setup.prototype = {
     e.preventDefault();
     logout();
   });
+  app.initDatePicker();
 
   if(!localStorage.getItem('id_token')){
     document.getElementById('profile-button').setAttribute('style', 'display: none');
