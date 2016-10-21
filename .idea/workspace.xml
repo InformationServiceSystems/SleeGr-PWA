@@ -2,284 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2af8fd4e-a79a-4a92-8e51-af42aac38de3" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/amcharts.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/amstock.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIcon.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconBlack.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconH.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconHBlack.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBig.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBig.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBigBlack.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBigBlack.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBigBlackH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBigBlackH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBigH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectBigH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmall.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmall.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmallBlack.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmallBlack.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmallBlackH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmallBlackH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmallH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRectSmallH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBig.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBig.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBigBlack.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBigBlack.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBigBlackH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBigBlackH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBigH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundBigH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmall.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmall.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmallBlack.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmallBlack.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmallBlackH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmallBlackH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmallH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/dragIconRoundSmallH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/eraserIcon.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/eraserIcon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/eraserIcon.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/eraserIconH.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/eraserIconH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/eraserIconH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/export.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/exportWhite.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/lens.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/lens.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/lensWhite.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/lensWhite.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/lensWhite_old.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/lens_old.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/pencilIcon.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/pencilIcon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/pencilIcon.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/pencilIconH.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/pencilIconH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/pencilIconH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/xIcon.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/xIcon.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/xIcon.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/xIconH.gif" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/xIconH.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/images/xIconH.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/az.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/bg.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/de.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/es.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/fi.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/fo.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/fr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/hr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/hu.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/id.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/is.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/it.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/ja.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/lt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/lv.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/mk.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/mn.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/mt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/nl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/no.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/pl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/pt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/ro.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/ru.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/rw.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/sk.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/so.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/th.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/lang/tr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern10.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern11.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern12.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern13.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern14.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern15.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern16.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern17.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern18.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern19.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern20.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern21.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern4.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern5.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern6.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern7.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern8.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/black/pattern9.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern1.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern1r.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern2.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern3.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern4.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern5.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/chalk/pattern6.jpg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern1.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern10.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern11.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern12.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern13.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern14.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern15.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern16.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern17.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern18.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern19.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern2.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern20.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern21.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern3.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern4.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern5.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern6.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern7.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern8.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/patterns/white/pattern9.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/dataloader.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/dataloader.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/MSFT.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/MSFT_events.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/TXN.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/gauge.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/map.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/pie.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/pie.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/serial.csv" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/serial.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/data/serial2.json" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/gauge_json.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/map_json.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/pie_csv.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/pie_json.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/serial2_json.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/serial_csv.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/serial_json.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/serial_with_dynamic_graphs.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/examples/stock_csv_data_and_events.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/lang/en.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/lang/lt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/license.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/dataloader/readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/README.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/export.config.advanced.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/export.config.default.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/funnel.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/gantt.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/gauge.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/images/bicycle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/images/car.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/images/motorcycle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/map.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/pie1.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/pie2.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/pie3.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/pie4.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/radar.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/serial1.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/serial2.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/serial3.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/stock.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/examples/xy.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/export.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/export.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/export.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/lang/de.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/lang/en.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/lang/fr.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/lang/lt.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/lang/pl.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/FileSaver.js/FileSaver.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/FileSaver.js/FileSaver.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/blob.js/blob.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/fabric.js/fabric.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/fabric.js/fabric.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/jszip/jszip.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/jszip/jszip.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/pdfmake/pdfmake.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/pdfmake/pdfmake.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/pdfmake/pdfmake.min.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/pdfmake/vfs_fonts.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/xlsx/LICENSE" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/xlsx/xlsx.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/xlsx/xlsx.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/libs/xlsx/xlsx.min.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/1.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/10.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/11.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/12.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/13.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/14.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/15.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/16.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/17.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/18.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/19.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/2.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/20.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/21.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/22.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/23.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/24.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/25.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/26.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/27.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/28.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/29.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/3.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/30.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/31.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/4.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/5.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/6.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/7.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/8.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/export/shapes/9.svg" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/funnel.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/gantt.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/gauge.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/images/bicycle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/images/car.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/images/motorcycle.png" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/index.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/map.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/pie1.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/pie2.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/pie3.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/radar.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/serial1.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/serial2.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/serial3.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/stock.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/examples/xy.html" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/license.txt" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/readme.md" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/responsive.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/responsive.min.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/plugins/responsive/responsive.min.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/serial.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/style.css" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/themes/black.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/themes/chalk.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/themes/dark.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/themes/light.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/amcharts/themes/patterns.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/chart_updater.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/isscharts/charts.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/isscharts/functions/amCharts_functions.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/isscharts/functions/highcharts_functions.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/setup.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/scripts/js/utils/common_functions.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/index.html" afterPath="$PROJECT_DIR$/app/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/scripts/main.js" afterPath="$PROJECT_DIR$/app/scripts/main.js" />
@@ -306,8 +28,8 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1736">
-              <caret line="113" column="14" selection-start-line="113" selection-start-column="14" selection-end-line="113" selection-end-column="14" />
+            <state relative-caret-position="504">
+              <caret line="153" column="81" selection-start-line="153" selection-start-column="81" selection-end-line="153" selection-end-column="81" />
               <folding>
                 <element signature="n#style#0;n#img#0;n#a#0;n#div#1;n#header#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#img#0;n#a#1;n#div#1;n#header#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -324,28 +46,28 @@
       <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/scripts/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="726">
-              <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+            <state relative-caret-position="310">
+              <caret line="817" column="9" selection-start-line="817" selection-start-column="9" selection-end-line="817" selection-end-column="9" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
-                <marker date="1477044445282" expanded="true" signature="14499:14515" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14538:14555" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14618:14634" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14655:14672" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14733:14749" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14777:14794" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14867:14883" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="14922:14939" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="15029:15045" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="15066:15083" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="21299:21306" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="21396:21413" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="21614:21621" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="21714:21731" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="24033:24040" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="24120:24137" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="24310:24317" placeholder="..." />
-                <marker date="1477044445282" expanded="true" signature="24394:24411" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14324:14340" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14363:14380" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14443:14459" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14480:14497" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14558:14574" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14602:14619" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14692:14708" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14747:14764" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14854:14870" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="14891:14908" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="21125:21132" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="21222:21239" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="21440:21447" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="21540:21557" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="23858:23865" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="23945:23962" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="24135:24142" placeholder="..." />
+                <marker date="1477052352433" expanded="true" signature="24219:24236" placeholder="..." />
               </folding>
             </state>
           </provider>
@@ -394,8 +116,8 @@
         <option value="$PROJECT_DIR$/app/styles/main.css" />
         <option value="$PROJECT_DIR$/app/scripts/js/utils/common_functions.js" />
         <option value="$PROJECT_DIR$/app/scripts/js/chart_updater.js" />
-        <option value="$PROJECT_DIR$/app/index.html" />
         <option value="$PROJECT_DIR$/app/scripts/main.js" />
+        <option value="$PROJECT_DIR$/app/index.html" />
       </list>
     </option>
   </component>
@@ -465,6 +187,38 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="dist" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sleegr_progressive_web_app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sleegr_progressive_web_app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="dist" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="styles" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sleegr_progressive_web_app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sleegr_progressive_web_app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -502,6 +256,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sleegr_progressive_web_app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sleegr_progressive_web_app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="scripts" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sw" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -653,12 +429,12 @@
       <workItem from="1476907069404" duration="7459000" />
       <workItem from="1476946417133" duration="4354000" />
       <workItem from="1476951208425" duration="8197000" />
-      <workItem from="1477034884283" duration="9589000" />
+      <workItem from="1477034884283" duration="17374000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="55322000" />
+    <option name="totallyTimeSpent" value="63107000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-9" y="-9" width="1938" height="1098" extended-state="6" />
@@ -667,6 +443,7 @@
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -678,7 +455,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32987553" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
@@ -698,40 +474,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/scripts/main.min.js.map">
-      <provider editor-type-id="sourcemapFileViewerProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/scripts/main.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/dist/styles/main.css.map">
-      <provider editor-type-id="sourcemapFileViewerProvider">
-        <state />
-      </provider>
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/humans.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -832,20 +574,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.tmp/scripts/main.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="118" column="2" selection-start-line="118" selection-start-column="2" selection-end-line="118" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/scripts/sw/runtime-caching.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/js/amcharts/lang/az.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -913,16 +641,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="22">
           <caret line="1" column="11" selection-start-line="1" selection-start-column="11" selection-end-line="1" selection-end-column="26" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/gulpfile.babel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3520">
-          <caret line="168" column="14" selection-start-line="168" selection-start-column="14" selection-end-line="168" selection-end-column="14" />
-          <folding>
-            <element signature="e#898#922#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -995,14 +713,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/styles/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="887">
-          <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/example.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-3192">
@@ -1011,10 +721,71 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/gulpfile.babel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="44" column="44" selection-start-line="44" selection-start-column="38" selection-end-line="44" selection-end-column="44" />
+          <folding>
+            <element signature="e#898#922#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/scripts/main.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="18" column="2155" selection-start-line="18" selection-start-column="2155" selection-end-line="18" selection-end-column="2155" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.tmp/scripts/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="336">
+          <caret line="117" column="2" selection-start-line="117" selection-start-column="2" selection-end-line="117" selection-end-column="2" />
+          <folding>
+            <marker date="1477052591555" expanded="true" signature="14319:14335" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14358:14375" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14438:14454" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14475:14492" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14553:14569" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14597:14614" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14687:14703" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14742:14759" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14849:14865" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="14886:14903" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="21120:21127" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="21217:21234" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="21435:21442" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="21535:21552" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="23853:23860" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="23940:23957" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="24130:24137" placeholder="..." />
+            <marker date="1477052591555" expanded="true" signature="24214:24231" placeholder="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/styles/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dist/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1736">
-          <caret line="113" column="14" selection-start-line="113" selection-start-column="14" selection-end-line="113" selection-end-column="14" />
+        <state relative-caret-position="504">
+          <caret line="153" column="81" selection-start-line="153" selection-start-column="81" selection-end-line="153" selection-end-column="81" />
           <folding>
             <element signature="n#style#0;n#img#0;n#a#0;n#div#1;n#header#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#img#0;n#a#1;n#div#1;n#header#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -1027,30 +798,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/scripts/sw/runtime-caching.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/styles/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="887">
+          <caret line="180" column="0" selection-start-line="180" selection-start-column="0" selection-end-line="180" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/scripts/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="726">
-          <caret line="33" column="19" selection-start-line="33" selection-start-column="19" selection-end-line="33" selection-end-column="19" />
+        <state relative-caret-position="310">
+          <caret line="817" column="9" selection-start-line="817" selection-start-column="9" selection-end-line="817" selection-end-column="9" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
-            <marker date="1477044445282" expanded="true" signature="14499:14515" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14538:14555" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14618:14634" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14655:14672" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14733:14749" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14777:14794" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14867:14883" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="14922:14939" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="15029:15045" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="15066:15083" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="21299:21306" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="21396:21413" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="21614:21621" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="21714:21731" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="24033:24040" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="24120:24137" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="24310:24317" placeholder="..." />
-            <marker date="1477044445282" expanded="true" signature="24394:24411" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14324:14340" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14363:14380" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14443:14459" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14480:14497" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14558:14574" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14602:14619" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14692:14708" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14747:14764" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14854:14870" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="14891:14908" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="21125:21132" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="21222:21239" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="21440:21447" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="21540:21557" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="23858:23865" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="23945:23962" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="24135:24142" placeholder="..." />
+            <marker date="1477052352433" expanded="true" signature="24219:24236" placeholder="..." />
           </folding>
         </state>
       </provider>

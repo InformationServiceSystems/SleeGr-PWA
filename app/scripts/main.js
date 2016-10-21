@@ -31,305 +31,310 @@ Util.prototype = {
   },
   toDate: function(str) {
     var chunks = str.split('.');
-    return new Date(chunks[2], chunks[1]-1, chunks[0]);
+    return new Date(chunks[2], chunks[1] - 1, chunks[0]);
   },
-  getWeekday: function (day){
+  getWeekday: function(day) {
     return this.WEEKDAYS[day];
   },
-  secondsToMinutes: function (seconds){
-    var totalMins = Math.round(seconds/60);
-    var mins = totalMins%60;
-    var hours = (totalMins-mins)/60;
-    if (hours===0){
+  secondsToMinutes: function(seconds) {
+    var totalMins = Math.round(seconds / 60);
+    var mins = totalMins % 60;
+    var hours = (totalMins - mins) / 60;
+    if (hours === 0) {
       return mins + ' minutes';
     }
     return hours + ' hours ' + mins + ' minutes';
   },
-  contains: function (a, obj) {
+  contains: function(a, obj) {
     for (var i = 0; i < a.length; i++) {
-      if (a[i] == obj) {
+      if (a[i] === obj) {
         return true;
       }
     }
     return false;
   },
-  getNoDataDiv: function (text){
-    var error_page = '<div class="error-content" align="center"> ' +
+  getNoDataDiv: function(text) {
+    var errorPage = '<div class="error-content" align="center"> ' +
       '<h3><i class="fa fa-warning text-yellow"></i> No data available.</h3> ' +
       '<p>' +
       'Sorry! ' + text +
       '</p> ' +
       '</div>';
 
-    return error_page;
+    return errorPage;
   },
-  getHtmlDataTable: function (data_points){
-    var content = "";
-    content += "<thead class='datathead'>" +
-      "<tr class='datatr'>" +
-      "<th class='datath'>Date</th>" +
-      "<th class='datath'>a</th>" +
-      "<th class='datath'>T</th>" +
-      "<th class='datath'>c</th>" +
-      "</tr>" +
-      "</thead>" +
-      "<tbody class='datatbody'>";
-    if (data_points.length != 0) {
+  getHtmlDataTable: function(dataPoints) {
+    var content = '';
+    content += '<thead class="datathead">' +
+      '<tr class="datatr">' +
+      '<th class="datath">Date</th>' +
+      '<th class="datath">a</th>' +
+      '<th class="datath">T</th>' +
+      '<th class="datath">c</th>' +
+      '</tr>' +
+      '</thead>' +
+      '<tbody class="datatbody">';
+    if (dataPoints.length !== 0) {
       try {
-        for (var i = 0; i < data_points.length; i++) {
-          if (!(data_points[i].a == null) && !(data_points[i].t == null) && !(data_points[i].c == null)) {
-            content += "<tr class='datatr'>";
-            content += "<td class=\"datatd filterable-cell\">" + data_points[i].date + "</td>";
-            content += "<td  class=\"datatd filterable-cell\">" + Math.round(data_points[i].a * 100) / 100 + "</td>";
-            content += "<td  class=\"datatd filterable-cell\">" + Math.round(data_points[i].t * 100) / 100 + "</td>";
-            content += "<td  class=\"datatd filterable-cell\">" + Math.round(data_points[i].c * 100) / 100 + "</td>";
-            content += "</tr>";
+        for (var i = 0; i < dataPoints.length; i++) {
+          if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)) {
+            content += '<tr class="datatr">';
+            content += '<td class="datatd filterable-cell">' + dataPoints[i].date + '</td>';
+            content += '<td  class="datatd filterable-cell">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
+            content += '<td  class="datatd filterable-cell">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
+            content += '<td  class="datatd filterable-cell">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '</tr>';
           }
         }
-      }
-      catch (e) {
+      } catch (e) {
         this.logerr('getNoDataTable()', e);
-        return "";
-      }// catch
-      content += "</tbody>";
+        return '';
+      }
+      content += '</tbody>';
     }
     return content;
   },
-  fadeInHtmlTable: function  (points, table_div){
+  fadeInHtmlTable: function(points, tableDiv) {
     var content;
-    if(table_div!=null){
+    if (tableDiv !== null) {
       content = this.getHtmlDataTable(points);
     }
-    $(table_div).html(content);
+    $(tableDiv).html(content);
   },
-  format_url: function (root, type){
+  formatUrl: function(root, type) {
     var url;
-    if(type){
-      url = encodeURI(root  +   '/' + type);
+    if (type) {
+      url = encodeURI(root + '/' + type);
     } else {
-      url =  encodeURI(root);
+      url = encodeURI(root);
     }
     return url;
   },
-  NormalDensityZx: function ( x, Mean, StdDev ) {
-    var a = x - Mean;
-    return Math.exp( -( a * a ) / ( 2 * StdDev * StdDev ) ) / ( Math.sqrt( 2 * Math.PI ) * StdDev );
+  normalDensityZx: function(x, mean, stdDev) {
+    var a = x - mean;
+    return Math.exp(-(a * a) / (2 * stdDev * stdDev)) / (Math.sqrt(2 * Math.PI) * stdDev);
   },
-  standardNormalQx: function (x, glb_mean, glb_dev) {
-    if ( x === 0 ) // no approximation necessary for 0
+  standardNormalQx: function(x, glbMean, glbDev) {
+    if (x === 0) {
       return 0.50;
-
-    var t1, t2, t3, t4, t5, qx;
+    }
+    var t1;
+    var t2;
+    var t3;
+    var t4;
+    var t5;
+    var qx;
     var negative = false;
-    if ( x < 0 ) {
+    if (x < 0) {
       x = -x;
       negative = true;
     }
-    t1 = 1 / ( 1 + ( 0.2316419 * x ) );
+    t1 = 1 / (1 + (0.2316419 * x));
     t2 = t1 * t1;
     t3 = t2 * t1;
     t4 = t3 * t1;
     t5 = t4 * t1;
-    qx = this.NormalDensityZx( x, glb_mean, glb_dev) * ( ( 0.319381530 * t1 ) + ( -0.356563782 * t2 ) +
-      ( 1.781477937 * t3 ) + ( -1.821255978 * t4 ) + ( 1.330274429 * t5 ) );
-    if ( negative == true )
+    qx = this.normalDensityZx(x, glbMean, glbDev) * ((0.319381530 * t1) + (-0.356563782 * t2) + (1.781477937 * t3) +
+      (-1.821255978 * t4) + (1.330274429 * t5));
+    if (negative === true) {
       qx = 1 - qx;
+    }
     return qx;
   },
-  standardNormalPx: function ( x, glb_mean, glb_dev) {
-    return 1 - this.standardNormalQx(x, glb_mean, glb_dev);
+  standardNormalPx: function(x, glbMean, glbDev) {
+    return 1 - this.standardNormalQx(x, glbMean, glbDev);
   },
-  standardNormalAx: function ( x , glb_mean, glb_dev) {
-    return 1 - ( 2 * this.standardNormalQx(Math.abs(x), glb_mean, glb_dev) );
+  standardNormalAx: function(x, glbMean, glbDev) {
+    return 1 - (2 * this.standardNormalQx(Math.abs(x), glbMean, glbDev));
   },
-  initLock: function (client_id, client_domain, options) {
-    var lock = new Auth0Lock(client_id, client_domain, options);
+  initLock: function(clientId, clientDomain, options) {
+    var lock = new Auth0Lock(clientId, clientDomain, options);
     return lock;
   }
 };
 
-
-function HighchartFunctions () {
+function HighchartFunctions() {
   this.utils = new Util();
 }
 HighchartFunctions.prototype = {
-  highcharts_newRandomColor: function () {
+  highchartsNewRandomColor: function() {
     var color = [];
     color.push((Math.random() * 255).toFixed());
     color.push((Math.random() * 255).toFixed());
     color.push((Math.random() * 255).toFixed());
 
-    //opacity fixed to 100%
+    // opacity fixed to 100%
     color.push(1);
     color = 'rgba(' + color.join(',') + ')';
     return color;
   },
-  highcharts_getColor: function (html_id, name){
-    if ($(html_id).highcharts()!=null){
-      var chart = $(html_id).highcharts();
+  highchartsGetColor: function(htmlId, name) {
+    if ($(htmlId).highcharts() !== null) {
+      var chart = $(htmlId).highcharts();
       var serieses = chart.series;
-      for (var i = 0; i<serieses.length; i++){
-        if (serieses[i].options.type=='line'&& serieses[i].options.name==name){
+      for (var i = 0; i < serieses.length; i++) {
+        if (serieses[i].options.type === 'line' && serieses[i].options.name === name) {
           return serieses[i].options.color;
         }
       }
     }
-    return this.highcharts_newRandomColor();
+    return this.highchartsNewRandomColor();
   },
-  highcharts_getFormatter: function(xlabel){
+  highchartsGetFormatter: function(xlabel) {
     var formatter = null;
-    if (xlabel=="Sleep start"){
-      formatter = function(){
-        var format = this.value/(60*60);
+    if (xlabel === 'Sleep start') {
+      formatter = function() {
+        var format = this.value / (60 * 60);
         var hours = Math.round(format);
-        var mins = format-hours;
-        if (mins<0){
+        var mins = format - hours;
+        if (mins < 0) {
           --hours;
-          mins = format-hours;
+          mins = format - hours;
         }
-        mins = Math.round(mins*60);
+        mins = Math.round(mins * 60);
         return hours + ':' + mins + 'h';
       };
     }
-    if (xlabel=="Day of week"){
+    if (xlabel === 'Day of week') {
       var utils = this.utils;
-      formatter = function(){
-        if (this.value-Math.round(this.value)==0){
+      formatter = function() {
+        if (this.value - Math.round(this.value) === 0) {
           return utils.getWeekday(Math.round(this.value));
         }
       };
     }
     return formatter;
   },
-  createLineSeries: function (id, grp_type, visible, name, color, data,showInLegend, data_select_id, legendClickFunction){
-    //tooltip.valuePrefix = legend;
-    var series 			= {};
-    series.id			= id;
-    series.type			= 'line';
-    series.grp			= String(grp_type);
-    series.visible	 	= visible;
-    series.showInLegend	= showInLegend;
-    series.name			= name;
-    series.data			= data;
-    series.color		= color;
-    if (showInLegend){series.selected 	= visible;
-      series.events 		= {};
-      series.events.legendItemClick 	= legendClickFunction;
-    }
-    return series;
-  },
-  createScatterSeries: function (name, color, type, visible, linkedId, data, point_symbol, show_data){
+  createLineSeries: function(id, grpType, visible, name, color, data, showInLegend, dataSelectId, legendClickFunction) {
+    // tooltip.valuePrefix = legend;
     var series = {};
-    series.type 		= 'scatter';
-    series.grp		= String(type);
-    if (visible&&show_data){
-      series.selected		= true;
-      series.visible		= true;
-    } else {
-      series.selected		= false;
-      series.visible		= false;
+    series.id = id;
+    series.type = 'line';
+    series.grp = String(grpType);
+    series.visible = visible;
+    series.showInLegend	= showInLegend;
+    series.name = name;
+    series.data = data;
+    series.color = color;
+    if (showInLegend) {
+      series.selected = visible;
+      series.events = {};
+      series.events.legendItemClick = legendClickFunction;
     }
-    series.linkedTo 	= linkedId;
-    series.name		= name;
-    series.data 		= data;
-    series.showInLegend 	= false;
-    series.color		= color;
-    series.marker		= {radius: 2,  symbol: point_symbol};
     return series;
   },
-  getScatterData: function (points, only_5mins){
-    var series_data = [];
-    for(var i=0; i< points.length; i++){
-      if(only_5mins){
-        if(points[i].x <= 300){
-          series_data.push([points[i].x, points[i].y]);
+  createScatterSeries: function(name, color, type, visible, linkedId, data, pointSymbol, showData) {
+    var series = {};
+    series.type = 'scatter';
+    series.grp = String(type);
+    if (visible && showData) {
+      series.selected = true;
+      series.visible = true;
+    } else {
+      series.selected = false;
+      series.visible = false;
+    }
+    series.linkedTo = linkedId;
+    series.name = name;
+    series.data = data;
+    series.showInLegend = false;
+    series.color = color;
+    series.marker = {radius: 2, symbol: pointSymbol};
+    return series;
+  },
+  getScatterData: function(points, only5mins) {
+    var seriesData = [];
+    for (var i = 0; i < points.length; i++) {
+      if (only5mins) {
+        if (points[i].x <= 300) {
+          seriesData.push([points[i].x, points[i].y]);
         }
       } else {
-        if (points[i].x <= 12000){
-          series_data.push([points[i].x, points[i].y]);
+        if (points[i].x <= 12000) {
+          seriesData.push([points[i].x, points[i].y]);
         }
       }
     }
-    return series_data;
+    return seriesData;
   },
-  getTwoDotLinePoints: function (x1, y1, x2, y2, step){
-    var m = (y2-y1)/(x2-x1);
-    var n = y1 - m*x1;
+  getTwoDotLinePoints: function(x1, y1, x2, y2, step) {
+    var m = (y2 - y1) / (x2 - x1);
+    var n = y1 - m * x1;
     var points = [];
-    for (var x = x1; x <= x2; x+= step) {
-      var y =m*x+n;
+    for (var x = x1; x <= x2; x += step) {
+      var y = m * x + n;
       points.push([x, y]);
     }
     points.push([x2, y2]);
     return points;
   },
-  getExponentialPoints: function(a, t , c, step, max_x){
-    var series_data	= [];
-    var start_HR = 180;
-    for (var x = 0; x <= max_x; x+= step) {
-      var y = (start_HR-c)*Math.exp(-(x-t)/a) + c;
-      series_data.push([x, y]);
+  getExponentialPoints: function(a, t, c, step, maximumXValue) {
+    var seriesData	= [];
+    var startHeartrate = 180;
+    for (var x = 0; x <= maximumXValue; x += step) {
+      var y = (startHeartrate - c) * Math.exp(-(x - t) / a) + c;
+      seriesData.push([x, y]);
     }
-    return series_data;
+    return seriesData;
   },
-  getCorellSeries: function (x1, y1, x2, y2, data_points, point_symbol, id){
-    var step = (x2-x1)/200;
+  getCorellSeries: function(x1, y1, x2, y2, dataPoints, pointSymbol, id) {
+    var step = (x2 - x1) / 200;
     var lineData = this.getTwoDotLinePoints(x1, y1, x2, y2, step);
     var lineColor = 'rgba(0, 85, 213, 1)';
     var scatterColor = 'rgba(228, 6, 6, 1)';
-    var scatter = this.createScatterSeries("scatter " + id, scatterColor, "scatter", true, id, data_points, point_symbol, true);
+    var scatter = this.createScatterSeries('scatter ' + id, scatterColor, 'scatter', true, id, dataPoints, pointSymbol, true);
     var line = this.createLineSeries(id, null, true, 'line ' + id, lineColor, lineData, false);
     var serieses = [];
     serieses.push(line);
     serieses.push(scatter);
     return serieses;
   },
-  getMultichartSeries: function (points, show_data,  type, visible, data_select_id,  point_symbol, only_5mins, html_id){
+  getMultichartSeries: function(points, showData, type, visible, dataSelectId, pointSymbol, only5mins, htmlId) {
     var serieses = [];
-    var max_x = only_5mins? 300: 12000; // 12K
-    var step = only_5mins? 1: 10;
-    for(var i=0; i<points.length; i++){
-      try{
+    var maximumXValue = only5mins ? 300 : 12000;
+    var step = only5mins ? 1 : 10;
+    var legendClickFunction = function(event) {
+      this.options.selected = !this.visible;
+      this.linkedSeries[0].options.selected = !this.visible;
+      this.setVisible(!this.visible, false);
+      this.linkedSeries[0].setVisible($(dataSelectId).is(':checked') && this.visible, false);
+
+      this.chart.redraw();
+      return false;
+    };
+    for (var i = 0; i < points.length; i++) {
+      try {
         var a = points[i].a;
         var t = points[i].t;
         var c = points[i].c;
-        if(!(a==null)&&!(t==null)&&!(c==null)){
+        if (!(a === null) && !(t === null) && !(c === null)) {
           var dataPoints = points[i].data_points;
           var date = points[i].date;
           var dateObj = this.utils.toDate(date);
-          var line_data = this.getExponentialPoints(a, t, c, step, max_x);
-          var scatter_data = this.getScatterData(dataPoints,  only_5mins);
-          var scatter_name = this.utils.getWeekday(dateObj.getDay()) + ' ' + date;
-          var line_name = this.utils.getWeekday(dateObj.getDay()) + ' ' + date;
-          var legend = 'maximum: ' + line_data[0][1] + ', minimum: ' + line_data[line_data.length-1][1] + ', current: ';
-          var color = this.highcharts_getColor(html_id, line_name);
+          var lineData = this.getExponentialPoints(a, t, c, step, maximumXValue);
+          var scatterData = this.getScatterData(dataPoints, only5mins);
+          var scatterName = this.utils.getWeekday(dateObj.getDay()) + ' ' + date;
+          var lineName = this.utils.getWeekday(dateObj.getDay()) + ' ' + date;
+          var color = this.highchartsGetColor(htmlId, lineName);
           var id = type + '_' + i;
-          var legendClickFunction = function (event) {
-            this.options.selected = !this.visible;
-            this.linkedSeries[0].options.selected = !this.visible;
-            this.setVisible(!this.visible, false);
-            this.linkedSeries[0].setVisible($(data_select_id).is(':checked') && this.visible, false);
 
-            this.chart.redraw();
-            return false;
-          };
-          var lineSeries = this.createLineSeries(id, type, visible, line_name, color, line_data, true, data_select_id, legendClickFunction);
-          var scatterSeries = this.createScatterSeries	(scatter_name, color, type, visible, id, scatter_data, point_symbol, show_data);
+          var lineSeries = this.createLineSeries(id, type, visible, lineName, color, lineData, true, dataSelectId, legendClickFunction);
+          var scatterSeries = this.createScatterSeries	(scatterName, color, type, visible, id, scatterData, pointSymbol, showData);
           serieses.push(lineSeries);
           serieses.push(scatterSeries);
         }
-      }catch(e){
+      } catch (e) {
         this.utils.logerr('getMultiChartSeries()', e);
-      }// catch
-    }//for
+      }
+    }
     return serieses;
   },
-  clearHighchart: function (html_id, error_text) {
-    if ($(html_id).highcharts()!=null){
-      $(html_id).highcharts().destroy();
+  clearHighchart: function(htmlId, errorText) {
+    if ($(htmlId).highcharts() !== undefined) {
+      $(htmlId).highcharts().destroy();
     }
-    var no_data = this.utils.getNoDataDiv(error_text);
-    $(html_id).html(no_data);
+    var noData = this.utils.getNoDataDiv(errorText);
+    $(htmlId).html(noData);
   }
 };
 
@@ -370,7 +375,7 @@ AmChartFunctions.prototype = {
     for (var i = lowerbound; i < upperbound; i += 0.1 ) {
       var dp = {
         category: i,
-        value: this.utils.NormalDensityZx(i, glb_mean, glb_dev)
+        value: this.utils.normalDensityZx(i, glb_mean, glb_dev)
       };
       if (verticals.indexOf( Math.round( i * 10 ) / 10 ) !== -1 ) {
         dp.vertical	= y_values[index]/100;
@@ -465,6 +470,7 @@ AmChartFunctions.prototype = {
     $(html_id).html(no_data);
   }
 };
+
 function Chart(mean, dev, maxhour, hours, blue, green, maxvalue) {
   this.glb_mean = mean;
   this.glb_dev = dev;
@@ -701,7 +707,7 @@ Chart.prototype = {
   draw_linearChart: function (data_points, title, xLabel, yLabel, html_id) {
 
     var series = this.highchartFunctions.getCorellSeries(data_points.x0, data_points.y0, data_points.x1, data_points.y1, data_points.data, 'circle', title);
-    var formatter = this.highchartFunctions.highcharts_getFormatter(xLabel);
+    var formatter = this.highchartFunctions.highchartsGetFormatter(xLabel);
 
     $(html_id).highcharts({
       title: {
@@ -818,7 +824,12 @@ ChartUpdater.prototype = {
   getChartObject: function(){
     return this.chart;
   },
-  update_correlations: function (url, user_id, linearData, correlations_id){
+  update_correlations: function (url, user_id, linearData, correlations_id, app){
+    if (!app.isLoading) {
+      app.spinner.setAttribute('hidden', false);
+      app.container.setAttribute('hidden', true);
+      app.isLoading = true;
+    }
     var nextDay;
     var xLabel = $('#xLabel').val();
     var yLabel = $('#yLabel').val();
@@ -828,10 +839,10 @@ ChartUpdater.prototype = {
       }
     }
     var currentTitle = 'Correlation between <strong>' + xLabel + '</strong> and <strong>' + yLabel + '</strong>';
-    var reqUrl = this.utils.format_url(url, 'correlation');
-    this.charts_getCorrelations(reqUrl, true, user_id, correlations_id, currentTitle, xLabel, yLabel, nextDay);
+    var reqUrl = this.utils.formatUrl(url, 'correlation');
+    this.charts_getCorrelations(reqUrl, true, user_id, correlations_id, currentTitle, xLabel, yLabel, nextDay, app);
   },
-  charts_getCorrelations: function (rooturl, show_data, user_id, html_id, title, xLabel, yLabel, nextDay){
+  charts_getCorrelations: function (rooturl, show_data, user_id, html_id, title, xLabel, yLabel, nextDay, app){
     var data = {
       userId: user_id,
       xAxis: xLabel,
@@ -839,7 +850,7 @@ ChartUpdater.prototype = {
       nextDay: nextDay
     };
     var chart = this.getChartObject();
-    $.ajax({type: 'POST', crossDomain: true, url: rooturl, data: data, success: function(result){
+    $.ajax({type: 'POST', url: rooturl, data: data, success: function(result){
       var data_points = JSON.parse(result);
       if (data_points!=null){
         console.log('data from  %s', rooturl);
@@ -849,6 +860,11 @@ ChartUpdater.prototype = {
         var error_text = 'There is no correlation data available from ' + xLabel + ' to ' + yLabel + '. Please choose other labels.';
         chart.clearHighchart(html_id, error_text);
       }
+      if (app.isLoading) {
+        app.spinner.setAttribute('hidden', true);
+        app.container.removeAttribute('hidden');
+        app.isLoading = false;
+      }
       return;
     }});
   },
@@ -856,7 +872,7 @@ ChartUpdater.prototype = {
     var show_type1 	= $("#chk_type1").is(':checked');
     var show_data 	= $("#chk_data").is(':checked');
     if (newData){
-      var reqUrl = this.utils.format_url(url, 'heartrate');
+      var reqUrl = this.utils.formatUrl(url, 'heartrate');
       this.charts_createMultiChart(reqUrl, show_type1, show_data, user_id, date_from, date_to, multichart_id, table_id, chk_data, only5min);
     }
     else{
@@ -906,7 +922,7 @@ ChartUpdater.prototype = {
     this.chart.setTypeVisible(html_id, type, visible, showdata);
   },
   update_heatmap: function (url, user_id, date_from, date_to, heatmap_id){
-    var reqUrl = this.utils.format_url(url, 'sleepPoints');
+    var reqUrl = this.utils.formatUrl(url, 'sleepPoints');
     this.charts_createHeatmap(reqUrl, user_id, date_from, date_to, heatmap_id);
   },
   charts_createHeatmap: function (rooturl, user_id, begin_date, end_date, html_id){
@@ -930,7 +946,7 @@ ChartUpdater.prototype = {
     }});
   },
   update_gaussian: function (url, user_id,  date_from, date_to , gaussian_id){
-    var reqUrl = this.utils.format_url(url, 'sleepPoints');
+    var reqUrl = this.utils.formatUrl(url, 'sleepPoints');
     this.charts_createGaussian(reqUrl, user_id,  date_from, date_to , gaussian_id);
   },
   charts_createGaussian: function (rooturl, user_id, begin_date, end_date, html_id){
@@ -1010,7 +1026,7 @@ Setup.prototype = {
     }
     $(x_label_id).html(temp);
   },
-  fillInYlabels: function (url, user_id, linearData, correlations_id, x_label_id, y_label_id){
+  fillInYlabels: function (url, user_id, linearData, correlations_id, x_label_id, y_label_id, app){
     var currXlabel = $(x_label_id).val();
     var temp = "";
     for (var i = 0; i<linearData.length; i++){
@@ -1019,7 +1035,7 @@ Setup.prototype = {
       }
     }
     $(y_label_id).html(temp);
-    this.updater.update_correlations(url, user_id, linearData, correlations_id);
+    this.updater.update_correlations(url, user_id, linearData, correlations_id, app);
   },
   setup_datepicker: function (picker_id, time, update_function) {
     $(picker_id).daterangepicker(
@@ -1038,7 +1054,7 @@ Setup.prototype = {
     );
   },
   get_correlationsList: function(url){
-    var correlationsUrl = this.utils.format_url(url, 'get_correlations_list');
+    var correlationsUrl = this.utils.formatUrl(url, 'get_correlations_list');
     var list;
     $.ajax({type : 'GET', crossDomain:true, url: correlationsUrl, success: function (data) {
       list=JSON.parse(data);
@@ -1050,57 +1066,59 @@ Setup.prototype = {
 };
 /* eslint-env browser */
 (function() {
+  // Uncomment if service worker is ready for usage
+
   // Check to make sure service workers are supported in the current browser,
   // and that the current page is accessed from a secure origin. Using a
   // service worker from an insecure origin will trigger JS console errors. See
   // http://www.chromium.org/Home/chromium-security/prefer-secure-origins-for-powerful-new-features
-  var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
-      // [::1] is the IPv6 localhost address.
-      window.location.hostname === '[::1]' ||
-      // 127.0.0.1/8 is considered localhost for IPv4.
-      window.location.hostname.match(
-        /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
-      )
-    );
-
-  if ('serviceWorker' in navigator &&
-      (window.location.protocol === 'https:' || isLocalhost)) {
-    navigator.serviceWorker.register('service-worker.js')
-    .then(function(registration) {
-      // updatefound is fired if service-worker.js changes.
-      registration.onupdatefound = function() {
-        // updatefound is also fired the very first time the SW is installed,
-        // and there's no need to prompt for a reload at that point.
-        // So check here to see if the page is already controlled,
-        // i.e. whether there's an existing service worker.
-        if (navigator.serviceWorker.controller) {
-          // The updatefound event implies that registration.installing is set:
-          // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-container-updatefound-event
-          var installingWorker = registration.installing;
-
-          installingWorker.onstatechange = function() {
-            switch (installingWorker.state) {
-              case 'installed':
-                // At this point, the old content will have been purged and the
-                // fresh content will have been added to the cache.
-                // It's the perfect time to display a "New content is
-                // available; please refresh." message in the page's interface.
-                break;
-
-              case 'redundant':
-                throw new Error('The installing ' +
-                                'service worker became redundant.');
-
-              default:
-                // Ignore
-            }
-          };
-        }
-      };
-    }).catch(function(e) {
-      console.error('Error during service worker registration:', e);
-    });
-  }
+  // var isLocalhost = Boolean(window.location.hostname === 'localhost' ||
+  //     // [::1] is the IPv6 localhost address.
+  //     window.location.hostname === '[::1]' ||
+  //     // 127.0.0.1/8 is considered localhost for IPv4.
+  //     window.location.hostname.match(
+  //       /^127(?:\.(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}$/
+  //     )
+  //   );
+  //
+  // if ('serviceWorker' in navigator &&
+  //     (window.location.protocol === 'https:' || isLocalhost)) {
+  //   navigator.serviceWorker.register('service-worker.js')
+  //   .then(function(registration) {
+  //     // updatefound is fired if service-worker.js changes.
+  //     registration.onupdatefound = function() {
+  //       // updatefound is also fired the very first time the SW is installed,
+  //       // and there's no need to prompt for a reload at that point.
+  //       // So check here to see if the page is already controlled,
+  //       // i.e. whether there's an existing service worker.
+  //       if (navigator.serviceWorker.controller) {
+  //         // The updatefound event implies that registration.installing is set:
+  //         // https://slightlyoff.github.io/ServiceWorker/spec/service_worker/index.html#service-worker-container-updatefound-event
+  //         var installingWorker = registration.installing;
+  //
+  //         installingWorker.onstatechange = function() {
+  //           switch (installingWorker.state) {
+  //             case 'installed':
+  //               // At this point, the old content will have been purged and the
+  //               // fresh content will have been added to the cache.
+  //               // It's the perfect time to display a "New content is
+  //               // available; please refresh." message in the page's interface.
+  //               break;
+  //
+  //             case 'redundant':
+  //               throw new Error('The installing ' +
+  //                               'service worker became redundant.');
+  //
+  //             default:
+  //               // Ignore
+  //           }
+  //         };
+  //       }
+  //     };
+  //   }).catch(function(e) {
+  //     console.error('Error during service worker registration:', e);
+  //   });
+  // }
 
   // Your custom JavaScript goes here
   var AUTH0_CLIENT_ID='kMlSIl3Itqt6mQetzGXES6biAVFei6k8';
@@ -1137,7 +1155,7 @@ Setup.prototype = {
 
     var cb = function(start, end) {
       $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
-    }
+    };
 
     $('#reportrange').daterangepicker({
       startDate: start,
@@ -1161,19 +1179,14 @@ Setup.prototype = {
     var y_label_id = '#yLabel';
     var user_id	= JSON.parse(localStorage.getItem('profile')).email;
     app.setup.fillInXlabels(app.correlations_list, x_label_id);
-    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, correlations_id, x_label_id, y_label_id);
+    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, correlations_id, x_label_id, y_label_id, app);
 
     $('body').on('change', x_label_id, function() {
-      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, correlations_id, x_label_id, y_label_id);
+      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, correlations_id, x_label_id, y_label_id, app);
     });
     $('body').on('change', y_label_id, function() {
-      app.updater.update_correlations(app.url, user_id, app.correlations_list, correlations_id)
+      app.updater.update_correlations(app.url, user_id, app.correlations_list, correlations_id, app)
     });
-    if (app.isLoading) {
-      app.spinner.setAttribute('hidden', true);
-      app.container.removeAttribute('hidden');
-      app.isLoading = false;
-    }
   }
 
   //retrieve the profile:
