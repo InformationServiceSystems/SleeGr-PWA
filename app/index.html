@@ -75,6 +75,9 @@
         margin-top: 20px;
         z-index: 900;
       }
+      .demo-list-action {
+        width: 300px;
+      }
     </style>
 
   </head>
@@ -88,9 +91,9 @@
         <span class="mdl-layout-title">SleeGr</span>
       </div>
       <div class="mdl-layout__tab-bar mdl-js-ripple-effect mdl-color--primary-dark">
-        <a href="#dashboard" class="mdl-layout__tab is-active"><img alt="Dashboard" src="images/icons/dashboard-icon-3e0e4acd7a9b788ff73d3c144017a6eb.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
-        <a href="#heartrate" class="mdl-layout__tab"><img alt="Heartrate" src="images/icons/pulse-512.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
-        <a href="#sleepdata" class="mdl-layout__tab"><img alt="Sleep" src="images/icons/sleep-icon-2.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a id="tab-dashboard" href="#dashboard" class="mdl-layout__tab is-active"><img alt="Dashboard" src="images/icons/dashboard-icon-3e0e4acd7a9b788ff73d3c144017a6eb.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a id="tab-heartrate" href="#heartrate" class="mdl-layout__tab"><img alt="Heartrate" src="images/icons/pulse-512.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a id="tab-sleep" href="#sleepdata" class="mdl-layout__tab"><img alt="Sleep" src="images/icons/sleep-icon-2.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
         <a href="#profile" class="mdl-layout__tab"><img alt="Profile" src="images/icons/profile-icon.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
       </div>
     </header>
@@ -99,7 +102,7 @@
     </div>
     <main class="mdl-layout__content">
       <div class="mdl-layout__tab-panel is-active" id="dashboard">
-        <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" hidden>
+        <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
             <div class="btn-group">
               <div class="row">
@@ -113,12 +116,36 @@
                 </div>
               </div>
             </div>
+            <div class="loader">
+              <svg viewBox="0 0 32 32" width="32" height="32">
+                <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+              </svg>
+            </div>
             <div id="correlationsdiv" class="card cardTemplate" style="width: 100%;"></div>
           </div>
         </section>
       </div>
       <div class="mdl-layout__tab-panel" id="heartrate">
-
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div id="reportrange1" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+            <span></span> <b class="caret"></b>
+          </div>
+        </section>
+        <section id="heartrateContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+            <div class="btn-group">
+              <label for="timerange">Choose timrange</label>
+              <select class="form-control" id="timerange">
+                <option>First 5 minutes</option>
+                <option>Whole Range</option>
+              </select>
+              <input type="checkbox" id="chk_type1" value="son" checked="true" /> <label for="chk_type1">Show Heartrate Data</label>
+              <input type="checkbox" id="chk_data" value="dataSelected" checked="true" /> <label for="chk_data">Show Data Points</label>
+            </div>
+            <div class="card cardTemplate" id="multichart" style="width:100%;"></div>
+          </div>
+        </section>
       </div>
       <div class="mdl-layout__tab-panel" id="sleepdata">
         <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
@@ -129,19 +156,43 @@
         </section>
         <section id="sleepContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-            <div id="sleepchart" class="card cardTemplate" style="width:100%; height: 500px;"></div>
+            <div class="box-body" id="sleepchart" style="width:100%; height: 500px"></div>
           </div>
         </section>
       </div>
       <div class="mdl-layout__tab-panel" id="profile">
-
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2p">
+          <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+            <div class="card cardTemplate">
+              <div class="demo-list-action mdl-list">
+                <div class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-avatar">person</i>
+                    <span>Bryan Cranston</span>
+                  </span>
+                  <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+                </div>
+                <div class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-avatar">person</i>
+                    <span>Aaron Paul</span>
+                  </span>
+                  <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+                </div>
+                <div class="mdl-list__item">
+                  <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-avatar">person</i>
+                    <span>Bob Odenkirk</span></span>
+                  <span class="mdl-list__item-secondary-content">
+                    <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       </div>
     </main>
-    <div class="loader">
-      <svg viewBox="0 0 32 32" width="32" height="32">
-        <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
-      </svg>
-    </div>
   </div>
 
   <button id="profile-button" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-color--accent mdl-color-text--accent-contrast">

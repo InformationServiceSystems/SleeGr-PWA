@@ -96,7 +96,7 @@ Util.prototype = {
   },
   fadeInHtmlTable: function(points, tableDiv) {
     var content;
-    if (tableDiv !== null) {
+    if (tableDiv !== undefined) {
       content = this.getHtmlDataTable(points);
     }
     $(tableDiv).html(content);
@@ -169,7 +169,7 @@ HighchartFunctions.prototype = {
     return color;
   },
   highchartsGetColor: function(htmlId, name) {
-    if ($(htmlId).highcharts() !== null) {
+    if ($(htmlId).highcharts() !== undefined) {
       var chart = $(htmlId).highcharts();
       var serieses = chart.series;
       for (var i = 0; i < serieses.length; i++) {
@@ -827,7 +827,6 @@ ChartUpdater.prototype = {
   update_correlations: function (url, user_id, linearData, correlations_id, app){
     if (!app.isLoading) {
       app.spinner.setAttribute('hidden', false);
-      app.corellationsContainer.setAttribute('hidden', true);
       app.isLoading = true;
     }
     var nextDay;
@@ -862,24 +861,21 @@ ChartUpdater.prototype = {
       }
       if (app.isLoading) {
         app.spinner.setAttribute('hidden', true);
-        app.corellationsContainer.removeAttribute('hidden');
         app.isLoading = false;
       }
       return;
     }});
   },
-  update_mutlichart: function (url, user_id, date_from, date_to, multichart_id, table_id, chk_data, only5min,newData){
-    var show_type1 	= $("#chk_type1").is(':checked');
-    var show_data 	= $("#chk_data").is(':checked');
+  update_mutlichart: function (url, user_id, date_from, date_to, app, newData){
     if (newData){
       var reqUrl = this.utils.formatUrl(url, 'heartrate');
-      this.charts_createMultiChart(reqUrl, show_type1, show_data, user_id, date_from, date_to, multichart_id, table_id, chk_data, only5min);
+      this.charts_createMultiChart(reqUrl, user_id, date_from, date_to, app);
     }
-    else{
-      this.charts_switchMultiChart(show_type1, show_data, multichart_id, chk_data, only5min);
-    }
+    // else{
+    //   this.charts_switchMultiChart(show_type1, show_data, multichart_id, chk_data, only5min);
+    // }
   },
-  charts_createMultiChart: function (rooturl, show_type1, show_data, user_id, begin_date, end_date, html_id, table_id, data_select_id, only_5mins){
+  charts_createMultiChart: function (rooturl, user_id, begin_date, end_date, app){
     var data = {
       userId: user_id,
       type: "Cooldown",
@@ -887,27 +883,28 @@ ChartUpdater.prototype = {
       endDate: end_date
     };
     var multichart_points = this.multichart_points;
-    var utils = this.utils;
-    var chart = this.getChartObject();
+    //var utils = this.utils;
+    //var chart = this.getChartObject();
     $.ajax({type: "POST", url: rooturl, data: data, success: function(result){
       multichart_points = eval(result);
-      if (multichart_points.length!=0){
+      //if (multichart_points.length!=0){
         console.log('data from  %s len: %d', rooturl, multichart_points.length);
         // the following commented lines are for getting type2 uncomment to get the results
         //$.ajax({url: type2_url, success: function(result_type2){
         //    	var points2 = eval(result_type2);
         //	console.log('data from  %s len: %d', type2_url, points2.length);
         //	addSerieses(points2, show_data, 'Type2', true, data_select_id, serieses,  'triangle');
-        chart.draw_multiChart(multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
-        utils.fadeInHtmlTable(multichart_points, table_id);
-        //}});
-      }
-      else{
-        var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
-        chart.clearHighchart(html_id, error_text);
-        var no_data = utils.getNoDataDiv(error_text);
-        $(table_id).html(no_data);
-      }
+        app.setLoadingReady('heartrate', multichart_points);
+        //chart.draw_multiChart(multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
+        //utils.fadeInHtmlTable(multichart_points, table_id);
+                //}});
+      // }
+      // else{
+      //   var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
+      //   chart.clearHighchart(html_id, error_text);
+      //   var no_data = utils.getNoDataDiv(error_text);
+      //   $(table_id).html(no_data);
+      // }
     }});
   },
   charts_switchMultiChart: function (show_type1, show_data, html_id, data_select_id, only_5mins){
@@ -1133,7 +1130,8 @@ Setup.prototype = {
     utils: new Util(),
     setup: new Setup(),
     updater: new ChartUpdater(),
-    url: 'http://192.168.0.247:5000',
+    chart: new Chart(0, 0, 12, [], 0, 0, 0),
+    url: 'http://localhost:5000',
     correlations_list: JSON.parse('[{"x_label": "Day of week", "y_label": "Sleep length", "next_day": false}, ' +
             '{"x_label": "Sleep length", "y_label": "Load", "next_day": false},' +
             '{"x_label": "Sleep start", "y_label": "Load", "next_day": false},' +
@@ -1147,7 +1145,39 @@ Setup.prototype = {
             '{"x_label": "RPE", "y_label": "Load", "next_day": false},' +
             '{"x_label": "DALDA", "y_label": "Deep sleep", "next_day": true},' +
             '{"x_label": "Sleep end", "y_label": "RPE", "next_day": false},' +
-            '{"x_label": "Sleep length", "y_label": "RPE", "next_day": false}]')
+            '{"x_label": "Sleep length", "y_label": "RPE", "next_day": false}]'),
+    chartId: {
+      multichart: {
+        id: '#multichart',
+        range: '#timerange',
+        chk_data: '#chk_data',
+        chk_type1: '#chk_type1',
+      },
+    },
+    ready: {
+      multichart: false
+    },
+    series: {
+      multichart: null
+    }
+  };
+
+  app.setLoadingReady = function (label, series) {
+    if (label === 'heartrate') {
+      app.ready.multichart = true;
+      app.series.multichart = series;
+      var show_data = $(app.chartId.multichart.chk_data).is(':checked');
+      var show_type1 = $(app.chartId.multichart.chk_type1).is(':checked');
+      var grp_type = 'Type1';
+      var data_select_id = app.chartId.multichart.chk_data;
+      var point_symbol = 'circle';
+      var html_id = app.chartId.multichart.id;
+      var only_5mins = $(app.chartId.multichart.range).val()=='First 5 minutes';
+      $('#tab-heartrate').click(function (e) {
+        e.preventDefault();
+        app.chart.draw_multiChart(series, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins);
+      });
+    }
   };
 
   app.initDatePicker = function () {
@@ -1195,6 +1225,12 @@ Setup.prototype = {
     var userId = JSON.parse(localStorage.getItem('profile')).email;
     app.updater.update_heatmap(app.url, userId, '01.01.2016', '01.06.2016', sleepDataId);
   };
+
+  app.readHeartrateData = function() {
+    var userId = JSON.parse(localStorage.getItem('profile')).email;
+    app.updater.update_mutlichart(app.url, userId, '01.01.2016', '01.06.2016', app, true);
+
+  }
 
   //retrieve the profile:
   var retrieve_profile = function() {
@@ -1249,8 +1285,10 @@ Setup.prototype = {
     document.getElementById('profile-button').setAttribute('style', 'display: block');
     retrieve_profile();
     lock.hide();
+    app.setup.select_all(['#chk_data', '#chk_type1']);
     app.readCorrelations();
     app.readSleepData();
+    app.readHeartrateData();
   };
 
   lock.on("authenticated", function(authResult) {
