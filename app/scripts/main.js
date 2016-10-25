@@ -868,6 +868,7 @@ ChartUpdater.prototype = {
   },
   update_mutlichart: function (url, user_id, date_from, date_to, app, newData){
     if (newData){
+      app.invokeLoading('heartrate');
       var reqUrl = this.utils.formatUrl(url, 'heartrate');
       this.charts_createMultiChart(reqUrl, user_id, date_from, date_to, app);
     }
@@ -894,7 +895,8 @@ ChartUpdater.prototype = {
         //    	var points2 = eval(result_type2);
         //	console.log('data from  %s len: %d', type2_url, points2.length);
         //	addSerieses(points2, show_data, 'Type2', true, data_select_id, serieses,  'triangle');
-        app.setLoadingReady('heartrate', multichart_points);
+      app.multichart.changed = true;
+        app.invokeReady('heartrate', multichart_points);
         //chart.draw_multiChart(multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
         //utils.fadeInHtmlTable(multichart_points, table_id);
                 //}});
@@ -1123,7 +1125,7 @@ Setup.prototype = {
 
   var app = {
     isLoading: true,
-    spinner: document.querySelector('.loader'),
+    spinner: document.querySelector('#dashboard-spinner'),
     cardTemplate: document.querySelector('.cardTemplate'),
     corellationsContainer: document.querySelector('#corellContainer'),
     sleepContainer: document.querySelector('#sleepContainer'),
@@ -1146,39 +1148,61 @@ Setup.prototype = {
             '{"x_label": "DALDA", "y_label": "Deep sleep", "next_day": true},' +
             '{"x_label": "Sleep end", "y_label": "RPE", "next_day": false},' +
             '{"x_label": "Sleep length", "y_label": "RPE", "next_day": false}]'),
-    chartId: {
-      multichart: {
-        id: '#multichart',
-        range: '#timerange',
-        chk_data: '#chk_data',
-        chk_type1: '#chk_type1',
-      },
-    },
-    ready: {
-      multichart: false
-    },
-    series: {
-      multichart: null
+    datepickerId: '#datepicker',
+    multichart: {
+      id: '#multichart',
+      container: document.querySelector('#heartrateContainer'),
+      rangepicker: '#timerange',
+      chk_data: '#chk_data',
+      chk_type1: '#chk_type1',
+      spinner: document.querySelector('#heartrate-spinner'),
+      ready: false,
+      data: null,
+      changed: false
     }
   };
 
-  app.setLoadingReady = function (label, series) {
+
+  app.invokeReady = function (label, data) {
     if (label === 'heartrate') {
-      app.ready.multichart = true;
-      app.series.multichart = series;
-      var show_data = $(app.chartId.multichart.chk_data).is(':checked');
-      var show_type1 = $(app.chartId.multichart.chk_type1).is(':checked');
-      var grp_type = 'Type1';
-      var data_select_id = app.chartId.multichart.chk_data;
-      var point_symbol = 'circle';
-      var html_id = app.chartId.multichart.id;
-      var only_5mins = $(app.chartId.multichart.range).val()=='First 5 minutes';
-      $('#tab-heartrate').click(function (e) {
-        e.preventDefault();
-        app.chart.draw_multiChart(series, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins);
-      });
+      app.multichart. ready = true;
+      app.multichart.spinner.setAttribute('hidden', 'true');
+      app.multichart.container.removeAttribute('hidden');
+      app.multichart.data = data;
+      if (data.length !== 0) {
+        var show_data = $(app.multichart.chk_data).is(':checked');
+        var show_type1 = $(app.multichart.chk_type1).is(':checked');
+        var grp_type = 'Type1';
+        var data_select_id = app.multichart.chk_data;
+        var point_symbol = 'circle';
+        var html_id = app.multichart.id;
+        var only_5mins = $(app.multichart.rangepicker).val() === 'First 5 minutes';
+        if (app.multichart.changed){
+          app.chart.draw_multiChart(data, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins);
+          app.multichart.changed = false;
+        }
+        $('#tab-heartrate').click(function (e) {
+          // e.preventDefault();
+          $('#heartrate').css('display', 'block');
+          if ($(app.multichart.id).highcharts()) {
+            app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes');
+          }
+        });
+      } else {
+        var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
+        app.chart.clearHighchart(app.multichart.id, error_text);
+      }
+
     }
   };
+
+  app.invokeLoading = function(label) {
+    if (label === 'heartrate') {
+      app.multichart.container.setAttribute('hidden', 'true');
+      app.multichart.spinner.removeAttribute('hidden');
+
+    }
+  }
 
   app.initDatePicker = function () {
     var start = moment().subtract(29, 'days');
@@ -1186,6 +1210,8 @@ Setup.prototype = {
 
     var cb = function(start, end) {
       $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+      app.readHeartrateData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
+      app.readSleepData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
     };
 
     $('#reportrange').daterangepicker({
@@ -1220,15 +1246,17 @@ Setup.prototype = {
     });
   };
 
-  app.readSleepData = function() {
+  app.readSleepData = function(start, end) {
     var sleepDataId = 'sleepchart';
     var userId = JSON.parse(localStorage.getItem('profile')).email;
-    app.updater.update_heatmap(app.url, userId, '01.01.2016', '01.06.2016', sleepDataId);
+    app.updater.update_heatmap(app.url, userId, start, end, sleepDataId);
   };
 
-  app.readHeartrateData = function() {
+  app.readHeartrateData = function(start, end) {
     var userId = JSON.parse(localStorage.getItem('profile')).email;
-    app.updater.update_mutlichart(app.url, userId, '01.01.2016', '01.06.2016', app, true);
+    var beginDate = start;
+    var endDate = end;
+    app.updater.update_mutlichart(app.url, userId, beginDate, endDate, app, true);
 
   }
 
@@ -1286,9 +1314,28 @@ Setup.prototype = {
     retrieve_profile();
     lock.hide();
     app.setup.select_all(['#chk_data', '#chk_type1']);
+    app.initDatePicker();
+    $('#tab-dashboard').click(function (e) {
+      e.preventDefault();
+      $('#datepicker').hide();
+      $('#heartrate').css('display', 'none');
+    });
+    $('#tab-profile').click(function (e) {
+      e.preventDefault();
+      $('#datepicker').hide();
+      $('#heartrate').css('display', 'none');
+    });
+    $('#tab-heartrate').click(function (e) {
+      e.preventDefault();
+      $('#datepicker').show();
+      $('#heartrate').css('display', 'block');
+    });
+    $('#tab-sleep').click(function (e) {
+      e.preventDefault();
+      $('#datepicker').show();
+      $('#heartrate').css('display', 'none');
+    });
     app.readCorrelations();
-    app.readSleepData();
-    app.readHeartrateData();
   };
 
   lock.on("authenticated", function(authResult) {
@@ -1309,7 +1356,7 @@ Setup.prototype = {
     e.preventDefault();
     logout();
   });
-  app.initDatePicker();
+  $('#datepicker').hide();
 
   if(!localStorage.getItem('id_token')){
     document.getElementById('profile-button').setAttribute('style', 'display: none');

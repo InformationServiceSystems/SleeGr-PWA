@@ -94,13 +94,21 @@
         <a id="tab-dashboard" href="#dashboard" class="mdl-layout__tab is-active"><img alt="Dashboard" src="images/icons/dashboard-icon-3e0e4acd7a9b788ff73d3c144017a6eb.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
         <a id="tab-heartrate" href="#heartrate" class="mdl-layout__tab"><img alt="Heartrate" src="images/icons/pulse-512.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
         <a id="tab-sleep" href="#sleepdata" class="mdl-layout__tab"><img alt="Sleep" src="images/icons/sleep-icon-2.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
-        <a href="#profile" class="mdl-layout__tab"><img alt="Profile" src="images/icons/profile-icon.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
+        <a id="tab-profile" href="#profile" class="mdl-layout__tab"><img alt="Profile" src="images/icons/profile-icon.png" style="height: 60%; filter: brightness(0) invert(1);"></a>
       </div>
     </header>
     <div class="mdl-layout__drawer">
       <span class="mdl-layout-title">Title</span>
     </div>
     <main class="mdl-layout__content">
+      <div id="datepicker" style="padding-top: 48px;">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+            <span></span> <b class="caret"></b>
+          </div>
+        </section>
+      </div>
       <div class="mdl-layout__tab-panel is-active" id="dashboard">
         <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
@@ -116,44 +124,43 @@
                 </div>
               </div>
             </div>
-            <div class="loader">
-              <svg viewBox="0 0 32 32" width="32" height="32">
-                <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
-              </svg>
-            </div>
             <div id="correlationsdiv" class="card cardTemplate" style="width: 100%;"></div>
           </div>
         </section>
+        <div id="dashboard-spinner" class="loader">
+          <svg viewBox="0 0 32 32" width="32" height="32">
+            <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+          </svg>
+        </div>
       </div>
       <div class="mdl-layout__tab-panel" id="heartrate">
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div id="reportrange1" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-            <span></span> <b class="caret"></b>
-          </div>
-        </section>
-        <section id="heartrateContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-            <div class="btn-group">
-              <label for="timerange">Choose timrange</label>
-              <select class="form-control" id="timerange">
-                <option>First 5 minutes</option>
-                <option>Whole Range</option>
-              </select>
-              <input type="checkbox" id="chk_type1" value="son" checked="true" /> <label for="chk_type1">Show Heartrate Data</label>
-              <input type="checkbox" id="chk_data" value="dataSelected" checked="true" /> <label for="chk_data">Show Data Points</label>
+        <section id="heartrateContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" hidden="true">
+          <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
+                  <label for="timerange">Choose timrange</label>
+                  <select class="form-control" id="timerange">
+                    <option>First 5 minutes</option>
+                    <option>Whole Range</option>
+                  </select>
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="chk_type1">
+                    <input type="checkbox" id="chk_type1" class="mdl-checkbox__input" checked>
+                    <span class="mdl-checkbox__label">Show Heartrate Data</span>
+                  </label>
+                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="chk_data">
+                    <input type="checkbox" id="chk_data" class="mdl-checkbox__input" checked>
+                    <span class="mdl-checkbox__label">Show Data Points</span>
+                  </label>
+                <div id="multichart" style="width:100%;"></div>
             </div>
-            <div class="card cardTemplate" id="multichart" style="width:100%;"></div>
           </div>
         </section>
+        <div id="heartrate-spinner" class="loader">
+          <svg viewBox="0 0 32 32" width="32" height="32">
+            <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+          </svg>
+        </div>
       </div>
       <div class="mdl-layout__tab-panel" id="sleepdata">
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-            <span></span> <b class="caret"></b>
-          </div>
-        </section>
         <section id="sleepContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
           <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
             <div class="box-body" id="sleepchart" style="width:100%; height: 500px"></div>
@@ -161,9 +168,9 @@
         </section>
       </div>
       <div class="mdl-layout__tab-panel" id="profile">
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2p">
-          <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-            <div class="card cardTemplate">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
               <div class="demo-list-action mdl-list">
                 <div class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
@@ -212,7 +219,7 @@
   <script src="//cdn.auth0.com/js/lock/10.3.0/lock.min.js"></script>
 
   <!--Chart JS imports from CDN-->
-  <script src="https://code.highcharts.com/highcharts.js" type="text/javascript"></script>
+  <script src="http://code.highcharts.com/highcharts.js" type="text/javascript"></script>
   <script src="https://code.highcharts.com/modules/exporting.js" type="text/javascript"></script>
   <script src="http://www.amcharts.com/lib/3/amcharts.js" type="text/javascript"></script>
   <script src="http://www.amcharts.com/lib/3/serial.js" type="text/javascript"></script>
