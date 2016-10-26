@@ -824,24 +824,20 @@ ChartUpdater.prototype = {
   getChartObject: function(){
     return this.chart;
   },
-  update_correlations: function (url, user_id, linearData, correlations_id, app){
-    if (!app.isLoading) {
-      app.spinner.setAttribute('hidden', false);
-      app.isLoading = true;
-    }
+  update_correlations: function (url, user_id, linearData, app){
+    app.invokeLoading('correlation');
     var nextDay;
-    var xLabel = $('#xLabel').val();
-    var yLabel = $('#yLabel').val();
+    var xLabel = $(app.correlation.xLabel).val();
+    var yLabel = $(app.correlation.yLabel).val();
     for (var i = 0; i<linearData.length; i++){
       if (linearData[i].x_label==xLabel&&linearData[i].y_label==yLabel){
         nextDay=linearData[i].next_day;
       }
     }
-    var currentTitle = 'Correlation between <strong>' + xLabel + '</strong> and <strong>' + yLabel + '</strong>';
     var reqUrl = this.utils.formatUrl(url, 'correlation');
-    this.charts_getCorrelations(reqUrl, true, user_id, correlations_id, currentTitle, xLabel, yLabel, nextDay, app);
+    this.charts_getCorrelations(reqUrl, user_id, xLabel, yLabel, nextDay, app);
   },
-  charts_getCorrelations: function (rooturl, show_data, user_id, html_id, title, xLabel, yLabel, nextDay, app){
+  charts_getCorrelations: function (rooturl, user_id, xLabel, yLabel, nextDay, app){
     var data = {
       userId: user_id,
       xAxis: xLabel,
@@ -851,18 +847,8 @@ ChartUpdater.prototype = {
     var chart = this.getChartObject();
     $.ajax({type: 'POST', url: rooturl, data: data, success: function(result){
       var data_points = JSON.parse(result);
-      if (data_points!=null){
-        console.log('data from  %s', rooturl);
-        chart.draw_linearChart(data_points, title, xLabel, yLabel, html_id);
-      }
-      else{
-        var error_text = 'There is no correlation data available from ' + xLabel + ' to ' + yLabel + '. Please choose other labels.';
-        chart.clearHighchart(html_id, error_text);
-      }
-      if (app.isLoading) {
-        app.spinner.setAttribute('hidden', true);
-        app.isLoading = false;
-      }
+      console.log('data from  %s', rooturl);
+      app.invokeReady('correlation', data_points);
       return;
     }});
   },
@@ -895,7 +881,6 @@ ChartUpdater.prototype = {
         //    	var points2 = eval(result_type2);
         //	console.log('data from  %s len: %d', type2_url, points2.length);
         //	addSerieses(points2, show_data, 'Type2', true, data_select_id, serieses,  'triangle');
-      app.multichart.changed = true;
         app.invokeReady('heartrate', multichart_points);
         //chart.draw_multiChart(multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
         //utils.fadeInHtmlTable(multichart_points, table_id);
@@ -1025,7 +1010,7 @@ Setup.prototype = {
     }
     $(x_label_id).html(temp);
   },
-  fillInYlabels: function (url, user_id, linearData, correlations_id, x_label_id, y_label_id, app){
+  fillInYlabels: function (url, user_id, linearData, x_label_id, y_label_id, app){
     var currXlabel = $(x_label_id).val();
     var temp = "";
     for (var i = 0; i<linearData.length; i++){
@@ -1034,7 +1019,7 @@ Setup.prototype = {
       }
     }
     $(y_label_id).html(temp);
-    this.updater.update_correlations(url, user_id, linearData, correlations_id, app);
+    this.updater.update_correlations(url, user_id, linearData, app);
   },
   setup_datepicker: function (picker_id, time, update_function) {
     $(picker_id).daterangepicker(
@@ -1133,7 +1118,7 @@ Setup.prototype = {
     setup: new Setup(),
     updater: new ChartUpdater(),
     chart: new Chart(0, 0, 12, [], 0, 0, 0),
-    url: 'http://localhost:5000',
+    url: 'http://81.169.137.80:5000',
     correlations_list: JSON.parse('[{"x_label": "Day of week", "y_label": "Sleep length", "next_day": false}, ' +
             '{"x_label": "Sleep length", "y_label": "Load", "next_day": false},' +
             '{"x_label": "Sleep start", "y_label": "Load", "next_day": false},' +
@@ -1149,6 +1134,16 @@ Setup.prototype = {
             '{"x_label": "Sleep end", "y_label": "RPE", "next_day": false},' +
             '{"x_label": "Sleep length", "y_label": "RPE", "next_day": false}]'),
     datepickerId: '#datepicker',
+    correlation: {
+      id: '#correlationsdiv',
+      container: document.querySelector('#corellContainer'),
+      xLabel: '#xLabel',
+      yLabel: '#yLabel',
+      spinner: document.querySelector('#dashboard-spinner'),
+      ready: false,
+      data: null,
+      changed: false
+    },
     multichart: {
       id: '#multichart',
       container: document.querySelector('#heartrateContainer'),
@@ -1157,7 +1152,7 @@ Setup.prototype = {
       chk_type1: '#chk_type1',
       spinner: document.querySelector('#heartrate-spinner'),
       ready: false,
-      data: null,
+      data: [],
       changed: false
     }
   };
@@ -1165,7 +1160,7 @@ Setup.prototype = {
 
   app.invokeReady = function (label, data) {
     if (label === 'heartrate') {
-      app.multichart. ready = true;
+      app.multichart.ready = true;
       app.multichart.spinner.setAttribute('hidden', 'true');
       app.multichart.container.removeAttribute('hidden');
       app.multichart.data = data;
@@ -1182,8 +1177,7 @@ Setup.prototype = {
           app.multichart.changed = false;
         }
         $('#tab-heartrate').click(function (e) {
-          // e.preventDefault();
-          $('#heartrate').css('display', 'block');
+          e.preventDefault();
           if ($(app.multichart.id).highcharts()) {
             app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes');
           }
@@ -1192,7 +1186,30 @@ Setup.prototype = {
         var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
         app.chart.clearHighchart(app.multichart.id, error_text);
       }
+    }
+    if (label === 'correlation') {
+      app.correlation.spinner.setAttribute('hidden', 'true');
+      app.correlation.container.removeAttribute('hidden');
+      app.correlation.data = data;
+      var xLabel = $(app.correlation.xLabel).val();
+      var yLabel = $(app.correlation.yLabel).val();
+      var html_id = app.correlation.id;
+      if (data != null){
+        var title = 'Correlation between <strong>' + xLabel + '</strong> and <strong>' + yLabel + '</strong>';
+        if (app.correlation.changed){
+          app.chart.draw_linearChart(data, title, xLabel, yLabel, html_id);
+          app.correlation.changed = false;
+        }
+        $('#tab-dashboard').click(function(e) {
+          e.preventDefault();
+          app.chart.draw_linearChart(app.correlation.data, title, xLabel, yLabel,html_id);
+        })
 
+      }
+      else{
+        var error_text = 'There is no correlation data available from ' + xLabel + ' to ' + yLabel + '. Please choose other labels.';
+        app.chart.clearHighchart(html_id, error_text);
+      }
     }
   };
 
@@ -1200,7 +1217,14 @@ Setup.prototype = {
     if (label === 'heartrate') {
       app.multichart.container.setAttribute('hidden', 'true');
       app.multichart.spinner.removeAttribute('hidden');
-
+      app.multichart.ready = false;
+      app.multichart.changed = true;
+    }
+    if (label === 'correlation') {
+      app.correlation.container.setAttribute('hidden', 'true');
+      app.correlation.spinner.removeAttribute('hidden');
+      app.correlation.ready = false;
+      app.correlation.changed = true;
     }
   }
 
@@ -1231,18 +1255,15 @@ Setup.prototype = {
   };
 
   app.readCorrelations = function () {
-    var correlations_id = '#correlationsdiv';
-    var x_label_id = '#xLabel';
-    var y_label_id = '#yLabel';
     var user_id	= JSON.parse(localStorage.getItem('profile')).email;
-    app.setup.fillInXlabels(app.correlations_list, x_label_id);
-    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, correlations_id, x_label_id, y_label_id, app);
+    app.setup.fillInXlabels(app.correlations_list, app.correlation.xLabel);
+    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, app.correlation.yLabel, app);
 
-    $('body').on('change', x_label_id, function() {
-      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, correlations_id, x_label_id, y_label_id, app);
+    $('body').on('change', app.correlation.xLabel, function() {
+      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, app.correlation.yLabel, app);
     });
-    $('body').on('change', y_label_id, function() {
-      app.updater.update_correlations(app.url, user_id, app.correlations_list, correlations_id, app)
+    $('body').on('change', app.correlation.yLabel, function() {
+      app.updater.update_correlations(app.url, user_id, app.correlations_list, app)
     });
   };
 
@@ -1258,6 +1279,12 @@ Setup.prototype = {
     var endDate = end;
     app.updater.update_mutlichart(app.url, userId, beginDate, endDate, app, true);
 
+  }
+
+  app.multichartSwitch = function() {
+    if (app.multichart.data.length != 0){
+      app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circe', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes');
+    }
   }
 
   //retrieve the profile:
@@ -1319,23 +1346,37 @@ Setup.prototype = {
       e.preventDefault();
       $('#datepicker').hide();
       $('#heartrate').css('display', 'none');
+      $('#dashboard').css('display', 'block');
     });
     $('#tab-profile').click(function (e) {
       e.preventDefault();
       $('#datepicker').hide();
       $('#heartrate').css('display', 'none');
+      $('#dashboard').css('display', 'none');
     });
     $('#tab-heartrate').click(function (e) {
       e.preventDefault();
       $('#datepicker').show();
       $('#heartrate').css('display', 'block');
+      $('#dashboard').css('display', 'none');
     });
     $('#tab-sleep').click(function (e) {
       e.preventDefault();
       $('#datepicker').show();
       $('#heartrate').css('display', 'none');
+      $('#dashboard').css('display', 'none');
     });
     app.readCorrelations();
+    $(app.multichart.rangepicker).on('change', app.multichartSwitch);
+    $(app.multichart.chk_data).click(function() {
+      var checked = $(app.multichart.chk_data).is(':checked');
+      app.chart.setScatterVisible(app.multichart.id, checked);
+    });
+    $(app.multichart.chk_type1).click(function() {
+      var show_data = $(app.multichart.chk_data).is(':checked');
+      var visible = $(app.multichart.chk_type1).is(':checked');
+      app.chart.setTypeVisible(app.multichart.id, 'Type1', visible, show_data);
+    });
   };
 
   lock.on("authenticated", function(authResult) {

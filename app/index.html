@@ -52,6 +52,7 @@
     <!-- Your styles -->
     <link rel="stylesheet" href="styles/main.css">
 
+    <link rel="stylesheet" href="styles/getmdl-select.min.css">
 
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -101,19 +102,21 @@
       <span class="mdl-layout-title">Title</span>
     </div>
     <main class="mdl-layout__content">
-      <div id="datepicker" style="padding-top: 48px;">
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-            <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-            <span></span> <b class="caret"></b>
+      <div id="datepicker" style="margin-top: 48px;">
+        <section class="section--center mdl-grid">
+          <div class="mdl-cell mdl-cell--8-col"></div>
+          <div class="mdl-cell mdl-cell--4-col mdl-shadow--2dp">
+            <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
+              <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+              <span></span> <b class="caret"></b>
+            </div>
           </div>
         </section>
       </div>
       <div class="mdl-layout__tab-panel is-active" id="dashboard">
-        <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-            <div class="btn-group">
-              <div class="row">
+        <section id="corellContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" hidden="true">
+          <div class="mdl-card mdl-cell mdl-cell--12-col">
+            <div class="mdl-card__supporting-text">
                 <div class="col-md-6 col-sm-6 col-xs-12">
                   <label for="xLabel">Choose x-Label</label>
                   <select class="form-control" id="xLabel"></select>
@@ -122,9 +125,8 @@
                   <label for="yLabel">Choose y-Label</label>
                   <select class="form-control" id="yLabel"></select>
                 </div>
-              </div>
+              <div id="correlationsdiv" style="width:100%; margin-top: 100px;"></div>
             </div>
-            <div id="correlationsdiv" class="card cardTemplate" style="width: 100%;"></div>
           </div>
         </section>
         <div id="dashboard-spinner" class="loader">
@@ -134,23 +136,32 @@
         </div>
       </div>
       <div class="mdl-layout__tab-panel" id="heartrate">
-        <section id="heartrateContainer" class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp" hidden="true">
-          <div class="mdl-card mdl-cell mdl-cell--12-col">
-            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-                  <label for="timerange">Choose timrange</label>
-                  <select class="form-control" id="timerange">
-                    <option>First 5 minutes</option>
-                    <option>Whole Range</option>
-                  </select>
-                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="chk_type1">
-                    <input type="checkbox" id="chk_type1" class="mdl-checkbox__input" checked>
-                    <span class="mdl-checkbox__label">Show Heartrate Data</span>
-                  </label>
-                  <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="chk_data">
-                    <input type="checkbox" id="chk_data" class="mdl-checkbox__input" checked>
-                    <span class="mdl-checkbox__label">Show Data Points</span>
-                  </label>
-                <div id="multichart" style="width:100%;"></div>
+        <section id="heartrateContainer" class="section--center mdl-grid mdl-grid--no-spacing " hidden="true">
+          <div class="mdl-card mdl-cell mdl-cell--12-col mdl-shadow--2dp">
+            <div class="mdl-grid mdl-card__supporting-text">
+              <div class="mdl-cell mdl-cell--4-col">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
+                  <input class="mdl-textfield__input" type="text" id="timerange" value="First 5 minutes" readonly tabIndex="-1">
+                  <label for="timerange" class="mdl-textfield__label">Choose Timerange</label>
+                  <ul for="timerange" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
+                    <li class="mdl-menu__item">First 5 minutes</li>
+                    <li class="mdl-menu__item">Whole Range</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="mdl-cell mdl-cell--4-col">
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="chk_type1">
+                  <input type="checkbox" id="chk_type1" class="mdl-checkbox__input" checked>
+                  <span class="mdl-checkbox__label">Show Heartrate Data</span>
+                </label>
+              </div>
+              <div class="mdl-cell mdl-cell--4-col">
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="chk_data">
+                  <input type="checkbox" id="chk_data" class="mdl-checkbox__input" checked>
+                  <span class="mdl-checkbox__label">Show Data Points</span>
+                </label>
+              </div>
+              <div id="multichart" style="width:100%; margin-top: 100px;"></div>
             </div>
           </div>
         </section>
@@ -228,6 +239,8 @@
   <!--Datepicker JS imports from CDN-->
   <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+
+  <script type="text/javascript" src="scripts/getmdl-select.min.js"></script>
 
   <!-- build:js scripts/main.min.js -->
   <script src="scripts/main.js" async></script>
