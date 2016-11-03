@@ -905,28 +905,25 @@ ChartUpdater.prototype = {
   setTypeVisible: function (html_id, type, visible, showdata){
     this.chart.setTypeVisible(html_id, type, visible, showdata);
   },
-  update_heatmap: function (url, user_id, date_from, date_to, heatmap_id){
+  update_heatmap: function (url, user_id, date_from, date_to, app){
+    app.invokeLoading('sleep');
+    app.sleep.beginDate = date_from;
+    app.sleep.endDate = date_to;
     var reqUrl = this.utils.formatUrl(url, 'sleepPoints');
-    this.charts_createHeatmap(reqUrl, user_id, date_from, date_to, heatmap_id);
+    this.charts_createHeatmap(reqUrl, user_id, date_from, date_to, app);
   },
-  charts_createHeatmap: function (rooturl, user_id, begin_date, end_date, html_id){
+  charts_createHeatmap: function (rooturl, user_id, begin_date, end_date, app){
     var data = {
       userId: user_id,
       beginDate: begin_date,
       endDate: end_date,
       gaussianSettings: false
     };
-    var chart = this.getChartObject();
-
     $.ajax({type: "POST", url: rooturl, data: data, success: function(result){
       var points = eval(result);
-      if (points.length != 0){
-        console.log('data from  %s len: %d', rooturl , points.length);
-        chart.create_heatmap(points, html_id, begin_date, end_date);
-      } else{
-        var error_text = 'There is no sleep data measured in the given time period. Please choose another period to analyse your personal sleep data.';
-        chart.clearAmChart(html_id, error_text);
-      }
+      console.log('data from  %s len: %d', rooturl , points.length);
+      app.invokeReady('sleep', points);
+
     }});
   },
   update_gaussian: function (url, user_id,  date_from, date_to , gaussian_id){
@@ -1000,25 +997,45 @@ Setup.prototype = {
     });
   },
   fillInXlabels: function(linearData, x_label_id){
-    var temp = "";
+    var temp = '';
     var xLabels = [];
     for (var i = 0; i<linearData.length; i++){
       if (!(this.utils.contains(xLabels, linearData[i].x_label))){
         xLabels.push(linearData[i].x_label);
-        temp += "<option>" + linearData[i].x_label + "</option>";
+        temp += '<li class="mdl-menu__item">' + linearData[i].x_label + '</li>';
       }
     }
-    $(x_label_id).html(temp);
+    var html_code = '<div id="xMDL" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height getmdl-select__fullwidth"> ' +
+      '<input class="mdl-textfield__input" type="text" id="xLabel" value="' + xLabels[0] + '"readonly tabIndex="-1"/> ' +
+      '<label for="xLabel" class="mdl-textfield__label">Choose x Label</label> ' +
+      '<ul id="x" for="xLabel" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">' +
+      temp +
+      '</ul> ' +
+      '</div>'
+    $('#xPicker').html(html_code);
+    getmdlSelect.init('#xMDL');
   },
   fillInYlabels: function (url, user_id, linearData, x_label_id, y_label_id, app){
     var currXlabel = $(x_label_id).val();
-    var temp = "";
+    var temp = '';
+    var yLabels = [];
     for (var i = 0; i<linearData.length; i++){
       if (linearData[i].x_label==currXlabel){
-        temp += "<option>" + linearData[i].y_label + "</option>";
+        yLabels.push(linearData[i].y_label);
+        temp += '<li class="mdl-menu__item">' + linearData[i].y_label + '</li>';
       }
     }
-    $(y_label_id).html(temp);
+    var html_code = '<div id="yMDL" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fix-height getmdl-select__fullwidth">' +
+      '<input class="mdl-textfield__input" type="text" id="yLabel" value="' + yLabels[0] + '"  readonly tabIndex="-1"/>' +
+      '<label for="yLabel" class="mdl-textfield__label">Choose y Label</label>' +
+      '<ul id="y" for="yLabel" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">' +
+      temp +
+      '</ul></div>';
+    $('#yPicker').html(html_code);
+    $(app.correlation.yLabel).on('change', function() {
+      app.updater.update_correlations(app.url, user_id, app.correlations_list, app)
+    });
+    getmdlSelect.init('#yMDL');
     this.updater.update_correlations(url, user_id, linearData, app);
   },
   setup_datepicker: function (picker_id, time, update_function) {
@@ -1154,6 +1171,16 @@ Setup.prototype = {
       ready: false,
       data: [],
       changed: false
+    },
+    sleep: {
+      id: 'sleepchart',
+      container: document.querySelector('#sleepContainer'),
+      spinner: document.querySelector('#sleep-spinner'),
+      ready: false,
+      data: [],
+      beginDate: null,
+      endDate: null,
+      changed: false
     }
   };
 
@@ -1173,6 +1200,8 @@ Setup.prototype = {
         var html_id = app.multichart.id;
         var only_5mins = $(app.multichart.rangepicker).val() === 'First 5 minutes';
         if (app.multichart.changed){
+          $(app.multichart.id).css('min-height', screen.height * 0.55);
+          $(app.multichart.id).css('max-height', screen.height * 0.7);
           app.chart.draw_multiChart(data, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins);
           app.multichart.changed = false;
         }
@@ -1183,6 +1212,7 @@ Setup.prototype = {
           }
         });
       } else {
+        $(app.multichart.id).css('min-height', '0px');
         var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
         app.chart.clearHighchart(app.multichart.id, error_text);
       }
@@ -1197,6 +1227,8 @@ Setup.prototype = {
       if (data != null){
         var title = 'Correlation between <strong>' + xLabel + '</strong> and <strong>' + yLabel + '</strong>';
         if (app.correlation.changed){
+          $(app.correlation.id).css('min-height', screen.height * 0.55);
+          $(app.correlation.id).css('max-height', screen.height * 0.7);
           app.chart.draw_linearChart(data, title, xLabel, yLabel, html_id);
           app.correlation.changed = false;
         }
@@ -1205,10 +1237,34 @@ Setup.prototype = {
           app.chart.draw_linearChart(app.correlation.data, title, xLabel, yLabel,html_id);
         })
 
-      }
-      else{
+      } else{
+        $(app.correlation.id).css('min-height', '0px');
         var error_text = 'There is no correlation data available from ' + xLabel + ' to ' + yLabel + '. Please choose other labels.';
         app.chart.clearHighchart(html_id, error_text);
+      }
+    }
+    if (label === 'sleep') {
+      app.sleep.spinner.setAttribute('hidden', 'true');
+      app.sleep.container.removeAttribute('hidden');
+      app.sleep.data = data;
+      var htmlId = app.sleep.id;
+      if (data.length !== 0 && app.sleep.beginDate !== null && app.sleep.endDate !== null) {
+        if (app.sleep.changed) {
+          $('#' + app.sleep.id).css('min-height', screen.height * 0.55);
+          $('#' + app.sleep.id).css('max-height', screen.height * 0.7);
+          app.chart.create_heatmap(data, htmlId, app.sleep.beginDate, app.sleep.endDate);
+          app.sleep.changed = false;
+        }
+        $('#tab-sleep').click(function(e) {
+          e.preventDefault();
+          if (app.chart.getChart(html_id)){
+            app.chart.create_heatmap(app.sleep.data, htmlId, app.sleep.beginDate, app.sleep.endDate);
+          }
+        });
+      } else {
+        $('#' + app.sleep.id).css('min-height', '0px');
+        var error_text = 'There is no sleep data measured in the given time period. Please choose another period to analyse your personal sleep data.';
+        app.chart.clearAmChart(htmlId, error_text);
       }
     }
   };
@@ -1225,6 +1281,12 @@ Setup.prototype = {
       app.correlation.spinner.removeAttribute('hidden');
       app.correlation.ready = false;
       app.correlation.changed = true;
+    }
+    if (label === 'sleep') {
+      app.sleep.container.setAttribute('hidden', 'true');
+      app.sleep.spinner.removeAttribute('hidden');
+      app.sleep.ready = false;
+      app.sleep.changed = true;
     }
   }
 
@@ -1254,23 +1316,22 @@ Setup.prototype = {
     cb(start, end);
   };
 
+
+
   app.readCorrelations = function () {
     var user_id	= JSON.parse(localStorage.getItem('profile')).email;
-    app.setup.fillInXlabels(app.correlations_list, app.correlation.xLabel);
-    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, app.correlation.yLabel, app);
+    app.setup.fillInXlabels(app.correlations_list, '#x');
+    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app);
 
-    $('body').on('change', app.correlation.xLabel, function() {
-      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, app.correlation.yLabel, app);
+    $(app.correlation.xLabel).on('change', function() {
+      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app);
     });
-    $('body').on('change', app.correlation.yLabel, function() {
-      app.updater.update_correlations(app.url, user_id, app.correlations_list, app)
-    });
+
   };
 
   app.readSleepData = function(start, end) {
-    var sleepDataId = 'sleepchart';
     var userId = JSON.parse(localStorage.getItem('profile')).email;
-    app.updater.update_heatmap(app.url, userId, start, end, sleepDataId);
+    app.updater.update_heatmap(app.url, userId, start, end, app);
   };
 
   app.readHeartrateData = function(start, end) {
@@ -1346,6 +1407,7 @@ Setup.prototype = {
       e.preventDefault();
       $('#datepicker').hide();
       $('#heartrate').css('display', 'none');
+      $('#sleepdata').css('display', 'none');
       $('#dashboard').css('display', 'block');
     });
     $('#tab-profile').click(function (e) {
@@ -1353,11 +1415,13 @@ Setup.prototype = {
       $('#datepicker').hide();
       $('#heartrate').css('display', 'none');
       $('#dashboard').css('display', 'none');
+      $('#sleepdata').css('display', 'none');
     });
     $('#tab-heartrate').click(function (e) {
       e.preventDefault();
       $('#datepicker').show();
       $('#heartrate').css('display', 'block');
+      $('#sleepdata').css('display', 'none');
       $('#dashboard').css('display', 'none');
     });
     $('#tab-sleep').click(function (e) {
@@ -1365,6 +1429,7 @@ Setup.prototype = {
       $('#datepicker').show();
       $('#heartrate').css('display', 'none');
       $('#dashboard').css('display', 'none');
+      $('#sleepdata').css('display', 'block');
     });
     app.readCorrelations();
     $(app.multichart.rangepicker).on('change', app.multichartSwitch);
