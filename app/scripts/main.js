@@ -601,8 +601,10 @@ Chart.prototype = {
       },
     });
   },
-  draw_multiChart: function (points, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins) {
-    var serieses = this.highchartFunctions.getMultichartSeries(points, show_data, grp_type, show_type1, data_select_id, 'circle', only_5mins, html_id);
+  draw_multiChart: function (points, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app) {
+    if (app.multichart.changed) {
+      app.multichart.series = this.highchartFunctions.getMultichartSeries(points, show_data, grp_type, show_type1, data_select_id, 'circle', only_5mins, html_id);
+    }
     var utils = this.utils;
     $(html_id).highcharts({
       title: {
@@ -670,7 +672,7 @@ Chart.prototype = {
           }
         }
       },
-      series: serieses
+      series: app.multichart.series
     });
   },
   setTypeVisible: function (htmlId, type, visible, showdata) {
@@ -1170,6 +1172,7 @@ Setup.prototype = {
       spinner: document.querySelector('#heartrate-spinner'),
       ready: false,
       data: [],
+      series: null,
       changed: false
     },
     sleep: {
@@ -1202,13 +1205,13 @@ Setup.prototype = {
         if (app.multichart.changed){
           $(app.multichart.id).css('min-height', screen.height * 0.55);
           $(app.multichart.id).css('max-height', screen.height * 0.7);
-          app.chart.draw_multiChart(data, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins);
+          app.chart.draw_multiChart(data, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app);
           app.multichart.changed = false;
         }
         $('#tab-heartrate').click(function (e) {
           e.preventDefault();
           if ($(app.multichart.id).highcharts()) {
-            app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes');
+            app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
           }
         });
       } else {
@@ -1257,7 +1260,7 @@ Setup.prototype = {
         }
         $('#tab-sleep').click(function(e) {
           e.preventDefault();
-          if (app.chart.getChart(html_id)){
+          if (app.chart.amFunctions.getChart(html_id)){
             app.chart.create_heatmap(app.sleep.data, htmlId, app.sleep.beginDate, app.sleep.endDate);
           }
         });
@@ -1344,7 +1347,8 @@ Setup.prototype = {
 
   app.multichartSwitch = function() {
     if (app.multichart.data.length != 0){
-      app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circe', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes');
+      app.multichart.changed = true;
+      app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circe', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
     }
   }
 
@@ -1354,7 +1358,8 @@ Setup.prototype = {
     if (id_token) {
       lock.getProfile(id_token, function (err, profile) {
         if (err) {
-          return alert('There was an error getting the profile: ' + err.message);
+          alert('There was an error getting the profile: ' + err.message);
+          logout();
         }
         // Display user information
         show_profile_info(profile);
@@ -1447,7 +1452,8 @@ Setup.prototype = {
   lock.on("authenticated", function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
-        // Handle error
+        alert('There was an error while logging in: ' + error.message);
+        logout();
         return;
       }
       localStorage.setItem('id_token', authResult.idToken);
