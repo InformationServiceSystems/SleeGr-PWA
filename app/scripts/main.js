@@ -54,8 +54,8 @@ Util.prototype = {
     return false;
   },
   getNoDataDiv: function(text) {
-    var errorPage = '<div class="error-content" align="center"> ' +
-      '<h3><i class="fa fa-warning text-yellow"></i> No data available.</h3> ' +
+    var errorPage = '<div align="center"> ' +
+      '<h3>No data available.</h3> ' +
       '<p>' +
       'Sorry! ' + text +
       '</p> ' +
@@ -65,24 +65,24 @@ Util.prototype = {
   },
   getHtmlDataTable: function(dataPoints) {
     var content = '';
-    content += '<thead class="datathead">' +
-      '<tr class="datatr">' +
-      '<th class="datath">Date</th>' +
-      '<th class="datath">a</th>' +
-      '<th class="datath">T</th>' +
-      '<th class="datath">c</th>' +
+    content += '<table class="mdl-data-table mdl-js-data-table" style="width: 100%;"><thead>' +
+      '<tr>' +
+      '<th class="mdl-data-table__cell--non-numeric">Date</th>' +
+      '<th class="mdl-data-table__cell--non-numeric">a</th>' +
+      '<th class="mdl-data-table__cell--non-numeric">T</th>' +
+      '<th class="mdl-data-table__cell--non-numeric">c</th>' +
       '</tr>' +
       '</thead>' +
-      '<tbody class="datatbody">';
+      '<tbody>';
     if (dataPoints.length !== 0) {
       try {
         for (var i = 0; i < dataPoints.length; i++) {
           if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)) {
-            content += '<tr class="datatr">';
-            content += '<td class="datatd filterable-cell">' + dataPoints[i].date + '</td>';
-            content += '<td  class="datatd filterable-cell">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
-            content += '<td  class="datatd filterable-cell">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
-            content += '<td  class="datatd filterable-cell">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '<tr>';
+            content += '<td class="mdl-data-table__cell--non-numeric">' + dataPoints[i].date + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
             content += '</tr>';
           }
         }
@@ -90,7 +90,7 @@ Util.prototype = {
         this.logerr('getNoDataTable()', e);
         return '';
       }
-      content += '</tbody>';
+      content += '</tbody> </table>';
     }
     return content;
   },
@@ -1165,6 +1165,7 @@ Setup.prototype = {
     },
     multichart: {
       id: '#multichart',
+      dataTableId: '#parameterTable',
       container: document.querySelector('#heartrateContainer'),
       rangepicker: '#timerange',
       chk_data: '#chk_data',
@@ -1202,6 +1203,7 @@ Setup.prototype = {
         var point_symbol = 'circle';
         var html_id = app.multichart.id;
         var only_5mins = $(app.multichart.rangepicker).val() === 'First 5 minutes';
+        app.utils.fadeInHtmlTable(app.multichart.data, app.multichart.dataTableId);
         if (app.multichart.changed){
           $(app.multichart.id).css('min-height', screen.height * 0.55);
           $(app.multichart.id).css('max-height', screen.height * 0.7);
@@ -1218,6 +1220,8 @@ Setup.prototype = {
         $(app.multichart.id).css('min-height', '0px');
         var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
         app.chart.clearHighchart(app.multichart.id, error_text);
+        var noData = app.utils.getNoDataDiv(error_text);
+        $(app.multichart.dataTableId).html(noData);
       }
     }
     if (label === 'correlation') {
