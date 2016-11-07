@@ -1298,17 +1298,20 @@ Setup.prototype = {
   }
 
   app.initDatePicker = function () {
+    $('#datepicker').show();
     var start = moment().subtract(29, 'days');
     var end = moment();
+    document.getElementById('date-from').setAttribute('value', start.format(('DD.MM.YYYY')));
+    document.getElementById('date-to').setAttribute('value', end.format(('DD.MM.YYYY')));
+
+    $('#datepicker').hide();
     app.readHeartrateData(start.format('DD.MM.YYYY'),end.format('DD.MM.YYYY'));
     app.readSleepData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
-    document.getElementById('date-from').setAttribute('value', start.format(('DD.MM.YYYY')));
     var dialogFrom = new mdDateTimePicker.default({
       type: 'date',
       init: start
     });
-    var toggleButton = document.getElementById('date-from');
-    toggleButton.addEventListener('click', function() {
+    document.getElementById('date-from').addEventListener('click', function() {
       dialogFrom.toggle();
     });
     dialogFrom.trigger = document.getElementById('date-from');
@@ -1317,7 +1320,6 @@ Setup.prototype = {
       app.readHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
       app.readSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
     });
-    document.getElementById('date-to').setAttribute('value', end.format(('DD.MM.YYYY')));
     var dialogTo = new mdDateTimePicker.default({
       type: 'date',
       init: end
@@ -1482,10 +1484,11 @@ Setup.prototype = {
     e.preventDefault();
     logout();
   });
-  $('#datepicker').hide();
+
 
   if(!localStorage.getItem('id_token')){
     document.getElementById('profile-button').setAttribute('style', 'display: none');
+    $('#datepicker').hide();
     lock.show();
   }
   else{
