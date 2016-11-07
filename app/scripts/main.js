@@ -1300,27 +1300,37 @@ Setup.prototype = {
   app.initDatePicker = function () {
     var start = moment().subtract(29, 'days');
     var end = moment();
-
-    var cb = function(start, end) {
-      $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
-      app.readHeartrateData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
-      app.readSleepData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
-    };
-
-    $('#reportrange').daterangepicker({
-      startDate: start,
-      endDate: end,
-      ranges: {
-        'Today': [moment(), moment()],
-        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-        'This Month': [moment().startOf('month'), moment().endOf('month')],
-        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-      }
-    }, cb);
-
-    cb(start, end);
+    app.readHeartrateData(start.format('DD.MM.YYYY'),end.format('DD.MM.YYYY'));
+    app.readSleepData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
+    document.getElementById('date-from').setAttribute('value', start.format(('DD.MM.YYYY')));
+    var dialogFrom = new mdDateTimePicker.default({
+      type: 'date',
+      init: start
+    });
+    var toggleButton = document.getElementById('date-from');
+    toggleButton.addEventListener('click', function() {
+      dialogFrom.toggle();
+    });
+    dialogFrom.trigger = document.getElementById('date-from');
+    document.getElementById('date-from').addEventListener('onOk', function() {
+      this.value = dialogFrom.time.format('DD.MM.YYYY');
+      app.readHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+      app.readSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+    });
+    document.getElementById('date-to').setAttribute('value', end.format(('DD.MM.YYYY')));
+    var dialogTo = new mdDateTimePicker.default({
+      type: 'date',
+      init: end
+    });
+    document.getElementById('date-to').addEventListener('click', function() {
+      dialogTo.toggle();
+    });
+    dialogTo.trigger = document.getElementById('date-to');
+    document.getElementById('date-to').addEventListener('onOk', function() {
+      this.value = dialogTo.time.format('DD.MM.YYYY');
+      app.readHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+      app.readSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+    });
   };
 
 

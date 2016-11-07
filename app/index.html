@@ -56,10 +56,9 @@
     <!--getmdl-select-->
     <link rel="stylesheet" href="https://cdn.rawgit.com/CreativeIT/getmdl-select/master/getmdl-select.min.css">
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+    <!--mdlDatePicker-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="styles/mdDateTimePicker.min.css">
 
     <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
     <!--
@@ -106,11 +105,16 @@
     <main class="mdl-layout__content">
       <div id="datepicker" style="margin-top: 0px;">
         <section class="section--center mdl-grid">
-          <div class="mdl-cell mdl-cell--8-col"></div>
-          <div class="mdl-cell mdl-cell--4-col mdl-shadow--2dp">
-            <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%">
-              <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
-              <span></span> <b class="caret"></b>
+          <div class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="date-from" readonly tabIndex="-1">
+              <label for="date-from" class="mdl-textfield__label">Choose begin date</label>
+            </div>
+          </div>
+          <div class="mdl-cell mdl-cell--4-col">
+            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+              <input class="mdl-textfield__input" type="text" id="date-to" readonly tabIndex="-1">
+              <label for="date-to" class="mdl-textfield__label">Choose end date</label>
             </div>
           </div>
         </section>
@@ -245,6 +249,8 @@
   <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
 
   <script defer src="https://cdn.rawgit.com/CreativeIT/getmdl-select/master/getmdl-select.min.js"></script>
+
+  <script type="text/javascript" src="scripts/mdDateTimePicker.js" async></script>
 
   <!-- build:js scripts/main.min.js -->
   <script src="scripts/main.js" async></script>
