@@ -187,30 +187,14 @@
         </div>
       </div>
       <div class="mdl-layout__tab-panel" id="profile">
-        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
-          <div class="mdl-card mdl-cell mdl-cell--12-col">
+        <section class="section--center mdl-grid mdl-grid--no-spacing">
+          <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--2dp">
             <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
               <div class="demo-list-action mdl-list">
                 <div class="mdl-list__item">
                   <span class="mdl-list__item-primary-content">
                     <i class="material-icons mdl-list__item-avatar">person</i>
-                    <span>Bryan Cranston</span>
-                  </span>
-                  <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
-                </div>
-                <div class="mdl-list__item">
-                  <span class="mdl-list__item-primary-content">
-                    <i class="material-icons mdl-list__item-avatar">person</i>
-                    <span>Aaron Paul</span>
-                  </span>
-                  <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
-                </div>
-                <div class="mdl-list__item">
-                  <span class="mdl-list__item-primary-content">
-                    <i class="material-icons mdl-list__item-avatar">person</i>
-                    <span>Bob Odenkirk</span></span>
-                  <span class="mdl-list__item-secondary-content">
-                    <a class="mdl-list__item-secondary-action" href="#"><i class="material-icons">star</i></a>
+                    <span id="usermail"></span>
                   </span>
                 </div>
               </div>
@@ -228,6 +212,20 @@
     <li id="username" class="mdl-menu__item"></li>
     <li id="btn-logout" class="mdl-menu__item">Log Out</li>
   </ul>
+  <!--skipping footer because of css problems with wsk-->
+
+  <!--<footer class="mdl-mega-footer" >-->
+    <!--<div class="mdl-mega-footer&#45;&#45;bottom-section">-->
+
+      <!--<strong>Copyright &copy; 2016-->
+        <!--<ul class="mdl-mega-footer&#45;&#45;link-list">-->
+          <!--<li><a href="http://iss.uni-saarland.de/en/" target="_blank">Information and Service Systems</a>.</li>-->
+        <!--</ul>-->
+        <!--<b>Version</b> 1.0-->
+      <!--</strong>-->
+      <!--<b>All rights reserved.</b>-->
+    <!--</div>-->
+  <!--</footer>-->
 
   <script src="https://storage.googleapis.com/code.getmdl.io/1.0.6/material.min.js"></script>
 
@@ -250,7 +248,7 @@
 
   <script defer src="https://cdn.rawgit.com/CreativeIT/getmdl-select/master/getmdl-select.min.js"></script>
 
-  <script type="text/javascript" src="scripts/mdDateTimePicker.js" async></script>
+  <script type="text/javascript" src="scripts/mdDateTimePicker.js"></script>
 
   <!-- build:js scripts/main.min.js -->
   <script src="scripts/main.js" async></script>

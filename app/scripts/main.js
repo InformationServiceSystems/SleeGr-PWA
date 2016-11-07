@@ -65,24 +65,32 @@ Util.prototype = {
   },
   getHtmlDataTable: function(dataPoints) {
     var content = '';
-    content += '<table class="mdl-data-table mdl-js-data-table" style="width: 100%;"><thead>' +
-      '<tr>' +
-      '<th class="mdl-data-table__cell--non-numeric">Date</th>' +
-      '<th class="mdl-data-table__cell--non-numeric">a</th>' +
-      '<th class="mdl-data-table__cell--non-numeric">T</th>' +
-      '<th class="mdl-data-table__cell--non-numeric">c</th>' +
+    content += '<div style="padding-left: 2%; padding-right: 2%">' +
+      '<h4>Curve Parameters</h4><h5>Formula: (HRR<sub>~80%</sub>-c) &sdot; e<sup>(-(x-T)/a)</sup>+ c </h5> ' +
+      '<hr> ' +
+      '<p>a: curvature</p> ' +
+      '<p>T: timeshift</p> ' +
+      '<p>c: Average Heartrate at rest</p>' +
+      '</div>';
+    content += '<table class="mdl-data-table mdl-js-data-table" style="width: 100%;">' +
+      '<thead class="datathead">' +
+      '<tr class="datatr">' +
+      '<th class="mdl-data-table__cell--non-numeric datath">Date</th>' +
+      '<th class="mdl-data-table__cell--non-numeric datath">a</th>' +
+      '<th class="mdl-data-table__cell--non-numeric datath">T</th>' +
+      '<th class="mdl-data-table__cell--non-numeric datath">c</th>' +
       '</tr>' +
       '</thead>' +
-      '<tbody>';
+      '<tbody class="datatbody">';
     if (dataPoints.length !== 0) {
       try {
         for (var i = 0; i < dataPoints.length; i++) {
           if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)) {
-            content += '<tr>';
-            content += '<td class="mdl-data-table__cell--non-numeric">' + dataPoints[i].date + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '<tr class="datatr">';
+            content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + dataPoints[i].date + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
             content += '</tr>';
           }
         }
@@ -568,14 +576,17 @@ Chart.prototype = {
     });
 
   },
-  create_heatmap: function (points, html_id, begin_date, end_date) {
-    var sourceData = this.amFunctions.getHeatmapDataPoints(points, this.glb_maxhour, this.glb_maxvalue, this.glb_hours, this.glb_green, this.glb_blue);
-    var graphs = this.amFunctions.getHeatmapGraphObjects(begin_date, end_date);
+  create_heatmap: function (points, html_id, begin_date, end_date, app) {
+    if ( app.sleep.changed ){
+      app.sleep.sourceData = this.amFunctions.getHeatmapDataPoints(points, this.glb_maxhour, this.glb_maxvalue, this.glb_hours, this.glb_green, this.glb_blue);
+      app.sleep.graphs = this.amFunctions.getHeatmapGraphObjects(begin_date, end_date);
+    }
+
 
     // create the heatmap chart!
     var chart = AmCharts.makeChart(html_id, {
       "type": "serial",
-      "dataProvider": sourceData,
+      "dataProvider": app.sleep.sourceData,
       "valueAxes": [{
         "title": "Deep Sleep (in %)",
         "baseValue": 0,
@@ -588,7 +599,7 @@ Chart.prototype = {
           return value * 5 + '%';
         }
       }],
-      "graphs": graphs,
+      "graphs": app.sleep.graphs,
       "columnWidth": 1,
       "categoryField": "hour",
       "categoryAxis": {
@@ -706,9 +717,11 @@ Chart.prototype = {
     }
 
   },
-  draw_linearChart: function (data_points, title, xLabel, yLabel, html_id) {
+  draw_linearChart: function (data_points, title, xLabel, yLabel, html_id, app) {
 
-    var series = this.highchartFunctions.getCorellSeries(data_points.x0, data_points.y0, data_points.x1, data_points.y1, data_points.data, 'circle', title);
+    if (app.correlation.changed){
+      app.correlation.series = this.highchartFunctions.getCorellSeries(data_points.x0, data_points.y0, data_points.x1, data_points.y1, data_points.data, 'circle', title);
+    }
     var formatter = this.highchartFunctions.highchartsGetFormatter(xLabel);
 
     $(html_id).highcharts({
@@ -760,7 +773,7 @@ Chart.prototype = {
           }
         }
       },
-      series: series
+      series: app.correlation.series
     });
   },
   create_gaussian: function (settings, points, html_id) {
@@ -1161,6 +1174,7 @@ Setup.prototype = {
       spinner: document.querySelector('#dashboard-spinner'),
       ready: false,
       data: null,
+      series: [],
       changed: false
     },
     multichart: {
@@ -1182,6 +1196,8 @@ Setup.prototype = {
       spinner: document.querySelector('#sleep-spinner'),
       ready: false,
       data: [],
+      sourceData: [],
+      graphs: null,
       beginDate: null,
       endDate: null,
       changed: false
@@ -1236,12 +1252,12 @@ Setup.prototype = {
         if (app.correlation.changed){
           $(app.correlation.id).css('min-height', screen.height * 0.55);
           $(app.correlation.id).css('max-height', screen.height * 0.7);
-          app.chart.draw_linearChart(data, title, xLabel, yLabel, html_id);
+          app.chart.draw_linearChart(data, title, xLabel, yLabel, html_id, app);
           app.correlation.changed = false;
         }
         $('#tab-dashboard').click(function(e) {
           e.preventDefault();
-          app.chart.draw_linearChart(app.correlation.data, title, xLabel, yLabel,html_id);
+          app.chart.draw_linearChart(app.correlation.data, title, xLabel, yLabel,html_id, app);
         })
 
       } else{
@@ -1259,13 +1275,13 @@ Setup.prototype = {
         if (app.sleep.changed) {
           $('#' + app.sleep.id).css('min-height', screen.height * 0.55);
           $('#' + app.sleep.id).css('max-height', screen.height * 0.7);
-          app.chart.create_heatmap(data, htmlId, app.sleep.beginDate, app.sleep.endDate);
+          app.chart.create_heatmap(data, htmlId, app.sleep.beginDate, app.sleep.endDate, app);
           app.sleep.changed = false;
         }
         $('#tab-sleep').click(function(e) {
           e.preventDefault();
           if (app.chart.amFunctions.getChart(html_id)){
-            app.chart.create_heatmap(app.sleep.data, htmlId, app.sleep.beginDate, app.sleep.endDate);
+            app.chart.create_heatmap(app.sleep.data, htmlId, app.sleep.beginDate, app.sleep.endDate, app);
           }
         });
       } else {
@@ -1299,17 +1315,16 @@ Setup.prototype = {
 
   app.initDatePicker = function () {
     $('#datepicker').show();
-    var start = moment().subtract(29, 'days');
+    var start = moment().subtract(27, 'days');
     var end = moment();
     document.getElementById('date-from').setAttribute('value', start.format(('DD.MM.YYYY')));
     document.getElementById('date-to').setAttribute('value', end.format(('DD.MM.YYYY')));
 
     $('#datepicker').hide();
-    app.readHeartrateData(start.format('DD.MM.YYYY'),end.format('DD.MM.YYYY'));
-    app.readSleepData(start.format('DD.MM.YYYY'), end.format('DD.MM.YYYY'));
     var dialogFrom = new mdDateTimePicker.default({
       type: 'date',
-      init: start
+      init: start,
+      future: moment()
     });
     document.getElementById('date-from').addEventListener('click', function() {
       dialogFrom.toggle();
@@ -1386,6 +1401,7 @@ Setup.prototype = {
   function show_profile_info(profile){
     document.getElementById('username').innerHTML = profile.email;
     $('.avatar').attr('src', profile.picture).show();
+    $('#usermail').html(profile.email);
 
   }
 
@@ -1452,7 +1468,6 @@ Setup.prototype = {
       $('#dashboard').css('display', 'none');
       $('#sleepdata').css('display', 'block');
     });
-    app.readCorrelations();
     $(app.multichart.rangepicker).on('change', app.multichartSwitch);
     $(app.multichart.chk_data).click(function() {
       var checked = $(app.multichart.chk_data).is(':checked');
@@ -1463,6 +1478,9 @@ Setup.prototype = {
       var visible = $(app.multichart.chk_type1).is(':checked');
       app.chart.setTypeVisible(app.multichart.id, 'Type1', visible, show_data);
     });
+    app.readCorrelations();
+    app.readHeartrateData($('#date-from').val(), $('#date-to').val());
+    app.readSleepData($('#date-from').val(), $('#date-to').val());
   };
 
   lock.on("authenticated", function(authResult) {
