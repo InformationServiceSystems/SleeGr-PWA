@@ -72,9 +72,10 @@ Util.prototype = {
       '<p>T: timeshift</p> ' +
       '<p>c: Average Heartrate at rest</p>' +
       '</div>';
-    content += '<table class="mdl-data-table mdl-js-data-table" style="width: 100%;">' +
+    content += '<table id="parameters" class="mdl-data-table" style="width: 100%;">' +
       '<thead class="datathead">' +
       '<tr class="datatr">' +
+      '<th class="mdl-data-table__cell--non-numeric datath"> <label id="headerbox" class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="table-header"> <input type="checkbox" id="table-header" class="mdl-checkbox__input" /> </label> </th>' +
       '<th class="mdl-data-table__cell--non-numeric datath">Date</th>' +
       '<th class="mdl-data-table__cell--non-numeric datath">a</th>' +
       '<th class="mdl-data-table__cell--non-numeric datath">T</th>' +
@@ -87,6 +88,7 @@ Util.prototype = {
         for (var i = 0; i < dataPoints.length; i++) {
           if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)) {
             content += '<tr class="datatr">';
+            content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
             content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + dataPoints[i].date + '</td>';
             content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
             content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
@@ -326,7 +328,7 @@ HighchartFunctions.prototype = {
           var color = this.highchartsGetColor(htmlId, lineName);
           var id = type + '_' + i;
 
-          var lineSeries = this.createLineSeries(id, type, visible, lineName, color, lineData, true, dataSelectId, legendClickFunction);
+          var lineSeries = this.createLineSeries(id, type, visible, lineName, color, lineData, false, dataSelectId, legendClickFunction);
           var scatterSeries = this.createScatterSeries	(scatterName, color, type, visible, id, scatterData, pointSymbol, showData);
           serieses.push(lineSeries);
           serieses.push(scatterSeries);
@@ -1183,7 +1185,7 @@ Setup.prototype = {
       container: document.querySelector('#heartrateContainer'),
       rangepicker: '#timerange',
       chk_data: '#chk_data',
-      chk_type1: '#chk_type1',
+      chk_type1: '#table-header',
       spinner: document.querySelector('#heartrate-spinner'),
       ready: false,
       data: [],
@@ -1212,6 +1214,8 @@ Setup.prototype = {
       app.multichart.container.removeAttribute('hidden');
       app.multichart.data = data;
       if (data.length !== 0) {
+        app.utils.fadeInHtmlTable(app.multichart.data, app.multichart.dataTableId);
+        app.configureHtmlTable();
         var show_data = $(app.multichart.chk_data).is(':checked');
         var show_type1 = $(app.multichart.chk_type1).is(':checked');
         var grp_type = 'Type1';
@@ -1219,7 +1223,6 @@ Setup.prototype = {
         var point_symbol = 'circle';
         var html_id = app.multichart.id;
         var only_5mins = $(app.multichart.rangepicker).val() === 'First 5 minutes';
-        app.utils.fadeInHtmlTable(app.multichart.data, app.multichart.dataTableId);
         if (app.multichart.changed){
           $(app.multichart.id).css('min-height', screen.height * 0.55);
           $(app.multichart.id).css('max-height', screen.height * 0.7);
@@ -1315,7 +1318,7 @@ Setup.prototype = {
 
   app.initDatePicker = function () {
     $('#datepicker').show();
-    var start = moment().subtract(27, 'days');
+    var start = moment().subtract(11, 'months');
     var end = moment();
     document.getElementById('date-from').setAttribute('value', start.format(('DD.MM.YYYY')));
     document.getElementById('date-to').setAttribute('value', end.format(('DD.MM.YYYY')));
@@ -1379,9 +1382,62 @@ Setup.prototype = {
   app.multichartSwitch = function() {
     if (app.multichart.data.length != 0){
       app.multichart.changed = true;
-      app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circe', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
+      app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circle', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
     }
-  }
+  };
+
+  app.configureHtmlTable = function () {
+    var table = document.querySelector('#parameters');
+    var headerLabel = table.querySelector('thead .mdl-data-table__select');
+    var headerCheckbox = headerLabel.querySelector('input');
+    headerLabel.MaterialCheckbox = new MaterialCheckbox(headerLabel);
+    headerLabel.MaterialCheckbox.check();
+    var boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].MaterialCheckbox = new MaterialCheckbox(boxes[i]);
+      boxes[i].MaterialCheckbox.check();
+    }
+    var headerCheckHandler = function(event) {
+      var chart = $(app.multichart.id).highcharts();
+      if (event.target.checked) {
+        for (var i = 0, length = boxes.length; i < length; i++) {
+          boxes[i].MaterialCheckbox.check();
+        }
+      } else {
+        for (var i = 0, length = boxes.length; i < length; i++) {
+          boxes[i].MaterialCheckbox.uncheck();
+        }
+      }
+      app.chart.setTypeVisible(app.multichart.id, 'Type1', event.target.checked, $(app.multichart.chk_data).is(':checked'))
+    };
+    headerCheckbox.addEventListener('change', headerCheckHandler);
+    var inputCheckhandler = function (event) {
+      var date = $(this).attr('data-main');
+      var chart = $(app.multichart.id).highcharts();
+      for (var i = 0; i < chart.series.length; i++) {
+        if (chart.series[i].name.split(' ')[1] == date) {
+          if (chart.series[i].options.type == 'scatter') {
+            chart.series[i].setVisible($(app.multichart.chk_data).is(':checked') && event.target.checked, false)
+          } else {
+            chart.series[i].setVisible(event.target.checked);
+
+          }
+        }
+      }
+      chart.redraw();
+      // this.options.selected = !this.visible;
+      // this.linkedSeries[0].options.selected = !this.visible;
+      // this.setVisible(!this.visible, false);
+      // this.linkedSeries[0].setVisible($(dataSelectId).is(':checked') && this.visible, false);
+      //
+      // this.chart.redraw();
+      // return false;
+
+    };
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].querySelector('input').addEventListener('change', inputCheckhandler);
+    }
+  };
 
   //retrieve the profile:
   var retrieve_profile = function() {
@@ -1438,7 +1494,7 @@ Setup.prototype = {
     document.getElementById('profile-button').setAttribute('style', 'display: block');
     retrieve_profile();
     lock.hide();
-    app.setup.select_all(['#chk_data', '#chk_type1']);
+    app.setup.select_all([app.multichart.chk_data]);
     app.initDatePicker();
     $('#tab-dashboard').click(function (e) {
       e.preventDefault();
@@ -1472,11 +1528,6 @@ Setup.prototype = {
     $(app.multichart.chk_data).click(function() {
       var checked = $(app.multichart.chk_data).is(':checked');
       app.chart.setScatterVisible(app.multichart.id, checked);
-    });
-    $(app.multichart.chk_type1).click(function() {
-      var show_data = $(app.multichart.chk_data).is(':checked');
-      var visible = $(app.multichart.chk_type1).is(':checked');
-      app.chart.setTypeVisible(app.multichart.id, 'Type1', visible, show_data);
     });
     app.readCorrelations();
     app.readHeartrateData($('#date-from').val(), $('#date-to').val());
