@@ -1241,6 +1241,8 @@ Setup.prototype = {
         app.chart.clearHighchart(app.multichart.id, error_text);
         var noData = app.utils.getNoDataDiv(error_text);
         $(app.multichart.dataTableId).html(noData);
+        app.multichart.boxes = null;
+        app.multichart.headerCheckbox = null;
       }
     }
     if (label === 'correlation') {
@@ -1389,28 +1391,28 @@ Setup.prototype = {
   app.configureHtmlTable = function () {
     var table = document.querySelector('#parameters');
     var headerLabel = table.querySelector('thead .mdl-data-table__select');
-    var headerCheckbox = headerLabel.querySelector('input');
+    app.multichart.headerCheckbox = headerLabel.querySelector('input');
     headerLabel.MaterialCheckbox = new MaterialCheckbox(headerLabel);
     headerLabel.MaterialCheckbox.check();
-    var boxes = table.querySelectorAll('tbody .mdl-data-table__select');
-    for (var i = 0; i < boxes.length; i++) {
-      boxes[i].MaterialCheckbox = new MaterialCheckbox(boxes[i]);
-      boxes[i].MaterialCheckbox.check();
+    app.multichart.boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+    for (var i = 0; i < app.multichart.boxes.length; i++) {
+      app.multichart.boxes[i].MaterialCheckbox = new MaterialCheckbox(app.multichart.boxes[i]);
+      app.multichart.boxes[i].MaterialCheckbox.check();
     }
     var headerCheckHandler = function(event) {
       var chart = $(app.multichart.id).highcharts();
       if (event.target.checked) {
-        for (var i = 0, length = boxes.length; i < length; i++) {
-          boxes[i].MaterialCheckbox.check();
+        for (var i = 0, length = app.multichart.boxes.length; i < length; i++) {
+          app.multichart.boxes[i].MaterialCheckbox.check();
         }
       } else {
-        for (var i = 0, length = boxes.length; i < length; i++) {
-          boxes[i].MaterialCheckbox.uncheck();
+        for (var i = 0, length = app.multichart.boxes.length; i < length; i++) {
+          app.multichart.boxes[i].MaterialCheckbox.uncheck();
         }
       }
       app.chart.setTypeVisible(app.multichart.id, 'Type1', event.target.checked, $(app.multichart.chk_data).is(':checked'))
     };
-    headerCheckbox.addEventListener('change', headerCheckHandler);
+    app.multichart.headerCheckbox.addEventListener('change', headerCheckHandler);
     var inputCheckhandler = function (event) {
       var date = $(this).attr('data-main');
       var chart = $(app.multichart.id).highcharts();
@@ -1425,17 +1427,9 @@ Setup.prototype = {
         }
       }
       chart.redraw();
-      // this.options.selected = !this.visible;
-      // this.linkedSeries[0].options.selected = !this.visible;
-      // this.setVisible(!this.visible, false);
-      // this.linkedSeries[0].setVisible($(dataSelectId).is(':checked') && this.visible, false);
-      //
-      // this.chart.redraw();
-      // return false;
-
     };
-    for (var i = 0; i < boxes.length; i++) {
-      boxes[i].querySelector('input').addEventListener('change', inputCheckhandler);
+    for (var i = 0; i < app.multichart.boxes.length; i++) {
+      app.multichart.boxes[i].querySelector('input').addEventListener('change', inputCheckhandler);
     }
   };
 
@@ -1524,7 +1518,21 @@ Setup.prototype = {
       $('#dashboard').css('display', 'none');
       $('#sleepdata').css('display', 'block');
     });
-    $(app.multichart.rangepicker).on('change', app.multichartSwitch);
+    $(app.multichart.rangepicker).on('change', function () {
+      app.multichartSwitch();
+      if (app.multichart.boxes !== null && app.multichart.headerCheckbox !== null){
+        if ($('#table-header').is(':checked')) {
+          for (var i = 0; i < app.multichart.boxes.length; i++) {
+            app.multichart.boxes[i].MaterialCheckbox.check();
+          }
+        } else {
+          for (var i = 0; i < app.multichart.boxes.length; i++) {
+            app.multichart.boxes[i].MaterialCheckbox.uncheck();
+          }
+        }
+      }
+
+    });
     $(app.multichart.chk_data).click(function() {
       var checked = $(app.multichart.chk_data).is(':checked');
       app.chart.setScatterVisible(app.multichart.id, checked);
