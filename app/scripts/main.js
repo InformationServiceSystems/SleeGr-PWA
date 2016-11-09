@@ -862,10 +862,9 @@ ChartUpdater.prototype = {
       nextDay: nextDay
     };
     var chart = this.getChartObject();
-    $.ajax({type: 'POST', url: rooturl, data: data, success: function(result){
-      var data_points = JSON.parse(result);
+    $.ajax({type: 'POST', url: rooturl, data: JSON.stringify(data), success: function(result){
       console.log('data from  %s', rooturl);
-      app.invokeReady('correlation', data_points);
+      app.invokeReady('correlation', result);
       return;
     }});
   },
@@ -889,7 +888,7 @@ ChartUpdater.prototype = {
     var multichart_points = this.multichart_points;
     //var utils = this.utils;
     //var chart = this.getChartObject();
-    $.ajax({type: "POST", url: rooturl, data: data, success: function(result){
+    $.ajax({type: "POST", url: rooturl, data: JSON.stringify(data), success: function(result){
       multichart_points = eval(result);
       //if (multichart_points.length!=0){
         console.log('data from  %s len: %d', rooturl, multichart_points.length);
@@ -936,7 +935,7 @@ ChartUpdater.prototype = {
       endDate: end_date,
       gaussianSettings: false
     };
-    $.ajax({type: "POST", url: rooturl, data: data, success: function(result){
+    $.ajax({type: "POST", url: rooturl, data: JSON.stringify(data), success: function(result){
       var points = eval(result);
       console.log('data from  %s len: %d', rooturl , points.length);
       app.invokeReady('sleep', points);
@@ -956,10 +955,10 @@ ChartUpdater.prototype = {
         gaussianSettings: true
       };
       var chart = this.getChartObject();
-      $.ajax({type: "POST", url:  rooturl, data: data, success: function(setting_result){
+      $.ajax({type: "POST", url:  rooturl, data: JSON.stringify(data), success: function(setting_result){
         var settings = eval(setting_result);
         data.gaussianSettings = false;
-        $.ajax({type: "POST", url:  rooturl, data: data, success: function(points_result){
+        $.ajax({type: "POST", url:  rooturl, data: JSON.stringify(data), success: function(points_result){
           var points = eval(points_result);
           if (points.length != 0){
             console.log('data from  %s len: %d', rooturl , points.length);
@@ -1325,6 +1324,9 @@ Setup.prototype = {
     document.getElementById('date-from').setAttribute('value', start.format(('DD.MM.YYYY')));
     document.getElementById('date-to').setAttribute('value', end.format(('DD.MM.YYYY')));
 
+    var datepicker1 = new MaterialTextfield(document.querySelector('#datepicker1'));
+    datepicker1 = new MaterialTextfield(document.querySelector('#datepicker2'));
+
     $('#datepicker').hide();
     var dialogFrom = new mdDateTimePicker.default({
       type: 'date',
@@ -1482,8 +1484,12 @@ Setup.prototype = {
           xhr.setRequestHeader('Authorization',
             'Bearer ' + localStorage.getItem('id_token'));
         }
+        xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
+        xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       }
     });
+
+
 
     document.getElementById('profile-button').setAttribute('style', 'display: block');
     retrieve_profile();
