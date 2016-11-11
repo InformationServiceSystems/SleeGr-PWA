@@ -1452,9 +1452,90 @@ Setup.prototype = {
 
   function show_profile_info(profile){
     document.getElementById('username').innerHTML = profile.email;
-    $('.avatar').attr('src', profile.picture).show();
-    $('#usermail').html(profile.email);
+    if (profile.email){
+      document.querySelector('#user-email span input').setAttribute('value', profile.email);
+    }
+    var lastname = document.querySelector('#user-lastname span input');
+    var prename = document.querySelector('#user-prename span input');
+    var sport = document.querySelector('#user-sport span input');
+    if (!profile.user_metadata){
+      $('.avatar').attr('src', profile.picture).show();
+      if (profile.family_name) {
+        lastname.setAttribute('value', profile.family_name);
+      }
+      if (profile.given_name) {
+        prename.setAttribute('value', profile.given_name);
+      }
+    } else {
+      if (profile.user_metadata.picture){
+        $('.avatar').attr('src', profile.user_metadata.picture).show();
+      } else {
+        $('.avatar').attr('src', profile.picture).show();
+      }
+      if (profile.user_metadata.sport){
+        sport.setAttribute('value', profile.user_metadata.sport);
+      }
+      if (profile.user_metadata.family_name) {
+        lastname.setAttribute('value', profile.user_metadata.family_name);
+      } else {
+        if (profile.family_name) {
+          lastname.setAttribute('value', profile.family_name);
+        }
+      }
+      if (profile.user_metadata.given_name) {
+        prename.setAttribute('value', profile.user_metadata.given_name);
+      } else {
+        if (profile.given_name) {
+          prename.setAttribute('value', profile.given_name);
+        }
+      }
+    }
 
+    var temp = new MaterialTextfield(document.querySelector('#user-sport div'));
+    temp = new MaterialTextfield(document.querySelector('#user-email div'));
+    temp = new MaterialTextfield(document.querySelector('#user-lastname div'));
+    temp = new MaterialTextfield(document.querySelector('#user-prename div'));
+    $('#user-sport').show();
+    $('#user-email').show();
+    $('#user-lastname').show();
+    $('#user-prename').show();
+
+    $('#edit').click(function (e) {
+      e.preventDefault();
+      $('#btn1').hide();
+      $('#submit-profile').show();
+      document.querySelector('#user-sport input').removeAttribute('readonly');
+      document.querySelector('#user-lastname input').removeAttribute('readonly');
+      document.querySelector('#user-prename input').removeAttribute('readonly');
+    });
+
+    $('#submit-profile').click(function (e) {
+      e.preventDefault();
+      document.querySelector('#user-sport input').setAttribute('readonly', 'true');
+      document.querySelector('#user-lastname input').setAttribute('readonly', 'true');
+      document.querySelector('#user-prename input').setAttribute('readonly','true');
+      var settings = {
+        "async": true,
+        "crossDomain": true,
+        "url": "https://app-iss.eu.auth0.com/api/v2/users/" + profile.user_id,
+        "method": "PATCH",
+        "headers": {
+          "authorization": "Bearer " + localStorage.getItem('id_token'),
+          "content-type": "application/json"
+        },
+        "processData": false,
+        "data": "{\"user_metadata\": {\"family_name\": \"" + lastname.value + "\", \"given_name\": \"" + prename.value + "\", \"sport\": \"" + sport.value + "\"}}"
+      };
+
+
+      $.ajax(settings).done(function (response) {
+        console.log('successfully updated user profile');
+      });
+      $('#submit-profile').hide();
+      $('#btn1').show();
+
+
+    })
   }
 
   var lock = app.utils.initLock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {

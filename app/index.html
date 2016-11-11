@@ -45,8 +45,7 @@
     material.blue-orange.min.css
     material.purple-indigo.min.css
     -->
-    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.deep_purple-red.min.css" />
-
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css" />
     <!-- Material Design icons -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
@@ -181,20 +180,65 @@
         </div>
       </div>
       <div class="mdl-layout__tab-panel" id="profile">
-        <section class="section--center mdl-grid mdl-grid--no-spacing">
-          <div class="mdl-card mdl-cell mdl-cell--4-col mdl-shadow--2dp">
-            <div class="mdl-card__supporting-text mdl-grid mdl-grid--no-spacing">
-              <div class="demo-list-action mdl-list">
-                <div class="mdl-list__item">
+        <section class="section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
+            <img alt="avatar" class="avatar" style="display:none; height: 100%; width: 100%">
+          </header>
+          <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+            <div class="mdl-card__supporting-text">
+              <h4>Your personal profile</h4>
+              <ul class="demo-list-icon mdl-list" style="width: 100%; height: 100%">
+                <li id="user-email" class="mdl-list__item" style="display: none">
                   <span class="mdl-list__item-primary-content">
-                    <i class="material-icons mdl-list__item-avatar">person</i>
-                    <span id="usermail"></span>
+                    <i class="material-icons mdl-list__item-icon">account_box</i>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input" type="text" readonly tabIndex="-1">
+                      <label for="date-from" class="mdl-textfield__label">Username</label>
+                    </div>
+                   </span>
+                </li>
+                <li  id="user-lastname" class="mdl-list__item" style="display: none">
+                  <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">person</i>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input" type="text" readonly tabIndex="-1">
+                      <label for="date-from" class="mdl-textfield__label">Name</label>
+                    </div>
                   </span>
-                </div>
-              </div>
+                </li>
+                <li  id="user-prename" class="mdl-list__item" style="display: none">
+                  <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">person_outline</i>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input" type="text" readonly tabIndex="-1">
+                      <label for="date-from" class="mdl-textfield__label">Prename</label>
+                    </div>
+                  </span>
+                </li>
+                <li  id="user-sport" class="mdl-list__item" style="display: none">
+                  <span class="mdl-list__item-primary-content">
+                    <i class="material-icons mdl-list__item-icon">directions_bike</i>
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input" type="text" readonly tabIndex="-1">
+                      <label for="date-from" class="mdl-textfield__label">Sport</label>
+                    </div>
+                  </span>
+                </li>
+              </ul>
+            </div>
+            <div id="submit-profile" class="mdl-card__actions" style="display: none">
+              <a class="mdl-button"><i class="material-icons">send</i> Submit your changes</a>
             </div>
           </div>
+          <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn1">
+            <i class="material-icons">more_vert</i>
+          </button>
+          <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn1">
+            <li id="edit" class="mdl-menu__item">Edit profile</li>
+          </ul>
         </section>
+        <section class="section--footer">
+      </section>
       </div>
     </main>
   </div>

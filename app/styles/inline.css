@@ -130,7 +130,7 @@ body {
           transform: translate(-50%, -50%); }
   .loader #spinner {
     box-sizing: border-box;
-    stroke: #673AB7;
+    stroke: #1c1fb7;
     stroke-width: 3px;
     -webkit-transform-origin: 50%;
             transform-origin: 50%;
