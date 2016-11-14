@@ -861,8 +861,11 @@ ChartUpdater.prototype = {
       yAxis: yLabel,
       nextDay: nextDay
     };
+    if (localStorage.getItem('id_token')) {
+      var authorization = 'Bearer ' + localStorage.getItem('id_token');
+    }
     var chart = this.getChartObject();
-    $.ajax({type: 'POST', url: rooturl, data: JSON.stringify(data), success: function(result){
+    $.ajax({type: 'POST', url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
       console.log('data from  %s', rooturl);
       app.invokeReady('correlation', result);
       return;
@@ -886,9 +889,12 @@ ChartUpdater.prototype = {
       endDate: end_date
     };
     var multichart_points = this.multichart_points;
+    if (localStorage.getItem('id_token')) {
+      var authorization = 'Bearer ' + localStorage.getItem('id_token');
+    }
     //var utils = this.utils;
     //var chart = this.getChartObject();
-    $.ajax({type: "POST", url: rooturl, data: JSON.stringify(data), success: function(result){
+    $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
       multichart_points = eval(result);
       //if (multichart_points.length!=0){
         console.log('data from  %s len: %d', rooturl, multichart_points.length);
@@ -935,7 +941,10 @@ ChartUpdater.prototype = {
       endDate: end_date,
       gaussianSettings: false
     };
-    $.ajax({type: "POST", url: rooturl, data: JSON.stringify(data), success: function(result){
+    if (localStorage.getItem('id_token')) {
+      var authorization = 'Bearer ' + localStorage.getItem('id_token');
+    }
+    $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
       var points = eval(result);
       console.log('data from  %s len: %d', rooturl , points.length);
       app.invokeReady('sleep', points);
@@ -955,10 +964,13 @@ ChartUpdater.prototype = {
         gaussianSettings: true
       };
       var chart = this.getChartObject();
-      $.ajax({type: "POST", url:  rooturl, data: JSON.stringify(data), success: function(setting_result){
+      if (localStorage.getItem('id_token')) {
+        var authorization = 'Bearer ' + localStorage.getItem('id_token');
+      }
+      $.ajax({type: "POST", url:  rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(setting_result){
         var settings = eval(setting_result);
         data.gaussianSettings = false;
-        $.ajax({type: "POST", url:  rooturl, data: JSON.stringify(data), success: function(points_result){
+        $.ajax({type: "POST", url:  rooturl,headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(points_result){
           var points = eval(points_result);
           if (points.length != 0){
             console.log('data from  %s len: %d', rooturl , points.length);
@@ -1140,7 +1152,7 @@ Setup.prototype = {
   // Your custom JavaScript goes here
   var AUTH0_CLIENT_ID='kMlSIl3Itqt6mQetzGXES6biAVFei6k8';
   var AUTH0_DOMAIN='app-iss.eu.auth0.com';
-
+  var refreshBearer = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiI1T3Y0SDRUQXg0Rm90ck1tTXZvWk1YbVp3bWNIaVVHbSIsInNjb3BlcyI6eyJkZXZpY2VfY3JlZGVudGlhbHMiOnsiYWN0aW9ucyI6WyJyZWFkIiwiZGVsZXRlIl19fSwiaWF0IjoxNDc5MTYzMDk4LCJqdGkiOiI5MzBjOWM0MTAzN2FhMTRmMDkwZTY2Nzc4ZjNhYWM1NyJ9.glDslHBRwWHgRIyOGCx61m3WA3KTrpHOVXOnpU57pps';
   var app = {
     isLoading: true,
     spinner: document.querySelector('#dashboard-spinner'),
@@ -1435,17 +1447,49 @@ Setup.prototype = {
     }
   };
 
+  var refreshTokens = function() {
+    var refreshToken = localStorage.getItem('refresh_token');
+    var data = {
+      'client_id':       AUTH0_CLIENT_ID,
+      'grant_type':      'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      'refresh_token':   refreshToken,
+      'api_type':        'app'
+    };
+    $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', type: 'POST', data: JSON.stringify(data), success: function(data){
+      localStorage.setItem('id_token', data.id_token);
+    }});
+  };
+
+  var getRefreshTokenIDs = function () {
+    var data = {
+      type: 'refresh_token',
+      client_id: AUTH0_CLIENT_ID,
+      user_id: JSON.parse(localStorage.getItem('profile')).user_id
+    };
+    $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' +refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
+      var temp = [];
+      for (var i = 0; i<response.length; i++) {
+        if (response[i].device_name === 'web-app') {
+            temp.push(response[i].id);
+        }
+      }
+      localStorage.setItem('refresh_id', JSON.stringify(temp));
+    }, error: function (xhr) {
+      console.error(xhr);
+    }});
+  };
   //retrieve the profile:
   var retrieve_profile = function() {
     var id_token = localStorage.getItem('id_token');
     if (id_token) {
       lock.getProfile(id_token, function (err, profile) {
         if (err) {
-          alert('There was an error getting the profile: ' + err.message);
-          logout();
+          refreshTokens();
+          retrieve_profile();
+        } else {
+          // Display user information
+          show_profile_info(profile);
         }
-        // Display user information
-        show_profile_info(profile);
       });
     }
   };
@@ -1540,7 +1584,7 @@ Setup.prototype = {
 
   var lock = app.utils.initLock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
     auth: {
-      params: {scope: 'openid email'}
+      params: {scope: 'openid profile offline_access', device: 'web-app'}
     },
     closable: false
   });
@@ -1549,29 +1593,39 @@ Setup.prototype = {
   var logout = function() {
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
+    var refreshToken = localStorage.getItem('refresh_token');
+    var refreshIDs = JSON.parse(localStorage.getItem('refresh_id'));
+    localStorage.removeItem('refresh_token');
+    localStorage.removeItem('refresh_id');
+
+    for (var i = 0; i < refreshIDs.length; i++) {
+      $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[i], success: function (res) {
+        if (i === refreshIDs.length) {
+          window.location.href = "/";
+        }
+      }, error: function (res) {
+        console.error(res);
+      }});
+    }
+
+
+
     document.getElementById('profile-button').setAttribute('style', 'display: none');
     if (!app.isLoading) {
       app.spinner.setAttribute('hidden', false);
       app.corellationsContainer.setAttribute('hidden', true);
       app.isLoading = true;
     }
-    window.location.href = "/";
   };
 
   var on_logged_in = function () {
+    getRefreshTokenIDs();
     $.ajaxSetup({
       'beforeSend': function(xhr) {
-        if (localStorage.getItem('id_token')) {
-          xhr.setRequestHeader('Authorization',
-            'Bearer ' + localStorage.getItem('id_token'));
-        }
         xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       }
     });
-
-
-
     document.getElementById('profile-button').setAttribute('style', 'display: block');
     retrieve_profile();
     lock.hide();
@@ -1638,6 +1692,7 @@ Setup.prototype = {
       }
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('profile', JSON.stringify(profile));
+      localStorage.setItem('refresh_token', authResult.refreshToken)
       // Display user information
       on_logged_in();
 
