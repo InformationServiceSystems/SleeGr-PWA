@@ -1154,15 +1154,11 @@ Setup.prototype = {
   var AUTH0_DOMAIN='app-iss.eu.auth0.com';
   var refreshBearer = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiI1T3Y0SDRUQXg0Rm90ck1tTXZvWk1YbVp3bWNIaVVHbSIsInNjb3BlcyI6eyJkZXZpY2VfY3JlZGVudGlhbHMiOnsiYWN0aW9ucyI6WyJyZWFkIiwiZGVsZXRlIl19fSwiaWF0IjoxNDc5MTYzMDk4LCJqdGkiOiI5MzBjOWM0MTAzN2FhMTRmMDkwZTY2Nzc4ZjNhYWM1NyJ9.glDslHBRwWHgRIyOGCx61m3WA3KTrpHOVXOnpU57pps';
   var app = {
-    isLoading: true,
-    spinner: document.querySelector('#dashboard-spinner'),
-    cardTemplate: document.querySelector('.cardTemplate'),
-    corellationsContainer: document.querySelector('#corellContainer'),
-    sleepContainer: document.querySelector('#sleepContainer'),
     utils: new Util(),
     setup: new Setup(),
     updater: new ChartUpdater(),
     chart: new Chart(0, 0, 12, [], 0, 0, 0),
+    clientjs: new ClientJS(),
     url: 'http://81.169.137.80:5000',
     correlations_list: JSON.parse('[{"x_label": "Day of week", "y_label": "Sleep length", "next_day": false}, ' +
             '{"x_label": "Sleep length", "y_label": "Load", "next_day": false},' +
@@ -1178,7 +1174,6 @@ Setup.prototype = {
             '{"x_label": "DALDA", "y_label": "Deep sleep", "next_day": true},' +
             '{"x_label": "Sleep end", "y_label": "RPE", "next_day": false},' +
             '{"x_label": "Sleep length", "y_label": "RPE", "next_day": false}]'),
-    datepickerId: '#datepicker',
     correlation: {
       id: '#correlationsdiv',
       container: document.querySelector('#corellContainer'),
@@ -1217,6 +1212,7 @@ Setup.prototype = {
     }
   };
 
+  app.clientFingerprint = app.clientjs.getFingerprint();
 
   app.invokeReady = function (label, data) {
     if (label === 'heartrate') {
@@ -1447,7 +1443,7 @@ Setup.prototype = {
     }
   };
 
-  var refreshTokens = function() {
+  var refreshTokens = function(callback) {
     var refreshToken = localStorage.getItem('refresh_token');
     var data = {
       'client_id':       AUTH0_CLIENT_ID,
@@ -1457,26 +1453,44 @@ Setup.prototype = {
     };
     $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', type: 'POST', data: JSON.stringify(data), success: function(data){
       localStorage.setItem('id_token', data.id_token);
+      callback();
     }});
   };
 
-  var getRefreshTokenIDs = function () {
+  var revokeRefreshTokenIDs = function () {
     var data = {
       type: 'refresh_token',
       client_id: AUTH0_CLIENT_ID,
       user_id: JSON.parse(localStorage.getItem('profile')).user_id
     };
-    $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' +refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
+    $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
       var temp = [];
       for (var i = 0; i<response.length; i++) {
-        if (response[i].device_name === 'web-app') {
+        if (response[i].device_name === app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()) {
             temp.push(response[i].id);
         }
       }
-      localStorage.setItem('refresh_id', JSON.stringify(temp));
+      invokeLogout(temp);
     }, error: function (xhr) {
       console.error(xhr);
     }});
+  };
+
+  var invokeLogout = function (refreshIDs) {
+    localStorage.removeItem('id_token');
+    localStorage.removeItem('profile');
+    localStorage.removeItem('refresh_token');
+    if (refreshIDs != null || refreshIDs.length !== 0) {
+      for (var i = 0; i < refreshIDs.length; i++) {
+        $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[i], success: function (res) {
+          if (i === refreshIDs.length) {
+            window.location.href = "/";
+          }
+        }, error: function (res) {
+          console.error(res);
+        }});
+      }
+    }
   };
   //retrieve the profile:
   var retrieve_profile = function() {
@@ -1484,17 +1498,18 @@ Setup.prototype = {
     if (id_token) {
       lock.getProfile(id_token, function (err, profile) {
         if (err) {
-          refreshTokens();
-          retrieve_profile();
+          refreshTokens(retrieve_profile);
         } else {
           // Display user information
           show_profile_info(profile);
         }
       });
+    } else {
+      logout();
     }
   };
 
-  function show_profile_info(profile){
+  var show_profile_info = function(profile){
     document.getElementById('username').innerHTML = profile.email;
     if (profile.email){
       document.querySelector('#user-email span input').setAttribute('value', profile.email);
@@ -1534,7 +1549,6 @@ Setup.prototype = {
         }
       }
     }
-
     var temp = new MaterialTextfield(document.querySelector('#user-sport div'));
     temp = new MaterialTextfield(document.querySelector('#user-email div'));
     temp = new MaterialTextfield(document.querySelector('#user-lastname div'));
@@ -1580,46 +1594,21 @@ Setup.prototype = {
 
 
     })
-  }
+  };
 
   var lock = app.utils.initLock(AUTH0_CLIENT_ID, AUTH0_DOMAIN, {
     auth: {
-      params: {scope: 'openid profile offline_access', device: 'web-app'}
+      params: {scope: 'openid profile offline_access', device: app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()}
     },
     closable: false
   });
 
 
   var logout = function() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('profile');
-    var refreshToken = localStorage.getItem('refresh_token');
-    var refreshIDs = JSON.parse(localStorage.getItem('refresh_id'));
-    localStorage.removeItem('refresh_token');
-    localStorage.removeItem('refresh_id');
-
-    for (var i = 0; i < refreshIDs.length; i++) {
-      $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[i], success: function (res) {
-        if (i === refreshIDs.length) {
-          window.location.href = "/";
-        }
-      }, error: function (res) {
-        console.error(res);
-      }});
-    }
-
-
-
-    document.getElementById('profile-button').setAttribute('style', 'display: none');
-    if (!app.isLoading) {
-      app.spinner.setAttribute('hidden', false);
-      app.corellationsContainer.setAttribute('hidden', true);
-      app.isLoading = true;
-    }
+    revokeRefreshTokenIDs();
   };
 
   var on_logged_in = function () {
-    getRefreshTokenIDs();
     $.ajaxSetup({
       'beforeSend': function(xhr) {
         xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
@@ -1628,7 +1617,6 @@ Setup.prototype = {
     });
     document.getElementById('profile-button').setAttribute('style', 'display: block');
     retrieve_profile();
-    lock.hide();
     app.setup.select_all([app.multichart.chk_data]);
     app.initDatePicker();
     $('#tab-dashboard').click(function (e) {
@@ -1681,9 +1669,10 @@ Setup.prototype = {
     app.readCorrelations();
     app.readHeartrateData($('#date-from').val(), $('#date-to').val());
     app.readSleepData($('#date-from').val(), $('#date-to').val());
+    lock.hide();
   };
 
-  lock.on("authenticated", function(authResult) {
+  lock.on('authenticated', function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
       if (error) {
         alert('There was an error while logging in: ' + error.message);
@@ -1692,7 +1681,7 @@ Setup.prototype = {
       }
       localStorage.setItem('id_token', authResult.idToken);
       localStorage.setItem('profile', JSON.stringify(profile));
-      localStorage.setItem('refresh_token', authResult.refreshToken)
+      localStorage.setItem('refresh_token', authResult.refreshToken);
       // Display user information
       on_logged_in();
 
