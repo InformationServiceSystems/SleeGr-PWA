@@ -1476,20 +1476,20 @@ Setup.prototype = {
     }});
   };
 
-  var invokeLogout = function (refreshIDs) {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('profile');
-    localStorage.removeItem('refresh_token');
+  var invokeLogout = function (refreshIDs, isRecursive) {
+    if (!isRecursive) {
+      localStorage.removeItem('id_token');
+      localStorage.removeItem('profile');
+      localStorage.removeItem('refresh_token');
+    }
+
     if (refreshIDs != null && refreshIDs.length !== 0) {
-      for (var i = 0; i < refreshIDs.length; i++) {
-        $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[i], success: function (res) {
-          if (i === refreshIDs.length) {
-            window.location.href = "/";
-          }
-        }, error: function (res) {
-          console.error(res);
-        }});
-      }
+      $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[refreshIDs.length-1], success: function (res) {
+        refreshIDs.pop();
+        invokeLogout(refreshIDs, true);
+      }, error: function (res) {
+        console.error(res);
+      }});
     } else {
       window.location.href = "/";
     }
