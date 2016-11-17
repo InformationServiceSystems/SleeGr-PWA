@@ -1480,7 +1480,7 @@ Setup.prototype = {
     localStorage.removeItem('id_token');
     localStorage.removeItem('profile');
     localStorage.removeItem('refresh_token');
-    if (refreshIDs != null || refreshIDs.length !== 0) {
+    if (refreshIDs != null && refreshIDs.length !== 0) {
       for (var i = 0; i < refreshIDs.length; i++) {
         $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[i], success: function (res) {
           if (i === refreshIDs.length) {
@@ -1490,6 +1490,8 @@ Setup.prototype = {
           console.error(res);
         }});
       }
+    } else {
+      window.location.href = "/";
     }
   };
   //retrieve the profile:
