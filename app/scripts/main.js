@@ -852,7 +852,7 @@ ChartUpdater.prototype = {
       }
     }
     var reqUrl = this.utils.formatUrl(url, 'correlation');
-    this.charts_getCorrelations(reqUrl, user_id, xLabel, yLabel, nextDay, app);
+    return this.charts_getCorrelations(reqUrl, user_id, xLabel, yLabel, nextDay, app);
   },
   charts_getCorrelations: function (rooturl, user_id, xLabel, yLabel, nextDay, app){
     var data = {
@@ -863,19 +863,22 @@ ChartUpdater.prototype = {
     };
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
+      var chart = this.getChartObject();
+      $.ajax({type: 'POST', url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
+        console.log('data from  %s', rooturl);
+        app.invokeReady('correlation', result);
+        return;
+      }});
+    } else {
+      return 'Unauthorized';
     }
-    var chart = this.getChartObject();
-    $.ajax({type: 'POST', url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
-      console.log('data from  %s', rooturl);
-      app.invokeReady('correlation', result);
-      return;
-    }});
+
   },
   update_mutlichart: function (url, user_id, date_from, date_to, app, newData){
     if (newData){
       app.invokeLoading('heartrate');
       var reqUrl = this.utils.formatUrl(url, 'heartrate');
-      this.charts_createMultiChart(reqUrl, user_id, date_from, date_to, app);
+      return this.charts_createMultiChart(reqUrl, user_id, date_from, date_to, app);
     }
     // else{
     //   this.charts_switchMultiChart(show_type1, show_data, multichart_id, chk_data, only5min);
@@ -891,12 +894,9 @@ ChartUpdater.prototype = {
     var multichart_points = this.multichart_points;
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
-    }
-    //var utils = this.utils;
-    //var chart = this.getChartObject();
-    $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
-      multichart_points = eval(result);
-      //if (multichart_points.length!=0){
+      $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
+        multichart_points = eval(result);
+        //if (multichart_points.length!=0){
         console.log('data from  %s len: %d', rooturl, multichart_points.length);
         // the following commented lines are for getting type2 uncomment to get the results
         //$.ajax({url: type2_url, success: function(result_type2){
@@ -906,15 +906,19 @@ ChartUpdater.prototype = {
         app.invokeReady('heartrate', multichart_points);
         //chart.draw_multiChart(multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
         //utils.fadeInHtmlTable(multichart_points, table_id);
-                //}});
-      // }
-      // else{
-      //   var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
-      //   chart.clearHighchart(html_id, error_text);
-      //   var no_data = utils.getNoDataDiv(error_text);
-      //   $(table_id).html(no_data);
-      // }
-    }});
+        //}});
+        // }
+        // else{
+        //   var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
+        //   chart.clearHighchart(html_id, error_text);
+        //   var no_data = utils.getNoDataDiv(error_text);
+        //   $(table_id).html(no_data);
+        // }
+      }});
+    } else {
+      return "Unauthorized";
+    }
+
   },
   charts_switchMultiChart: function (show_type1, show_data, html_id, data_select_id, only_5mins){
     if (this.multichart_points.length != 0){
@@ -932,7 +936,7 @@ ChartUpdater.prototype = {
     app.sleep.beginDate = date_from;
     app.sleep.endDate = date_to;
     var reqUrl = this.utils.formatUrl(url, 'sleepPoints');
-    this.charts_createHeatmap(reqUrl, user_id, date_from, date_to, app);
+    return this.charts_createHeatmap(reqUrl, user_id, date_from, date_to, app);
   },
   charts_createHeatmap: function (rooturl, user_id, begin_date, end_date, app){
     var data = {
@@ -943,6 +947,8 @@ ChartUpdater.prototype = {
     };
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
+    } else {
+      return "Unauthorized";
     }
     $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
       var points = eval(result);
@@ -966,6 +972,8 @@ ChartUpdater.prototype = {
       var chart = this.getChartObject();
       if (localStorage.getItem('id_token')) {
         var authorization = 'Bearer ' + localStorage.getItem('id_token');
+      } else {
+        return "Unauthorized";
       }
       $.ajax({type: "POST", url:  rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(setting_result){
         var settings = eval(setting_result);
@@ -1043,7 +1051,7 @@ Setup.prototype = {
     $('#xPicker').html(html_code);
     getmdlSelect.init('#xMDL');
   },
-  fillInYlabels: function (url, user_id, linearData, x_label_id, y_label_id, app){
+  fillInYlabels: function (url, user_id, linearData, x_label_id, y_label_id, app, callback){
     var currXlabel = $(x_label_id).val();
     var temp = '';
     var yLabels = [];
@@ -1061,10 +1069,16 @@ Setup.prototype = {
       '</ul></div>';
     $('#yPicker').html(html_code);
     $(app.correlation.yLabel).on('change', function() {
-      app.updater.update_correlations(app.url, user_id, app.correlations_list, app)
+      if (app.updater.update_correlations(app.url, user_id, app.correlations_list, app)){
+        alert ('Please login to retrieve your data!');
+        callback();
+      }
     });
     getmdlSelect.init('#yMDL');
-    this.updater.update_correlations(url, user_id, linearData, app);
+    if (this.updater.update_correlations(url, user_id, linearData, app)){
+      alert ('Please login to retrieve your data!');
+      callback();
+    }
   },
   setup_datepicker: function (picker_id, time, update_function) {
     $(picker_id).daterangepicker(
@@ -1370,26 +1384,42 @@ Setup.prototype = {
   app.readCorrelations = function () {
     var user_id	= JSON.parse(localStorage.getItem('profile')).email;
     app.setup.fillInXlabels(app.correlations_list, '#x');
-    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app);
+    app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app, logout);
 
     $(app.correlation.xLabel).on('change', function() {
-      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app);
+      app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app, logout);
     });
 
   };
 
   app.readSleepData = function(start, end) {
-    var userId = JSON.parse(localStorage.getItem('profile')).email;
-    app.updater.update_heatmap(app.url, userId, start, end, app);
+    if (localStorage.getItem('profile')) {
+      var userId = JSON.parse(localStorage.getItem('profile')).email;
+      if (app.updater.update_heatmap(app.url, userId, start, end, app)) {
+        alert('Please login to retrieve your data!');
+        logout();
+      }
+      ;
+    } else {
+      alert('Please login to retrieve your data!');
+      logout();
+    }
   };
 
   app.readHeartrateData = function(start, end) {
-    var userId = JSON.parse(localStorage.getItem('profile')).email;
-    var beginDate = start;
-    var endDate = end;
-    app.updater.update_mutlichart(app.url, userId, beginDate, endDate, app, true);
-
-  }
+    if (localStorage.getItem('profile')) {
+      var userId = JSON.parse(localStorage.getItem('profile')).email;
+      var beginDate = start;
+      var endDate = end;
+      if (app.updater.update_mutlichart(app.url, userId, beginDate, endDate, app, true)) {
+        alert ('Please login to retrieve your data!');
+        logout();
+      };
+    } else {
+      alert ('Please login to retrieve your data!');
+      logout();
+    }
+  };
 
   app.multichartSwitch = function() {
     if (app.multichart.data.length != 0){
@@ -1458,22 +1488,26 @@ Setup.prototype = {
   };
 
   var revokeRefreshTokenIDs = function () {
-    var data = {
-      type: 'refresh_token',
-      client_id: AUTH0_CLIENT_ID,
-      user_id: JSON.parse(localStorage.getItem('profile')).user_id
-    };
-    $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
-      var temp = [];
-      for (var i = 0; i<response.length; i++) {
-        if (response[i].device_name === app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()) {
+    if (localStorage.getItem('profile')) {
+      var data = {
+        type: 'refresh_token',
+        client_id: AUTH0_CLIENT_ID,
+        user_id: JSON.parse(localStorage.getItem('profile')).user_id
+      };
+      $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
+        var temp = [];
+        for (var i = 0; i<response.length; i++) {
+          if (response[i].device_name === app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()) {
             temp.push(response[i].id);
+          }
         }
-      }
-      invokeLogout(temp);
-    }, error: function (xhr) {
-      console.error(xhr);
-    }});
+        invokeLogout(temp);
+      }, error: function (xhr) {
+        console.error(xhr);
+      }});
+    } else {
+      invokeLogout([]);
+    }
   };
 
   var invokeLogout = function (refreshIDs, isRecursive) {
@@ -1571,30 +1605,33 @@ Setup.prototype = {
 
     $('#submit-profile').click(function (e) {
       e.preventDefault();
-      document.querySelector('#user-sport input').setAttribute('readonly', 'true');
-      document.querySelector('#user-lastname input').setAttribute('readonly', 'true');
-      document.querySelector('#user-prename input').setAttribute('readonly','true');
-      var settings = {
-        "async": true,
-        "crossDomain": true,
-        "url": "https://app-iss.eu.auth0.com/api/v2/users/" + profile.user_id,
-        "method": "PATCH",
-        "headers": {
-          "authorization": "Bearer " + localStorage.getItem('id_token'),
-          "content-type": "application/json"
-        },
-        "processData": false,
-        "data": "{\"user_metadata\": {\"family_name\": \"" + lastname.value + "\", \"given_name\": \"" + prename.value + "\", \"sport\": \"" + sport.value + "\"}}"
-      };
+      if(localStorage.getItem('id_token')) {
+        document.querySelector('#user-sport input').setAttribute('readonly', 'true');
+        document.querySelector('#user-lastname input').setAttribute('readonly', 'true');
+        document.querySelector('#user-prename input').setAttribute('readonly','true');
+        var settings = {
+          "async": true,
+          "crossDomain": true,
+          "url": "https://app-iss.eu.auth0.com/api/v2/users/" + profile.user_id,
+          "method": "PATCH",
+          "headers": {
+            "authorization": "Bearer " + localStorage.getItem('id_token'),
+            "content-type": "application/json"
+          },
+          "processData": false,
+          "data": "{\"user_metadata\": {\"family_name\": \"" + lastname.value + "\", \"given_name\": \"" + prename.value + "\", \"sport\": \"" + sport.value + "\"}}"
+        };
 
 
-      $.ajax(settings).done(function (response) {
-        console.log('successfully updated user profile');
-      });
-      $('#submit-profile').hide();
-      $('#btn1').show();
-
-
+        $.ajax(settings).done(function (response) {
+          console.log('successfully updated user profile');
+        });
+        $('#submit-profile').hide();
+        $('#btn1').show();
+      } else {
+        alert ('Please login to change user data!');
+        logout();
+      }
     })
   };
 
