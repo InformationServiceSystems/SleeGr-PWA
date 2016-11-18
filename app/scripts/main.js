@@ -1473,17 +1473,22 @@ Setup.prototype = {
     }
   };
 
-  var refreshTokens = function(callback) {
+  var refreshTokens = function(arrayOfCallbackFunctions) {
+    app.utils.log('refreshTokens', 'Refreshing id_token');
     var refreshToken = localStorage.getItem('refresh_token');
     var data = {
       'client_id':       AUTH0_CLIENT_ID,
       'grant_type':      'urn:ietf:params:oauth:grant-type:jwt-bearer',
       'refresh_token':   refreshToken,
+      'target':          AUTH0_CLIENT_ID,
+      'scope':           'openid profile',
       'api_type':        'app'
     };
     $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', type: 'POST', data: JSON.stringify(data), success: function(data){
       localStorage.setItem('id_token', data.id_token);
-      callback();
+      for (var i = 0; i < arrayOfCallbackFunctions.length; i++) {
+        arrayOfCallbackFunctions[i]();
+      }
     }});
   };
 
@@ -1534,7 +1539,7 @@ Setup.prototype = {
     if (id_token) {
       lock.getProfile(id_token, function (err, profile) {
         if (err) {
-          refreshTokens(retrieve_profile);
+          return err;
         } else {
           // Display user information
           show_profile_info(profile);
@@ -1655,7 +1660,6 @@ Setup.prototype = {
       }
     });
     document.getElementById('profile-button').setAttribute('style', 'display: block');
-    retrieve_profile();
     app.setup.select_all([app.multichart.chk_data]);
     app.initDatePicker();
     $('#tab-dashboard').click(function (e) {
@@ -1705,11 +1709,20 @@ Setup.prototype = {
       var checked = $(app.multichart.chk_data).is(':checked');
       app.chart.setScatterVisible(app.multichart.id, checked);
     });
+    if(retrieve_profile()) {
+      refreshTokens([retrieve_profile, initGraphs]);
+    } else {
+      initGraphs();
+    }
+
+    lock.hide();
+  };
+
+  var initGraphs = function () {
     app.readCorrelations();
     app.readHeartrateData($('#date-from').val(), $('#date-to').val());
     app.readSleepData($('#date-from').val(), $('#date-to').val());
-    lock.hide();
-  };
+  }
 
   lock.on('authenticated', function(authResult) {
     lock.getProfile(authResult.idToken, function(error, profile) {
@@ -1733,7 +1746,7 @@ Setup.prototype = {
   });
 
 
-  if(!localStorage.getItem('id_token')){
+  if(!localStorage.getItem('id_token')&&!localStorage.getItem('profile')&&!localStorage.getItem('refresh_token')){
     document.getElementById('profile-button').setAttribute('style', 'display: none');
     $('#datepicker').hide();
     lock.show();
