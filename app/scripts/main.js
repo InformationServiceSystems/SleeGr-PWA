@@ -1278,6 +1278,7 @@ Setup.prototype = {
         if (app.correlation.changed){
           $(app.correlation.id).css('min-height', screen.height * 0.55);
           $(app.correlation.id).css('max-height', screen.height * 0.7);
+          $('#dashboard').show();
           app.chart.draw_linearChart(data, title, xLabel, yLabel, html_id, app);
           app.correlation.changed = false;
         }
