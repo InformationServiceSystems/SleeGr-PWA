@@ -1048,7 +1048,7 @@ Setup.prototype = {
           if (app.utils.contains(classList,'is-active')) {
             $('#dashboard').show();
           }
-          app.chart.createLinearChart(data, title, xLabel, yLabel, html_id, app);
+          app.chart.createLinearChart(app.correlation.data, title, xLabel, yLabel, html_id, app);
           app.correlation.changed = false;
         }
         $('#tab-dashboard').click(function(e) {
