@@ -120,6 +120,11 @@ Util.prototype = {
     }
     return url;
   },
+  select_all: function (checkboxes){
+    checkboxes.forEach(function(html_id){
+      $(html_id).attr('checked', true);
+    });
+  },
   normalDensityZx: function(x, mean, stdDev) {
     var a = x - mean;
     return Math.exp(-(a * a) / (2 * stdDev * stdDev)) / (Math.sqrt(2 * Math.PI) * stdDev);
@@ -495,89 +500,6 @@ function Chart(mean, dev, maxhour, hours, blue, green, maxvalue) {
   this.highchartFunctions = new HighchartFunctions();
 }
 Chart.prototype = {
-  charts_createRanking: function (root, team_id, begin_date, end_date, html_id) {
-    var url_data = root;//format_url(root, team_id, begin_date, end_date);
-    var categories = new Object();
-    var serieses = [];
-    var average_data = [];
-    var current_cat_val = 0;
-
-    function find_cat(value) {
-      for (var cat in categories)
-        if (categories[cat].id == value) {
-          return cat;
-        }
-      return value;
-    }
-
-    $.ajax({
-      url: url_data, success: function (result) {
-        var points = eval(result);
-        console.log('data from  %s len: %d', url_data, points.length);
-        for (var i = 0; i < points.length; i++) {
-          var series_id = points[i]['athlete_id'];
-          var series = new Object();
-          series.name = points[i]['last_name'] + ',' + points[i]['name'];
-          series.data = [];
-
-          for (var property in points[i]) {
-            if (property.startsWith('score')) {
-              if (!categories.hasOwnProperty(property)) {
-                categories[property] = new Object();
-                categories[property].id = current_cat_val++;
-                categories[property].sum = 0;
-                categories[property].count = 0;
-
-              }
-              series.data.push([categories[property].id, points[i][property]]);
-              categories[property].sum += points[i][property];
-              categories[property].count += 1;
-            }
-          }
-          series.type = 'column';
-          serieses.push(series);
-        }
-        for (var cat in categories) {
-          average_data.push([categories[cat].id, categories[cat].sum / categories[cat].count]);
-        }
-        console.log('update');
-        var series = new Object();
-        series.name = 'average';
-        series.data = average_data;
-        series.type = 'line';
-        series.color = '#FF0000';
-        series.lineWidth = 5;
-        serieses.push(series);
-
-        $(html_id).highcharts({
-          //chart: { type: 'column'	},
-          title: {text: 'Compare Scores'},
-          yAxis: {min: 0, title: {text: 'score'}},
-          xAxis: {
-            labels: {
-              formatter: function () {
-                return find_cat(this.value)
-              }
-            }
-          },
-          tooltip: {
-            headerFormat: '',
-            /*formatter: function () {
-             var s = '<b>' + find_cat(this.x) + '</b>';
-             $.each(this.points, function () {
-             s += '<br/>' + this.series.name + ': ' + this.y;
-             });
-             return s;
-             },*/
-            shared: false
-          },
-          plotOptions: {column: {pointPadding: 0, borderWidth: 0, stacking: false}},
-          series: serieses
-        });
-      }
-    });
-
-  },
   create_heatmap: function (points, html_id, begin_date, end_date, app) {
     if ( app.sleep.changed ){
       app.sleep.sourceData = this.amFunctions.getHeatmapDataPoints(points, this.glb_maxhour, this.glb_maxvalue, this.glb_hours, this.glb_green, this.glb_blue);
@@ -614,7 +536,7 @@ Chart.prototype = {
       },
     });
   },
-  draw_multiChart: function (points, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app) {
+  createMultiChart: function (points, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app) {
     if (app.multichart.changed) {
       app.multichart.series = this.highchartFunctions.getMultichartSeries(points, show_data, grp_type, show_type1, data_select_id, 'circle', only_5mins, html_id);
     }
@@ -719,13 +641,11 @@ Chart.prototype = {
     }
 
   },
-  draw_linearChart: function (data_points, title, xLabel, yLabel, html_id, app) {
-
+  createLinearChart: function (data_points, title, xLabel, yLabel, html_id, app) {
     if (app.correlation.changed){
       app.correlation.series = this.highchartFunctions.getCorellSeries(data_points.x0, data_points.y0, data_points.x1, data_points.y1, data_points.data, 'circle', title);
     }
     var formatter = this.highchartFunctions.highchartsGetFormatter(xLabel);
-
     $(html_id).highcharts({
       title: {
         text: title
@@ -778,52 +698,6 @@ Chart.prototype = {
       series: app.correlation.series
     });
   },
-  create_gaussian: function (settings, points, html_id) {
-    var chartData = this.amFunctions.getGaussianDataPoints(settings, points, this.glb_mean, this.glb_dev);
-
-    // create the Gaussian chart!
-    var chart = AmCharts.makeChart(html_id, {
-      "type": "serial",
-      "theme": "light",
-      "dataProvider": chartData,
-      "precision": 2,
-      "valueAxes": [{
-        "title": "Deep Sleep (in %)",
-        "gridAlpha": 0.2,
-        "dashLength": 0
-      }],
-      "startDuration": 1,
-      "graphs": [{
-        "balloonText": "[[date]]",
-        "lineThickness": 3,
-        "valueField": "value"
-      }, {
-        "balloonText": "",
-        "fillAlphas": 1,
-        "type": "column",
-        "valueField": "vertical",
-        "fixedColumnWidth": 2,
-        "labelText": "[[value]]",
-        "labelOffset": 20
-      }],
-      "chartCursor": {
-        "categoryBalloonEnabled": false,
-        "cursorAlpha": 0,
-        "zoomable": false
-      },
-      "categoryField": "category",
-      "categoryAxis": {
-        "title": "Sleeping Hours",
-        "gridAlpha": 0.05,
-        "startOnAxis": true,
-        "tickLength": 5,
-        "labelFunction": function (label, item) {
-          return '' + Math.round(item.dataContext.category * 10) / 10;
-        }
-      }
-
-    });
-  },
   clearHighchart: function (html_id, error_text) {
     this.highchartFunctions.clearHighchart(html_id, error_text);
   },
@@ -832,16 +706,13 @@ Chart.prototype = {
   }
 };
 
-function ChartUpdater() {
+function ApiUpdater(url) {
   this.chart = new Chart(0, 0, 12, [], 0, 0, 0);
-  this.multichart_points;
   this.utils = new Util();
+  this.url = url;
 }
-ChartUpdater.prototype = {
-  getChartObject: function(){
-    return this.chart;
-  },
-  update_correlations: function (url, user_id, linearData, app){
+ApiUpdater.prototype = {
+  retrieveCorrelationData: function (user_id, linearData, app){
     app.invokeLoading('correlation');
     var nextDay;
     var xLabel = $(app.correlation.xLabel).val();
@@ -851,10 +722,10 @@ ChartUpdater.prototype = {
         nextDay=linearData[i].next_day;
       }
     }
-    var reqUrl = this.utils.formatUrl(url, 'correlation');
-    return this.charts_getCorrelations(reqUrl, user_id, xLabel, yLabel, nextDay, app);
+    var reqUrl = this.utils.formatUrl(this.url, 'correlation');
+    return this.requestCorrelationData(reqUrl, user_id, xLabel, yLabel, nextDay, app);
   },
-  charts_getCorrelations: function (rooturl, user_id, xLabel, yLabel, nextDay, app){
+  requestCorrelationData: function (rooturl, user_id, xLabel, yLabel, nextDay, app){
     var data = {
       userId: user_id,
       xAxis: xLabel,
@@ -863,82 +734,60 @@ ChartUpdater.prototype = {
     };
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
-      var chart = this.getChartObject();
-      $.ajax({type: 'POST', url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
-        console.log('data from  %s', rooturl);
-        app.invokeReady('correlation', result);
-        return;
-      }});
+      $.ajax({type: 'POST', url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
+        success: function(result){
+          console.log('data from  %s', rooturl);
+          app.invokeReady('correlation', result);
+          return;
+        },
+        error: function (xhr) {
+          app.utils.logerr('requestCorrelationData', xhr.responseText);
+          if (xhr.status === 401) {
+            app.abortAll();
+            app.refreshTokens([function () {
+              window.location.href = '/';
+            }]);
+          }
+        }
+      });
     } else {
       return 'Unauthorized';
     }
 
   },
-  update_mutlichart: function (url, user_id, date_from, date_to, app, newData){
-    if (newData){
-      app.invokeLoading('heartrate');
-      var reqUrl = this.utils.formatUrl(url, 'heartrate');
-      return this.charts_createMultiChart(reqUrl, user_id, date_from, date_to, app);
-    }
-    // else{
-    //   this.charts_switchMultiChart(show_type1, show_data, multichart_id, chk_data, only5min);
-    // }
+  retrieveMultichartData: function (user_id, date_from, date_to, app){
+    app.invokeLoading('heartrate');
+    var reqUrl = this.utils.formatUrl(this.url, 'heartrate');
+    return this.requestMultichartData(reqUrl, user_id, date_from, date_to, app);
   },
-  charts_createMultiChart: function (rooturl, user_id, begin_date, end_date, app){
+  requestMultichartData: function (rooturl, user_id, begin_date, end_date, app){
     var data = {
       userId: user_id,
       type: "Cooldown",
       beginDate: begin_date,
       endDate: end_date
     };
-    var multichart_points = this.multichart_points;
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
-      $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
-        multichart_points = eval(result);
-        //if (multichart_points.length!=0){
-        console.log('data from  %s len: %d', rooturl, multichart_points.length);
-        // the following commented lines are for getting type2 uncomment to get the results
-        //$.ajax({url: type2_url, success: function(result_type2){
-        //    	var points2 = eval(result_type2);
-        //	console.log('data from  %s len: %d', type2_url, points2.length);
-        //	addSerieses(points2, show_data, 'Type2', true, data_select_id, serieses,  'triangle');
-        app.invokeReady('heartrate', multichart_points);
-        //chart.draw_multiChart(multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
-        //utils.fadeInHtmlTable(multichart_points, table_id);
-        //}});
-        // }
-        // else{
-        //   var error_text = 'There is no heartrate data measured in the given time period. Please choose another period to analyse your personal heartrate data.';
-        //   chart.clearHighchart(html_id, error_text);
-        //   var no_data = utils.getNoDataDiv(error_text);
-        //   $(table_id).html(no_data);
-        // }
-      }});
+      $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
+        success: function(result){
+          console.log('data from  %s len: %d', rooturl, result.length);
+          app.invokeReady('heartrate', result);
+        }
+      });
     } else {
       return "Unauthorized";
     }
 
   },
-  charts_switchMultiChart: function (show_type1, show_data, html_id, data_select_id, only_5mins){
-    if (this.multichart_points.length != 0){
-      this.chart.draw_multiChart(this.multichart_points, show_data, 'Type1', show_type1, data_select_id, 'circle', html_id, only_5mins);
-    }
-  },
-  setScatterVisible: function (html_id, visible){
-    this.chart.setScatterVisible(html_id, visible);
-  },
-  setTypeVisible: function (html_id, type, visible, showdata){
-    this.chart.setTypeVisible(html_id, type, visible, showdata);
-  },
-  update_heatmap: function (url, user_id, date_from, date_to, app){
+  retrieveSleepData: function (user_id, date_from, date_to, app){
     app.invokeLoading('sleep');
     app.sleep.beginDate = date_from;
     app.sleep.endDate = date_to;
-    var reqUrl = this.utils.formatUrl(url, 'sleepPoints');
-    return this.charts_createHeatmap(reqUrl, user_id, date_from, date_to, app);
+    var reqUrl = this.utils.formatUrl(this.url, 'sleepPoints');
+    return this.requestSleepData(reqUrl, user_id, date_from, date_to, app);
   },
-  charts_createHeatmap: function (rooturl, user_id, begin_date, end_date, app){
+  requestSleepData: function (rooturl, user_id, begin_date, end_date, app){
     var data = {
       userId: user_id,
       beginDate: begin_date,
@@ -950,88 +799,20 @@ ChartUpdater.prototype = {
     } else {
       return "Unauthorized";
     }
-    $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(result){
-      var points = eval(result);
-      console.log('data from  %s len: %d', rooturl , points.length);
-      app.invokeReady('sleep', points);
-
-    }});
-  },
-  update_gaussian: function (url, user_id,  date_from, date_to , gaussian_id){
-    var reqUrl = this.utils.formatUrl(url, 'sleepPoints');
-    this.charts_createGaussian(reqUrl, user_id,  date_from, date_to , gaussian_id);
-  },
-  charts_createGaussian: function (rooturl, user_id, begin_date, end_date, html_id){
-    try{
-      var data = {
-        userId: user_id,
-        beginDate: begin_date,
-        endDate: end_date,
-        gaussianSettings: true
-      };
-      var chart = this.getChartObject();
-      if (localStorage.getItem('id_token')) {
-        var authorization = 'Bearer ' + localStorage.getItem('id_token');
-      } else {
-        return "Unauthorized";
+    $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
+      success: function(result){
+        console.log('data from  %s len: %d', rooturl , result.length);
+        app.invokeReady('sleep', result);
       }
-      $.ajax({type: "POST", url:  rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(setting_result){
-        var settings = eval(setting_result);
-        data.gaussianSettings = false;
-        $.ajax({type: "POST", url:  rooturl,headers: {'authorization': authorization}, data: JSON.stringify(data), success: function(points_result){
-          var points = eval(points_result);
-          if (points.length != 0){
-            console.log('data from  %s len: %d', rooturl , points.length);
-            chart.create_gaussian(settings, points, html_id);
-          }
-          else{
-            var error_text = 'There is no sleep data measured in the given time period. Please choose another period to analyse your personal sleep data.';
-            chart.clearAmChart(html_id, error_text);
-          }
-        }});
-      }});
-    }
-    catch(e){
-      this.utils.logerr('charts_createGaussian', e);
-    }
+    });
   }
 };
 
-function Setup() {
+function Setup(url) {
   this.utils = new Util();
-  this.updater = new ChartUpdater();
+  this.updater = new ApiUpdater(url);
 }
 Setup.prototype = {
-  set_default_picker: function (time, dateRange, picker_id){
-    var d = new Date();
-    var curr_date = d.getDate();
-    var curr_month = d.getMonth()+1;
-    var curr_year = d.getFullYear();
-    var startDay = curr_date;
-    var startMonth = curr_month-dateRange;
-    var startYear = curr_year;
-
-    if (startDay>28){
-      startDay=28;
-    }
-
-    while(startMonth<1){
-      startYear--;
-      startMonth = 12 + startMonth;
-    }
-    time.date_from 	= startDay.toString()+'.' + startMonth.toString() + '.' +startYear.toString();
-    time.datepicker_date_from = startMonth.toString() + '/' + startDay.toString() + '/' + startYear.toString();
-
-    time.date_to 	= curr_date.toString()+'.'+curr_month.toString()+'.'+curr_year.toString();
-    time.datepicker_date_to = (curr_month).toString() + '/' + curr_date.toString() + '/' + curr_year.toString();
-
-    $(picker_id).attr ('value', time.datepicker_date_from + " - " + time.datepicker_date_to);
-  },
-  select_all: function (checkboxes){
-    checkboxes.forEach(function(html_id){
-      $(html_id).attr('checked', true);
-    });
-  },
   fillInXlabels: function(linearData, x_label_id){
     var temp = '';
     var xLabels = [];
@@ -1069,32 +850,16 @@ Setup.prototype = {
       '</ul></div>';
     $('#yPicker').html(html_code);
     $(app.correlation.yLabel).on('change', function() {
-      if (app.updater.update_correlations(app.url, user_id, app.correlations_list, app)){
+      if (app.updater.retrieveCorrelationData(user_id, app.correlations_list, app)){
         alert ('Please login to retrieve your data!');
         callback();
       }
     });
     getmdlSelect.init('#yMDL');
-    if (this.updater.update_correlations(url, user_id, linearData, app)){
+    if (this.updater.retrieveCorrelationData(user_id, linearData, app)){
       alert ('Please login to retrieve your data!');
       callback();
     }
-  },
-  setup_datepicker: function (picker_id, time, update_function) {
-    $(picker_id).daterangepicker(
-      {
-        locale: {
-          format: 'DD.MM.YYYY'
-        },
-        "startDate": time.datepicker_date_from,
-        "endDate": time.datepicker_date_to
-      },
-      function(start, end, label) {
-        time.date_from=start.format('DD.MM.YYYY');
-        time.date_to=end.format('DD.MM.YYYY');
-        update_function ();
-      }
-    );
   },
   get_correlationsList: function(url){
     var correlationsUrl = this.utils.formatUrl(url, 'get_correlations_list');
@@ -1107,6 +872,7 @@ Setup.prototype = {
     return list;
   }
 };
+
 /* eslint-env browser */
 (function() {
   // Uncomment if service worker is ready for usage
@@ -1169,10 +935,9 @@ Setup.prototype = {
   var refreshBearer = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiI1T3Y0SDRUQXg0Rm90ck1tTXZvWk1YbVp3bWNIaVVHbSIsInNjb3BlcyI6eyJkZXZpY2VfY3JlZGVudGlhbHMiOnsiYWN0aW9ucyI6WyJyZWFkIiwiZGVsZXRlIl19fSwiaWF0IjoxNDc5MTYzMDk4LCJqdGkiOiI5MzBjOWM0MTAzN2FhMTRmMDkwZTY2Nzc4ZjNhYWM1NyJ9.glDslHBRwWHgRIyOGCx61m3WA3KTrpHOVXOnpU57pps';
   var app = {
     utils: new Util(),
-    setup: new Setup(),
-    updater: new ChartUpdater(),
     chart: new Chart(0, 0, 12, [], 0, 0, 0),
     clientjs: new ClientJS(),
+    xhrPool: [],
     url: 'http://81.169.137.80:5000',
     correlations_list: JSON.parse('[{"x_label": "Day of week", "y_label": "Sleep length", "next_day": false}, ' +
             '{"x_label": "Sleep length", "y_label": "Load", "next_day": false},' +
@@ -1225,7 +990,8 @@ Setup.prototype = {
       changed: false
     }
   };
-
+  app.updater = new ApiUpdater(app.url);
+  app.setup = new Setup(app.url);
   app.clientFingerprint = app.clientjs.getFingerprint();
 
   app.invokeReady = function (label, data) {
@@ -1247,13 +1013,13 @@ Setup.prototype = {
         if (app.multichart.changed){
           $(app.multichart.id).css('min-height', screen.height * 0.55);
           $(app.multichart.id).css('max-height', screen.height * 0.7);
-          app.chart.draw_multiChart(data, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app);
+          app.chart.createMultiChart(app.multichart.data, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app);
           app.multichart.changed = false;
         }
         $('#tab-heartrate').click(function (e) {
           e.preventDefault();
           if ($(app.multichart.id).highcharts()) {
-            app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
+            app.chart.createMultiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
           }
         });
       } else {
@@ -1278,13 +1044,16 @@ Setup.prototype = {
         if (app.correlation.changed){
           $(app.correlation.id).css('min-height', screen.height * 0.55);
           $(app.correlation.id).css('max-height', screen.height * 0.7);
-          $('#dashboard').show();
-          app.chart.draw_linearChart(data, title, xLabel, yLabel, html_id, app);
+          var classList = document.getElementById('tab-dashboard').className.split(/\s+/);
+          if (app.utils.contains(classList,'is-active')) {
+            $('#dashboard').show();
+          }
+          app.chart.createLinearChart(data, title, xLabel, yLabel, html_id, app);
           app.correlation.changed = false;
         }
         $('#tab-dashboard').click(function(e) {
           e.preventDefault();
-          app.chart.draw_linearChart(app.correlation.data, title, xLabel, yLabel,html_id, app);
+          app.chart.createLinearChart(app.correlation.data, title, xLabel, yLabel,html_id, app);
         })
 
       } else{
@@ -1380,7 +1149,15 @@ Setup.prototype = {
     });
   };
 
-
+  app.abortAll = function() {
+    var i = 0;
+    var xhrLength = app.xhrPool.length;
+    while (xhrLength > 0) {
+      app.xhrPool[0].abort();
+      app.xhrPool.splice(0, 1);
+      xhrLength = app.xhrPool.length;
+    }
+  };
 
   app.readCorrelations = function () {
     var user_id	= JSON.parse(localStorage.getItem('profile')).email;
@@ -1396,7 +1173,7 @@ Setup.prototype = {
   app.readSleepData = function(start, end) {
     if (localStorage.getItem('profile')) {
       var userId = JSON.parse(localStorage.getItem('profile')).email;
-      if (app.updater.update_heatmap(app.url, userId, start, end, app)) {
+      if (app.updater.retrieveSleepData(userId, start, end, app)) {
         alert('Please login to retrieve your data!');
         logout();
       }
@@ -1412,7 +1189,7 @@ Setup.prototype = {
       var userId = JSON.parse(localStorage.getItem('profile')).email;
       var beginDate = start;
       var endDate = end;
-      if (app.updater.update_mutlichart(app.url, userId, beginDate, endDate, app, true)) {
+      if (app.updater.retrieveMultichartData(userId, beginDate, endDate, app)) {
         alert ('Please login to retrieve your data!');
         logout();
       };
@@ -1425,7 +1202,7 @@ Setup.prototype = {
   app.multichartSwitch = function() {
     if (app.multichart.data.length != 0){
       app.multichart.changed = true;
-      app.chart.draw_multiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circle', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
+      app.chart.createMultiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circle', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
     }
   };
 
@@ -1474,7 +1251,7 @@ Setup.prototype = {
     }
   };
 
-  var refreshTokens = function(arrayOfCallbackFunctions) {
+  app.refreshTokens = function(arrayOfCallbackFunctions) {
     app.utils.log('refreshTokens', 'Refreshing id_token');
     var refreshToken = localStorage.getItem('refresh_token');
     var data = {
@@ -1485,12 +1262,18 @@ Setup.prototype = {
       'scope':           'openid profile',
       'api_type':        'app'
     };
-    $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', type: 'POST', data: JSON.stringify(data), success: function(data){
-      localStorage.setItem('id_token', data.id_token);
-      for (var i = 0; i < arrayOfCallbackFunctions.length; i++) {
-        arrayOfCallbackFunctions[i]();
+    $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', type: 'POST', data: JSON.stringify(data),
+      success: function(data){
+        localStorage.setItem('id_token', data.id_token);
+        for (var i = 0; i < arrayOfCallbackFunctions.length; i++) {
+          arrayOfCallbackFunctions[i]();
+        }
+      },
+      error: function (xhr) {
+        app.utils.logerr('refreshTokens', xhr.responseText);
+        logout();
       }
-    }});
+    });
   };
 
   var revokeRefreshTokenIDs = function () {
@@ -1540,6 +1323,7 @@ Setup.prototype = {
     if (id_token) {
       lock.getProfile(id_token, function (err, profile) {
         if (err) {
+          console.error(err);
           return err;
         } else {
           // Display user information
@@ -1627,8 +1411,6 @@ Setup.prototype = {
           "processData": false,
           "data": "{\"user_metadata\": {\"family_name\": \"" + lastname.value + "\", \"given_name\": \"" + prename.value + "\", \"sport\": \"" + sport.value + "\"}}"
         };
-
-
         $.ajax(settings).done(function (response) {
           console.log('successfully updated user profile');
         });
@@ -1658,10 +1440,17 @@ Setup.prototype = {
       'beforeSend': function(xhr) {
         xhr.setRequestHeader('Accept', 'application/json; charset=utf-8');
         xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+        app.xhrPool.push(xhr);
+      },
+      'complete': function(xhr) {
+        var i = app.xhrPool.indexOf(xhr);   //  get index for current connection completed
+        if (i > -1) {
+          app.xhrPool.splice(i, 1);
+        } //  removes from list by index
       }
     });
     document.getElementById('profile-button').setAttribute('style', 'display: block');
-    app.setup.select_all([app.multichart.chk_data]);
+    app.utils.select_all([app.multichart.chk_data]);
     app.initDatePicker();
     $('#tab-dashboard').click(function (e) {
       e.preventDefault();
@@ -1711,7 +1500,7 @@ Setup.prototype = {
       app.chart.setScatterVisible(app.multichart.id, checked);
     });
     if(retrieve_profile()) {
-      refreshTokens([retrieve_profile, initGraphs]);
+      app.refreshTokens([retrieve_profile, initGraphs]);
     } else {
       initGraphs();
     }
@@ -1755,6 +1544,4 @@ Setup.prototype = {
   else{
     on_logged_in();
   }
-
-
 })();
