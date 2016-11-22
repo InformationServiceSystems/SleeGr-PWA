@@ -734,7 +734,7 @@ ApiUpdater.prototype = {
     };
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
-      $.ajax({type: 'POST', url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
+      $.ajax({type: 'POST', "crossDomain": true, url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
         success: function(result){
           console.log('data from  %s', rooturl);
           app.invokeReady('correlation', result);
@@ -769,7 +769,7 @@ ApiUpdater.prototype = {
     };
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
-      $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
+      $.ajax({type: "POST", "crossDomain": true, url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
         success: function(result){
           console.log('data from  %s len: %d', rooturl, result.length);
           app.invokeReady('heartrate', result);
@@ -799,7 +799,7 @@ ApiUpdater.prototype = {
     } else {
       return "Unauthorized";
     }
-    $.ajax({type: "POST", url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
+    $.ajax({type: "POST", "crossDomain": true, url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
       success: function(result){
         console.log('data from  %s len: %d', rooturl , result.length);
         app.invokeReady('sleep', result);
@@ -1001,7 +1001,6 @@ Setup.prototype = {
       app.multichart.container.removeAttribute('hidden');
       app.multichart.data = data;
       if (data.length !== 0) {
-        app.utils.fadeInHtmlTable(app.multichart.data, app.multichart.dataTableId);
         app.configureHtmlTable();
         var show_data = $(app.multichart.chk_data).is(':checked');
         var show_type1 = $(app.multichart.chk_type1).is(':checked');
@@ -1131,8 +1130,8 @@ Setup.prototype = {
     dialogFrom.trigger = document.getElementById('date-from');
     document.getElementById('date-from').addEventListener('onOk', function() {
       this.value = dialogFrom.time.format('DD.MM.YYYY');
-      app.readHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
-      app.readSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+      app.fetchHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+      app.fetchSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
     });
     var dialogTo = new mdDateTimePicker.default({
       type: 'date',
@@ -1144,8 +1143,8 @@ Setup.prototype = {
     dialogTo.trigger = document.getElementById('date-to');
     document.getElementById('date-to').addEventListener('onOk', function() {
       this.value = dialogTo.time.format('DD.MM.YYYY');
-      app.readHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
-      app.readSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+      app.fetchHeartrateData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
+      app.fetchSleepData(dialogFrom.time.format('DD.MM.YYYY'), dialogTo.time.format('DD.MM.YYYY'));
     });
   };
 
@@ -1159,7 +1158,7 @@ Setup.prototype = {
     }
   };
 
-  app.readCorrelations = function () {
+  app.initDashboard = function () {
     var user_id	= JSON.parse(localStorage.getItem('profile')).email;
     app.setup.fillInXlabels(app.correlations_list, '#x');
     app.setup.fillInYlabels(app.url, user_id, app.correlations_list, app.correlation.xLabel, '#y', app, logout);
@@ -1170,7 +1169,7 @@ Setup.prototype = {
 
   };
 
-  app.readSleepData = function(start, end) {
+  app.fetchSleepData = function(start, end) {
     if (localStorage.getItem('profile')) {
       var userId = JSON.parse(localStorage.getItem('profile')).email;
       if (app.updater.retrieveSleepData(userId, start, end, app)) {
@@ -1184,7 +1183,7 @@ Setup.prototype = {
     }
   };
 
-  app.readHeartrateData = function(start, end) {
+  app.fetchHeartrateData = function(start, end) {
     if (localStorage.getItem('profile')) {
       var userId = JSON.parse(localStorage.getItem('profile')).email;
       var beginDate = start;
@@ -1199,7 +1198,7 @@ Setup.prototype = {
     }
   };
 
-  app.multichartSwitch = function() {
+  app.switchHeartrateScope = function() {
     if (app.multichart.data.length != 0){
       app.multichart.changed = true;
       app.chart.createMultiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), 'Type1', $(app.multichart.chk_type1).is(':checked'), app.multichart.chk_data, 'circle', app.multichart.id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
@@ -1207,6 +1206,7 @@ Setup.prototype = {
   };
 
   app.configureHtmlTable = function () {
+    app.utils.fadeInHtmlTable(app.multichart.data, app.multichart.dataTableId);
     var table = document.querySelector('#parameters');
     var headerLabel = table.querySelector('thead .mdl-data-table__select');
     app.multichart.headerCheckbox = headerLabel.querySelector('input');
@@ -1262,7 +1262,7 @@ Setup.prototype = {
       'scope':           'openid profile',
       'api_type':        'app'
     };
-    $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', type: 'POST', data: JSON.stringify(data),
+    $.ajax({url: 'https://app-iss.eu.auth0.com/delegation', "crossDomain": true, type: 'POST', data: JSON.stringify(data),
       success: function(data){
         localStorage.setItem('id_token', data.id_token);
         for (var i = 0; i < arrayOfCallbackFunctions.length; i++) {
@@ -1283,7 +1283,7 @@ Setup.prototype = {
         client_id: AUTH0_CLIENT_ID,
         user_id: JSON.parse(localStorage.getItem('profile')).user_id
       };
-      $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
+      $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' + refreshBearer}, "crossDomain": true, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
         var temp = [];
         for (var i = 0; i<response.length; i++) {
           if (response[i].device_name === app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()) {
@@ -1307,7 +1307,7 @@ Setup.prototype = {
     }
 
     if (refreshIDs != null && refreshIDs.length !== 0) {
-      $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[refreshIDs.length-1], success: function (res) {
+      $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, "crossDomain": true, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[refreshIDs.length-1], success: function (res) {
         refreshIDs.pop();
         invokeLogout(refreshIDs, true);
       }, error: function (res) {
@@ -1481,7 +1481,7 @@ Setup.prototype = {
       $('#sleepdata').css('display', 'block');
     });
     $(app.multichart.rangepicker).on('change', function () {
-      app.multichartSwitch();
+      app.switchHeartrateScope();
       if (app.multichart.boxes !== null && app.multichart.headerCheckbox !== null){
         if ($('#table-header').is(':checked')) {
           for (var i = 0; i < app.multichart.boxes.length; i++) {
@@ -1509,9 +1509,9 @@ Setup.prototype = {
   };
 
   var initGraphs = function () {
-    app.readCorrelations();
-    app.readHeartrateData($('#date-from').val(), $('#date-to').val());
-    app.readSleepData($('#date-from').val(), $('#date-to').val());
+    app.initDashboard();
+    app.fetchHeartrateData($('#date-from').val(), $('#date-to').val());
+    app.fetchSleepData($('#date-from').val(), $('#date-to').val());
   }
 
   lock.on('authenticated', function(authResult) {
