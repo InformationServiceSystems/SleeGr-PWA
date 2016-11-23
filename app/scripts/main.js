@@ -36,14 +36,19 @@ Util.prototype = {
   getWeekday: function(day) {
     return this.WEEKDAYS[day];
   },
-  secondsToMinutes: function(seconds) {
-    var totalMins = Math.round(seconds / 60);
-    var mins = totalMins % 60;
-    var hours = (totalMins - mins) / 60;
-    if (hours === 0) {
-      return mins + ' minutes';
+  reformatSeconds: function(seconds, target) {
+    if (target === 'hours') {
+      var totalMins = Math.round(seconds / 60);
+      var mins = totalMins % 60;
+      var hours = (totalMins - mins) / 60;
+      return (hours>0?hours + ' h ':'') + mins + ' min';
+    } else {
+      if (target === 'minutes') {
+        var secondsAfterMins = seconds % 60;
+        var mins = (seconds - secondsAfterMins)/60;
+        return (mins>0?mins + 'min ':'') + secondsAfterMins + 's';
+      }
     }
-    return hours + ' hours ' + mins + ' minutes';
   },
   contains: function(a, obj) {
     for (var i = 0; i < a.length; i++) {
@@ -561,12 +566,12 @@ Chart.prototype = {
         labels: {
           formatter: function () {
             if (only_5mins)
-              return this.value;
+              return utils.reformatSeconds(this.value, 'minutes');
 
             var hours = this.value / (60 * 60);
-            return hours.toFixed(2) + 'h';
+            return utils.reformatSeconds(this.value, 'hours');
           }
-        }
+        },
         //tickInterval: 1.5
       },
       yAxis: {
@@ -578,11 +583,11 @@ Chart.prototype = {
         formatter: function () {
           var s = '';
           if (!only_5mins) {
-            s = '<small> Heartrate after ' + utils.secondsToMinutes(this.x) + '</small>' +
+            s = '<small> Heartrate after ' + utils.reformatSeconds(this.x, 'hours') + '</small>' +
               '<table>';
           }
           else {
-            s = '<small> Heartrate after ' + this.x + ' seconds</small>' +
+            s = '<small> Heartrate after ' + utils.reformatSeconds(this.x, 'minutes') + '</small>' +
               '<table>';
           }
 
