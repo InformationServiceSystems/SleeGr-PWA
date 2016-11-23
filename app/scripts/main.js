@@ -220,15 +220,19 @@ HighchartFunctions.prototype = {
     }
     return formatter;
   },
-  createLineSeries: function(id, grpType, visible, name, color, data, showInLegend, dataSelectId, legendClickFunction) {
+  createLineSeries: function(id, grpType, visible, weekday, date, color, data, showInLegend, dataSelectId, legendClickFunction, checkedBoxes) {
     // tooltip.valuePrefix = legend;
     var series = {};
     series.id = id;
     series.type = 'line';
     series.grp = String(grpType);
-    series.visible = visible;
+    if (checkedBoxes) {
+      series.visible = checkedBoxes.indexOf(date) > -1;
+    } else {
+      series.visible = visible;
+    }
     series.showInLegend	= showInLegend;
-    series.name = name;
+    series.name = weekday + ' ' + date;
     series.data = data;
     series.color = color;
     if (showInLegend) {
@@ -238,11 +242,17 @@ HighchartFunctions.prototype = {
     }
     return series;
   },
-  createScatterSeries: function(name, color, type, visible, linkedId, data, pointSymbol, showData) {
+  createScatterSeries: function(weekday, date, color, type, visible, linkedId, data, pointSymbol, showData, checkedBoxes) {
     var series = {};
     series.type = 'scatter';
     series.grp = String(type);
-    if (visible && showData) {
+    var show;
+    if (checkedBoxes) {
+      show = checkedBoxes.indexOf(date) > -1;
+    } else {
+      show = visible
+    }
+    if (show && showData) {
       series.selected = true;
       series.visible = true;
     } else {
@@ -250,7 +260,7 @@ HighchartFunctions.prototype = {
       series.visible = false;
     }
     series.linkedTo = linkedId;
-    series.name = name;
+    series.name = weekday + ' ' + date;
     series.data = data;
     series.showInLegend = false;
     series.color = color;
@@ -297,14 +307,14 @@ HighchartFunctions.prototype = {
     var lineData = this.getTwoDotLinePoints(x1, y1, x2, y2, step);
     var lineColor = 'rgba(0, 85, 213, 1)';
     var scatterColor = 'rgba(228, 6, 6, 1)';
-    var scatter = this.createScatterSeries('scatter ' + id, scatterColor, 'scatter', true, id, dataPoints, pointSymbol, true);
-    var line = this.createLineSeries(id, null, true, 'line ' + id, lineColor, lineData, false);
+    var scatter = this.createScatterSeries('scatter ' + id,  null, scatterColor, 'scatter', true, id, dataPoints, pointSymbol, true);
+    var line = this.createLineSeries(id, null, true, 'line ' + id, null, lineColor, lineData, false);
     var serieses = [];
     serieses.push(line);
     serieses.push(scatter);
     return serieses;
   },
-  getMultichartSeries: function(points, showData, type, visible, dataSelectId, pointSymbol, only5mins, htmlId) {
+  getMultichartSeries: function(points, showData, type, visible, dataSelectId, pointSymbol, only5mins, htmlId, checkedBoxes) {
     var serieses = [];
     var maximumXValue = only5mins ? 300 : 12000;
     var step = only5mins ? 1 : 10;
@@ -328,13 +338,12 @@ HighchartFunctions.prototype = {
           var dateObj = this.utils.toDate(date);
           var lineData = this.getExponentialPoints(a, t, c, step, maximumXValue);
           var scatterData = this.getScatterData(dataPoints, only5mins);
-          var scatterName = this.utils.getWeekday(dateObj.getDay()) + ' ' + date;
-          var lineName = this.utils.getWeekday(dateObj.getDay()) + ' ' + date;
-          var color = this.highchartsGetColor(htmlId, lineName);
+          var weekday = this.utils.getWeekday(dateObj.getDay())
+          var color = this.highchartsGetColor(htmlId, weekday + ' ' + date);
           var id = type + '_' + i;
 
-          var lineSeries = this.createLineSeries(id, type, visible, lineName, color, lineData, false, dataSelectId, legendClickFunction);
-          var scatterSeries = this.createScatterSeries	(scatterName, color, type, visible, id, scatterData, pointSymbol, showData);
+          var lineSeries = this.createLineSeries(id, type, visible, weekday, date, color, lineData, false, dataSelectId, legendClickFunction, checkedBoxes);
+          var scatterSeries = this.createScatterSeries	(weekday, date, color, type, visible, id, scatterData, pointSymbol, showData, checkedBoxes);
           serieses.push(lineSeries);
           serieses.push(scatterSeries);
         }
@@ -538,7 +547,7 @@ Chart.prototype = {
   },
   createMultiChart: function (points, show_data, grp_type, show_type1, data_select_id, point_symbol, html_id, only_5mins, app) {
     if (app.multichart.changed) {
-      app.multichart.series = this.highchartFunctions.getMultichartSeries(points, show_data, grp_type, show_type1, data_select_id, 'circle', only_5mins, html_id);
+      app.multichart.series = this.highchartFunctions.getMultichartSeries(points, show_data, grp_type, show_type1, data_select_id, 'circle', only_5mins, html_id, app.multichart.checkedBoxes);
     }
     var utils = this.utils;
     $(html_id).highcharts({
@@ -732,6 +741,7 @@ ApiUpdater.prototype = {
       yAxis: yLabel,
       nextDay: nextDay
     };
+
     if (localStorage.getItem('id_token')) {
       var authorization = 'Bearer ' + localStorage.getItem('id_token');
       $.ajax({type: 'POST', "crossDomain": true, url: rooturl, headers: {'authorization': authorization}, data: JSON.stringify(data),
@@ -967,6 +977,7 @@ Setup.prototype = {
     multichart: {
       id: '#multichart',
       dataTableId: '#parameterTable',
+      checkedBoxes: [],
       container: document.querySelector('#heartrateContainer'),
       rangepicker: '#timerange',
       chk_data: '#chk_data',
@@ -1213,15 +1224,18 @@ Setup.prototype = {
     headerLabel.MaterialCheckbox = new MaterialCheckbox(headerLabel);
     headerLabel.MaterialCheckbox.check();
     app.multichart.boxes = table.querySelectorAll('tbody .mdl-data-table__select');
+    app.multichart.checkedBoxes = [];
     for (var i = 0; i < app.multichart.boxes.length; i++) {
       app.multichart.boxes[i].MaterialCheckbox = new MaterialCheckbox(app.multichart.boxes[i]);
       app.multichart.boxes[i].MaterialCheckbox.check();
+      app.multichart.checkedBoxes.push(app.multichart.boxes[i].querySelector('input').getAttribute('data-main'));
     }
     var headerCheckHandler = function(event) {
-      var chart = $(app.multichart.id).highcharts();
+      app.multichart.checkedBoxes = [];
       if (event.target.checked) {
         for (var i = 0, length = app.multichart.boxes.length; i < length; i++) {
           app.multichart.boxes[i].MaterialCheckbox.check();
+          app.multichart.checkedBoxes.push(app.multichart.boxes[i].querySelector('input').getAttribute('data-main'));
         }
       } else {
         for (var i = 0, length = app.multichart.boxes.length; i < length; i++) {
@@ -1233,6 +1247,14 @@ Setup.prototype = {
     app.multichart.headerCheckbox.addEventListener('change', headerCheckHandler);
     var inputCheckhandler = function (event) {
       var date = $(this).attr('data-main');
+      if (event.target.checked && app.multichart.checkedBoxes.indexOf(date) === -1) {
+        app.multichart.checkedBoxes.push(date);
+      } else {
+        var idx = app.multichart.checkedBoxes.indexOf(date);
+        if (!(idx === -1)) {
+          app.multichart.checkedBoxes.splice(idx, 1);
+        }
+      }
       var chart = $(app.multichart.id).highcharts();
       for (var i = 0; i < chart.series.length; i++) {
         if (chart.series[i].name.split(' ')[1] == date) {
@@ -1312,6 +1334,7 @@ Setup.prototype = {
         invokeLogout(refreshIDs, true);
       }, error: function (res) {
         console.error(res);
+        window.location.href = "/";
       }});
     } else {
       window.location.href = "/";
@@ -1482,18 +1505,6 @@ Setup.prototype = {
     });
     $(app.multichart.rangepicker).on('change', function () {
       app.switchHeartrateScope();
-      if (app.multichart.boxes !== null && app.multichart.headerCheckbox !== null){
-        if ($('#table-header').is(':checked')) {
-          for (var i = 0; i < app.multichart.boxes.length; i++) {
-            app.multichart.boxes[i].MaterialCheckbox.check();
-          }
-        } else {
-          for (var i = 0; i < app.multichart.boxes.length; i++) {
-            app.multichart.boxes[i].MaterialCheckbox.uncheck();
-          }
-        }
-      }
-
     });
     $(app.multichart.chk_data).click(function() {
       var checked = $(app.multichart.chk_data).is(':checked');
