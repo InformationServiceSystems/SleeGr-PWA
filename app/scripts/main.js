@@ -85,19 +85,21 @@ Util.prototype = {
       '<th class="mdl-data-table__cell--non-numeric datath">a</th>' +
       '<th class="mdl-data-table__cell--non-numeric datath">T</th>' +
       '<th class="mdl-data-table__cell--non-numeric datath">c</th>' +
+      '<th class="mdl-data-table__cell--non-numeric datath">RMSE</th>' +
       '</tr>' +
       '</thead>' +
       '<tbody class="datatbody">';
     if (dataPoints.length !== 0) {
       try {
         for (var i = 0; i < dataPoints.length; i++) {
-          if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)) {
+          if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)&& !(dataPoints[i].rmse === null)) {
             content += '<tr class="datatr">';
             content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
             content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + dataPoints[i].date + '</td>';
             content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
             content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
             content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
             content += '</tr>';
           }
         }
