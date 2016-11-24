@@ -41,7 +41,7 @@ Util.prototype = {
       var totalMins = Math.round(seconds / 60);
       var mins = totalMins % 60;
       var hours = (totalMins - mins) / 60;
-      return (hours>0?hours + ' h ':'') + mins + ' min';
+      return (hours>0?hours + 'h ':'') + mins + 'min';
     } else {
       if (target === 'minutes') {
         var secondsAfterMins = seconds % 60;
@@ -554,6 +554,11 @@ Chart.prototype = {
     if (app.multichart.changed) {
       app.multichart.series = this.highchartFunctions.getMultichartSeries(points, show_data, grp_type, show_type1, data_select_id, 'circle', only_5mins, html_id, app.multichart.checkedBoxes);
     }
+    if (only_5mins) {
+      var xAxisText = 'time (in minutes and seconds)';
+    } else {
+      var xAxisText = 'time (in hours and minutes)';
+    }
     var utils = this.utils;
     $(html_id).highcharts({
       title: {
@@ -561,7 +566,7 @@ Chart.prototype = {
       },
       xAxis: {
         title: {
-          text: 'time'
+          text: xAxisText?xAxisText:'time'
         },
         labels: {
           formatter: function () {
