@@ -1424,11 +1424,10 @@ Setup.prototype = {
 
 
   var logout = function() {
-    if (!localStorage.getItem('profile') || !localStorage.getItem('id_token')) {
+    if (!localStorage.getItem('id_token')) {
       window.location.href = '/';
     }
     var data = {
-      'userID': JSON.parse(localStorage.getItem('profile')).user_id,
       'deviceID': app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()
     };
     var url = app.utils.formatUrl(app.url, 'logout');
