@@ -954,7 +954,6 @@ Setup.prototype = {
   // Your custom JavaScript goes here
   var AUTH0_CLIENT_ID='kMlSIl3Itqt6mQetzGXES6biAVFei6k8';
   var AUTH0_DOMAIN='app-iss.eu.auth0.com';
-  var refreshBearer = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiI1T3Y0SDRUQXg0Rm90ck1tTXZvWk1YbVp3bWNIaVVHbSIsInNjb3BlcyI6eyJkZXZpY2VfY3JlZGVudGlhbHMiOnsiYWN0aW9ucyI6WyJyZWFkIiwiZGVsZXRlIl19fSwiaWF0IjoxNDc5MTYzMDk4LCJqdGkiOiI5MzBjOWM0MTAzN2FhMTRmMDkwZTY2Nzc4ZjNhYWM1NyJ9.glDslHBRwWHgRIyOGCx61m3WA3KTrpHOVXOnpU57pps';
   var app = {
     utils: new Util(),
     chart: new Chart(0, 0, 12, [], 0, 0, 0),
@@ -1310,48 +1309,6 @@ Setup.prototype = {
     });
   };
 
-  var revokeRefreshTokenIDs = function () {
-    if (localStorage.getItem('profile')) {
-      var data = {
-        type: 'refresh_token',
-        client_id: AUTH0_CLIENT_ID,
-        user_id: JSON.parse(localStorage.getItem('profile')).user_id
-      };
-      $.ajax({type: 'GET', data: data, headers: {'authorization' : 'Bearer ' + refreshBearer}, "crossDomain": true, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials', success: function (response) {
-        var temp = [];
-        for (var i = 0; i<response.length; i++) {
-          if (response[i].device_name === app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()) {
-            temp.push(response[i].id);
-          }
-        }
-        invokeLogout(temp);
-      }, error: function (xhr) {
-        console.error(xhr);
-      }});
-    } else {
-      invokeLogout([]);
-    }
-  };
-
-  var invokeLogout = function (refreshIDs, isRecursive) {
-    if (!isRecursive) {
-      localStorage.removeItem('id_token');
-      localStorage.removeItem('profile');
-      localStorage.removeItem('refresh_token');
-    }
-
-    if (refreshIDs != null && refreshIDs.length !== 0) {
-      $.ajax({type: 'DELETE', headers: {'authorization' : 'Bearer ' + refreshBearer}, "crossDomain": true, url: 'https://app-iss.eu.auth0.com/api/v2/device-credentials/' + refreshIDs[refreshIDs.length-1], success: function (res) {
-        refreshIDs.pop();
-        invokeLogout(refreshIDs, true);
-      }, error: function (res) {
-        console.error(res);
-        window.location.href = "/";
-      }});
-    } else {
-      window.location.href = "/";
-    }
-  };
   //retrieve the profile:
   var retrieve_profile = function() {
     var id_token = localStorage.getItem('id_token');
@@ -1467,7 +1424,24 @@ Setup.prototype = {
 
 
   var logout = function() {
-    revokeRefreshTokenIDs();
+    if (!localStorage.getItem('profile') || !localStorage.getItem('id_token')) {
+      window.location.href = '/';
+    }
+    var data = {
+      'userID': JSON.parse(localStorage.getItem('profile')).user_id,
+      'deviceID': app.clientjs.getUserAgent() + '_' + app.clientFingerprint.toString()
+    };
+    var url = app.utils.formatUrl(app.url, 'logout');
+    var authorization = 'Bearer ' + localStorage.getItem('id_token');
+    $.ajax({type: 'POST', 'crossDomain': true, url: url, headers: {'authorization': authorization}, data: JSON.stringify(data), success: function (res) {
+      data = JSON.parse(res);
+      if (data.status === 'success') {
+        localStorage.removeItem('id_token');
+        localStorage.removeItem('profile');
+        localStorage.removeItem('refresh_token');
+        window.location.href = '/';
+      }
+    }});
   };
 
   var on_logged_in = function () {
