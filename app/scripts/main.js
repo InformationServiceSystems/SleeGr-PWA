@@ -94,12 +94,12 @@ Util.prototype = {
         for (var i = 0; i < dataPoints.length; i++) {
           if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)&& !(dataPoints[i].rmse === null)) {
             content += '<tr class="datatr">';
-            content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
-            content += '<td class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + dataPoints[i].date + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
-            content += '<td  class="mdl-data-table__cell--non-numeric datatd filterable-cell">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
+            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + dataPoints[i].date + '</td>';
+            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
             content += '</tr>';
           }
         }
@@ -131,6 +131,16 @@ Util.prototype = {
     checkboxes.forEach(function(html_id){
       $(html_id).attr('checked', true);
     });
+  },
+  addEvent: function(object, type, callback) {
+    if (object == null || typeof(object) == 'undefined') return;
+    if (object.addEventListener) {
+      object.addEventListener(type, callback, false);
+    } else if (object.attachEvent) {
+      object.attachEvent("on" + type, callback);
+    } else {
+      object["on"+type] = callback;
+    }
   },
   normalDensityZx: function(x, mean, stdDev) {
     var a = x - mean;
@@ -1457,6 +1467,7 @@ Setup.prototype = {
         } //  removes from list by index
       }
     });
+    addResizeFunctions();
     document.getElementById('profile-button').setAttribute('style', 'display: block');
     app.utils.select_all([app.multichart.chk_data]);
     app.initDatePicker();
@@ -1530,6 +1541,18 @@ Setup.prototype = {
     e.preventDefault();
     logout();
   });
+
+
+
+  var addResizeFunctions = function () {
+    var resizeFontOfTableCells = function () {
+      var cells = document.querySelectorAll('.resize');
+      for (var i = 0; i < cells.length; i++) {
+        cells[i].setAttribute('style', 'font-size: ' + $('#parameterTable').width()*0.027+'px;');
+      }
+    };
+    app.utils.addEvent(window, "resize", resizeFontOfTableCells);
+  };
 
 
   if(!localStorage.getItem('id_token')&&!localStorage.getItem('profile')&&!localStorage.getItem('refresh_token')){
