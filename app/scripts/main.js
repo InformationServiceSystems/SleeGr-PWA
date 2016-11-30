@@ -69,6 +69,7 @@ Util.prototype = {
     return errorPage;
   },
   getHtmlDataTable: function(dataPoints) {
+    var initWidht = window.innerWidth;
     var content = '';
     content += '<div style="padding-left: 2%; padding-right: 2%">' +
       '<h4>Curve Parameters</h4><h5>Formula: (HRR<sub>~80%</sub>-c) &sdot; e<sup>(-(x-T)/a)</sup>+ c </h5> ' +
@@ -94,12 +95,12 @@ Util.prototype = {
         for (var i = 0; i < dataPoints.length; i++) {
           if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)&& !(dataPoints[i].rmse === null)) {
             content += '<tr class="datatr">';
-            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
-            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + dataPoints[i].date + '</td>';
-            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
-            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
-            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
-            content += '<td style="font-size: ' +$('#parameterTable').width()*0.027+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
+            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + dataPoints[i].date + '</td>';
+            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
             content += '</tr>';
           }
         }
