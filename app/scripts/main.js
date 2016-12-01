@@ -68,8 +68,8 @@ Util.prototype = {
 
     return errorPage;
   },
-  getHtmlDataTable: function(dataPoints) {
-    var initWidht = window.innerWidth;
+  getHtmlDataTable: function(dataPoints, tableDiv) {
+    var initWidht = $(tableDiv).width()*0.027;
     var content = '';
     content += '<div style="padding-left: 2%; padding-right: 2%">' +
       '<h4>Curve Parameters</h4><h5>Formula: (HRR<sub>~80%</sub>-c) &sdot; e<sup>(-(x-T)/a)</sup>+ c </h5> ' +
@@ -95,12 +95,12 @@ Util.prototype = {
         for (var i = 0; i < dataPoints.length; i++) {
           if (!(dataPoints[i].a === null) && !(dataPoints[i].t === null) && !(dataPoints[i].c === null)&& !(dataPoints[i].rmse === null)) {
             content += '<tr class="datatr">';
-            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
-            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + dataPoints[i].date + '</td>';
-            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
-            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
-            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
-            content += '<td style="font-size: ' +initWidht*0.01+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell"> <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect mdl-data-table__select" for="row[' + i + ']"> <input type="checkbox" id="row[' + i + ']" class="mdl-checkbox__input" data-main="' + dataPoints[i].date + '"/> </label> </td>';
+            content += '<td style="font-size: ' +initWidht+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + dataPoints[i].date + '</td>';
+            content += '<td style="font-size: ' +initWidht+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].a * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].t * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].c * 100) / 100 + '</td>';
+            content += '<td style="font-size: ' +initWidht+ 'px;" class="mdl-data-table__cell--non-numeric datatd filterable-cell resize">' + Math.round(dataPoints[i].rmse * 100) / 100 + '</td>';
             content += '</tr>';
           }
         }
@@ -115,7 +115,7 @@ Util.prototype = {
   fadeInHtmlTable: function(points, tableDiv) {
     var content;
     if (tableDiv !== undefined) {
-      content = this.getHtmlDataTable(points);
+      content = this.getHtmlDataTable(points, tableDiv);
     }
     $(tableDiv).html(content);
   },
@@ -1052,6 +1052,7 @@ Setup.prototype = {
           e.preventDefault();
           if ($(app.multichart.id).highcharts()) {
             app.chart.createMultiChart(app.multichart.data, $(app.multichart.chk_data).is(':checked'), grp_type, $(app.multichart.chk_type1).is(':checked'), data_select_id, point_symbol, html_id, $(app.multichart.rangepicker).val() === 'First 5 minutes', app);
+            app.resizeFontOfTableCells();
           }
         });
       } else {
@@ -1543,16 +1544,16 @@ Setup.prototype = {
     logout();
   });
 
-
+  app.resizeFontOfTableCells = function () {
+    var cells = document.querySelectorAll('.resize');
+    for (var i = 0; i < cells.length; i++) {
+      cells[i].setAttribute('style', 'font-size: ' + $('#parameterTable').width()*0.027+'px;');
+    }
+  };
 
   var addResizeFunctions = function () {
-    var resizeFontOfTableCells = function () {
-      var cells = document.querySelectorAll('.resize');
-      for (var i = 0; i < cells.length; i++) {
-        cells[i].setAttribute('style', 'font-size: ' + $('#parameterTable').width()*0.027+'px;');
-      }
-    };
-    app.utils.addEvent(window, "resize", resizeFontOfTableCells);
+
+    app.utils.addEvent(window, "resize", app.resizeFontOfTableCells);
   };
 
 
