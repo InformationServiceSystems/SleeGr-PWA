@@ -970,7 +970,7 @@ Setup.prototype = {
     chart: new Chart(0, 0, 12, [], 0, 0, 0),
     clientjs: new ClientJS(),
     xhrPool: [],
-    url: 'http://web01.iss.uni-saarland.de:3000',
+    url: 'http://iot01.iss.uni-saarland.de:81',
     correlations_list: JSON.parse('[{"x_label": "Day of week", "y_label": "Sleep length", "next_day": false}, ' +
             '{"x_label": "Sleep length", "y_label": "Load", "next_day": false},' +
             '{"x_label": "Sleep start", "y_label": "Load", "next_day": false},' +
